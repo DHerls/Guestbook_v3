@@ -60,13 +60,14 @@ $(document).ready(function() {
         }
         var input = $(this).find('input');
         var val = input.val().replace(' ','');
+        //Input isn't a number
         if (/[^0-9]+/.test(val)){
             event.preventDefault();
             $.notifyBar({
-                cssClass: "error",
+                cssClass: "warning",
                 html: "Must be a number!"
             });
-            $(this).addClass('has_error');
+            $(this).addClass('has-error');
             input.select();
         } else {
 
@@ -85,11 +86,29 @@ $(document).ready(function() {
                     removeTextbox.call(this);
                     },
                 error: function(data){
+                    var message = "Generic Error";
+                    var cl = "error";
+                    switch (data.status){
+                        case 404:
+                            message = "Cannot connect to server";
+                            cl = "error";
+                            break;
+                        case 422:
+                            message = data.responseJSON['num_members'][0];
+                            cl = "warning";
+                            break;
+                        case 500:
+                            message = "Internal Server Error";
+                            cl = "error";
+                            console.log(data);
+                        default:
+
+                    }
                     $.notifyBar({
-                        cssClass: "error",
-                        html: data.responseJSON['num_members'][0]
+                        cssClass: cl,
+                        html: message
                     });
-                    input.addClass('has_error');
+                    $(this).addClass('has-error');
                     input.select();
                 }
             });
