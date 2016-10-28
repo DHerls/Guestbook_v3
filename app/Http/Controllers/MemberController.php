@@ -36,6 +36,11 @@ class MemberController extends Controller
             $adults[] = $adult;
         }
 
-        return view('members.show')->with(compact('adults'));
+        return view('members.index')->with(compact('adults'));
+    }
+
+    public function display(Request $request, Member $member){
+
+        return view('members.display', compact('member'));
     }
 }

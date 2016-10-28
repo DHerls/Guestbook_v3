@@ -15,7 +15,8 @@
 
 Route::group(['middleware' => ['web','auth']], function() {
     Route::get('/', 'MemberController@index');
-    Route::get('/home', 'HomeController@index');
+    Route::get('/members/{member}','MemberController@display');
+
     Route::post('/members/{member}/records','MemberRecordController@create');
 });
 

@@ -7,8 +7,8 @@
 
 require('./bootstrap');
 require('./jquery.notifyBar');
-require('./memberlist');
 require('./tablesorter');
+require('./memberlist');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

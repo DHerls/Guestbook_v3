@@ -60,6 +60,10 @@ $(document).ready(function() {
         }
         var input = $(this).find('input');
         var val = input.val().replace(' ','');
+        if (!val){
+            cancelEdit.call(this)
+            return;
+        }
         //Input isn't a number
         if (/[^0-9]+/.test(val)){
             event.preventDefault();
@@ -84,6 +88,7 @@ $(document).ready(function() {
                 data: {num_members: val},
                 success: function(data){
                     removeTextbox.call(this);
+                    $(this).removeClass('has-error');
                     },
                 error: function(data){
                     var message = "Generic Error";
@@ -116,7 +121,6 @@ $(document).ready(function() {
         }
     }
 
-    $("#memberTable").tablesorter( {sortList: [[0,0]]} );
 
     $(document).on('dblclick','td.memberCountDisplay',addTextbox);
     $(document).on('focusout','td.memberCountEdit',submitRecord);

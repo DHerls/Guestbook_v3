@@ -56,7 +56,7 @@ class MemberSeeder extends Seeder
             for ($index2 = 0; $index2 < random_int(1,2); $index2++){
                 DB::table('phones')->insert([
                     'member_id' => $index,
-                    'number' => random_int(1000000000,999999999999),
+                    'number' => random_int(1000000000,9999999999),
                     'description' => $faker->word,
                 ]);
             }

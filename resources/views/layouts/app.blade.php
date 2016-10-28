@@ -22,6 +22,8 @@
     </script>
 </head>
 <body>
+    <!-- Scripts -->
+    <script src="/js/app.js"></script>
     <div id="app">
         @if (!Auth::guest())
         <nav class="navbar navbar-default navbar-static-top">
@@ -77,10 +79,10 @@
             </div>
         </nav>
         @endif
-        @yield('content')
+        <div class="content">
+            @yield('content')
+        </div>
+        @yield('scripts')
     </div>
-
-    <!-- Scripts -->
-    <script src="/js/app.js"></script>
 </body>
 </html>

@@ -5771,4 +5771,10 @@ button.close {
   padding: 0;
   height: 50px; }
 
+.row-eq-height {
+  display: -webkit-box;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-end; }
+
 /*# sourceMappingURL=app.css.map */
