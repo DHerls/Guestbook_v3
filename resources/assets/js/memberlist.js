@@ -89,7 +89,7 @@ $(document).ready(function() {
                 success: function(data){
                     removeTextbox.call(this);
                     $(this).removeClass('has-error');
-                    },
+                },
                 error: function(data){
                     var message = "Generic Error";
                     var cl = "error";

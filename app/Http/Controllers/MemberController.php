@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
-    public function index() {
+    public function memberData() {
         $members = Member::with(['adults',
             'memberRecords' => function($query){ $query->where(DB::raw("DATE('created_at')= CURDATE()"))->orderBy('created_at','desc');},
             'guestRecords' => function($query){ $query->where(DB::raw("DATE('created_at')= CURDATE()"));}
@@ -36,7 +36,11 @@ class MemberController extends Controller
             $adults[] = $adult;
         }
 
-        return view('members.index')->with(compact('adults'));
+        return response()->json($adults);
+    }
+
+    public function index(){
+        return view("members.test");
     }
 
     public function display(Request $request, Member $member){

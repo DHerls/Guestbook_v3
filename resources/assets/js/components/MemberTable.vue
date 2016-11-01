@@ -1,39 +1,23 @@
+<template>
+    <tr v-for="member in members" v-bind:id="'member-'+member.id">
+        <td><a v-bind:href="'/members/' + member.id" class="btn btn-info" role="button">
+            <span class="glyphicon glyphicon-list-alt"></span>
+        </a>
+        </td>
+        <td>@{{member.first_name}}</td>
+        <td>@{{member.last_name}}</td>
+        <td v-if="member.editing" v-bind:class="{ 'has-error': member.has_error }">
+            <input type="text" v-model="member.num_members"  class="text-center form-control" @blur="member.submit()" @keyup.enter="member.submit()" @keyup.esc="member.cancel()">
+        </td>
+        <td v-else class="text-center memberCountDisplay" @dblclick="member.edit()">@{{member.num_members}}</td>
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * include Vue and Vue Resource. This gives a great starting point for
- * building robust, powerful web applications using Vue and Laravel.
- */
+        <td class="text-center">@{{member.num_guests}}</td>
+    </tr>
+</template>
 
-require('./bootstrap');
-require('./jquery.notifyBar');
-require('./tablesorter');
-//require('./memberlist');
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-var members = [];
-
-$.ajax({
-    type: 'GET',
-    url: "/data/members",
-    dataType: 'json',
-    data: {num_members: self.num_members},
-    success: function(data){
-        data.sort(function(a,b){
-            return a['last_name'].localeCompare(b['last_name']);
-        });
-        for (var i = 0; i < data.length; i++){
-            members.push(new member(data[i]['id'],data[i]['first_name'],data[i]['last_name'],data[i]['members'],data[i]['guests']));
-        }
-    },
-    error: function(data){
-        console.log(data);
-    }});
+<style>
+</style>
+<script>
 
 function member(ids, first, last, mem, guests){
     this.id = ids;
@@ -139,10 +123,10 @@ function member(ids, first, last, mem, guests){
 
     }
 }
-
-const app = new Vue({
-    el: '#app',
-    data: {
-        members : members
+    export default{
+        data()  {
+            return {members: [new member(5,"Dan","Herlihy",5,2)]}
+        }
     }
-});
+    //this.members.push(new member(5,"Dan","Herlihy",5,2));
+</script>

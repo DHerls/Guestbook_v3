@@ -15,9 +15,12 @@
 
 Route::group(['middleware' => ['web','auth']], function() {
     Route::get('/', 'MemberController@index');
+    Route::get('/test', 'MemberController@test');
     Route::get('/members/{member}','MemberController@display');
 
     Route::post('/members/{member}/records','MemberRecordController@create');
+
+    Route::get('/data/members','MemberController@memberData');
 });
 
 Route::group(['middleware' => 'web'], function() {

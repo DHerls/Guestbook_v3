@@ -3,18 +3,6 @@
 @section('content')
 <div class="container-fluid">
     <div class="row row-eq-height">
-        <div class="col-xs-12 col-sm-6 col-lg-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">Children</div>
-                <div class="panel-body">
-                    <ul>
-                        @foreach($member->children as $child)
-                            <li>{{$child->first_name}} {{$child->last_name}}</li>
-                        @endforeach
-                    </ul>
-                </div>
-             </div>
-        </div>
 
         <div class="col-xs-12 col-sm-6 col-lg-3">
             <div class="panel panel-default">
@@ -28,6 +16,21 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-xs-12 col-sm-6 col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">Children</div>
+                <div class="panel-body">
+                    <ul>
+                        @foreach($member->children as $child)
+                            <li>{{$child->first_name}} {{$child->last_name}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+             </div>
+        </div>
+
+
 
         <div class="col-xs-12 col-sm-6 col-lg-3">
             <div class="panel panel-default">
