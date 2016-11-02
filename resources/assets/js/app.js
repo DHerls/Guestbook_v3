@@ -22,7 +22,6 @@ $.ajax({
     type: 'GET',
     url: "/data/members",
     dataType: 'json',
-    data: {num_members: self.num_members},
     success: function(data){
         data.sort(function(a,b){
             return a['last_name'].localeCompare(b['last_name']);
@@ -140,9 +139,41 @@ function member(ids, first, last, mem, guests){
     }
 }
 
+function search(){
+    if (app.search_query == app.old_search){
+        return;
+    }
+    app.old_search = app.search_query;
+    $.ajax({
+        type: 'GET',
+        url: "/data/members",
+        dataType: 'json',
+        data: {search_c: "last_name", search_q: app.search_query},
+        success: function(data){
+            while(members.length){
+                members.pop();
+            }
+            data.sort(function(a,b){
+                return a['last_name'].localeCompare(b['last_name']);
+            });
+            for (var i = 0; i < data.length; i++){
+                members.push(new member(data[i]['id'],data[i]['first_name'],data[i]['last_name'],data[i]['members'],data[i]['guests']));
+            }
+        },
+        error: function(data){
+            console.log(data);
+        }
+    });
+}
+
 const app = new Vue({
     el: '#app',
     data: {
-        members : members
+        members : members,
+        search_query: "",
+        old_search: ""
+    },
+    methods: {
+        search: _.debounce(search,250)
     }
 });

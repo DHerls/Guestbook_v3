@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <div class="row">
         <form action="" autocomplete="off" class="form-horizontal" method="post" accept-charset="utf-8">
             <div class="input-group">
-                <input id="member-search" role="search" type="text" class="form-control"/>
+                <input id="member-search" role="search" type="text" class="form-control" @keyup="search" v-model="search_query"/>
                 <span class="input-group-addon">
                     <i class="glyphicon glyphicon-search"></i>
                 </span>
@@ -28,27 +28,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($adults as $adult)
-                        <tr id={{$adult['id']}}>
-                            <td><a href="/members/{{$adult['id']}}" class="btn btn-info" role="button">
+                    <template v-for="member in members">
+                        <tr v-bind:id="'member-'+member.id">
+                            <td><a v-bind:href="'/members/' + member.id" class="btn btn-info" role="button">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                 </a>
                             </td>
-                            <td>{{$adult['first_name']}}</td>
-                            <td>{{$adult['last_name']}}</td>
-                            <td class="text-center memberCountDisplay">{{$adult['members']}}</td>
-                            <td class="text-center">{{$adult['guests']}}</td>
+                            <td>@{{member.last_name}}</td>
+                            <td>@{{member.first_name}}</td>
+                            <td v-if="member.editing" v-bind:class="{ 'has-error': member.has_error }">
+                                <input type="text" v-model="member.num_members"  class="text-center form-control" @blur="member.submit()" @keyup.enter="member.submit()" @keyup.esc="member.cancel()">
+                            </td>
+                            <td v-else class="text-center memberCountDisplay" @dblclick="member.edit()">@{{member.num_members}}</td>
+
+                            <td class="text-center">@{{member.num_guests}}</td>
                         </tr>
-                    @endforeach
+                    </template>
+   `
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-    <script type="text/javascript">
-        $('#memberTable').tablesorter( {sortList: [[1,0]]} );
-    </script>
 @endsection
