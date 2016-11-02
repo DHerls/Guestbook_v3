@@ -1,132 +1,196 @@
+var members = [];
 
-$(document).ready(function() {
-    var editing = false;
-    var canceling = false;
-
-    function addTextbox() {
-        if (!editing) {
-            var html = "<input type='text'"
-            if ($(this).html() != 0) {
-                html += " value='" + $(this).html() + "'";
-            }
-            html += "class='text-center form-control'>";
-            $(this).html(html);
-            $(this).removeClass('memberCountDisplay');
-            $(this).addClass('memberCountEdit');
-            $(this).find('input').select();
-            editing = true;
+$.ajax({
+    type: 'GET',
+    url: "/data/members",
+    dataType: 'json',
+    success: function(data){
+        for (var i = 0; i < data.length; i++){
+            members.push(new member(data[i]['id'],data[i]['first_name'],data[i]['last_name'],data[i]['members'],data[i]['guests']));
         }
+    },
+    error: function(data){
+        console.log(data);
+    }});
 
+function member(ids, first, last, mem, guests){
+    this.id = ids;
+    this.first_name = first;
+    this.last_name = last;
+    this.num_members = mem;
+    //Necessary for "cancel"
+    this.old_members = mem;
+    this.num_guests = guests;
+
+    //DOM Control booleans
+    this.editing = false;
+    this.has_error = false;
+
+    this.edit = function() {
+        this.editing = true;
+        this.old_members = this.num_members;
+        Vue.nextTick((function() {
+            document.querySelector("tr#member-"+this.id + " td input").select();
+        }).bind(this));
     }
 
-    function removeTextbox(){
-        var td = $('td.memberCountEdit')
-        var val = td.find('input').val().trim();
-        if (val==""){
-            td.html(0);
-        } else {
-            td.html(val);
-        }
-
-        td.addClass('memberCountDisplay');
-        td.removeClass('memberCountEdit');
-        editing = false;
+    this.cancel = function() {
+        this.canceling = true;
+        this.num_members = this.old_members;
+        this.editing = false;
+        this.has_error = false;
     }
 
-    function cancelEdit(){
-        canceling = true;
-        var input = $(this).find('input');
-        input.val(input[0].defaultValue);
-        removeTextbox.call(this);
-        canceling = false;
-    }
-
-    function keyHandler() {
-        switch (event.which){
-            //Enter button pressed
-            case 13:
-                submitRecord.call(this);
-                break;
-            //Escape Button Pressed
-            case 27:
-                cancelEdit.call(this)
-                break;
-        }
-    }
-
-    function submitRecord() {
-        if (canceling){
+    this.submit = function() {
+        var self = this;
+        //Prevents submissions when pressing escape
+        if (this.canceling){
+            this.canceling = false;
             return;
         }
-        var input = $(this).find('input');
-        var val = input.val().replace(' ','');
-        if (!val){
-            cancelEdit.call(this)
+        if (this.old_members == this.num_members){
+            this.has_error = false;
+            this.editing = false;
             return;
         }
+        var input = document.querySelector("tr#member-"+this.id + " td input")
         //Input isn't a number
-        if (/[^0-9]+/.test(val)){
-            event.preventDefault();
+        if (/[^0-9]+/.test(this.num_members)) {
             $.notifyBar({
                 cssClass: "warning",
                 html: "Must be a number!"
             });
-            $(this).addClass('has-error');
+            this.has_error = true;
             input.select();
-        } else {
+            return;
+        }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        if (this.num_members === ""){
+            $.notifyBar({
+                cssClass: "warning",
+                html: "Members must not be blank"
+            });
+            this.has_error = true;
+            input.select();
+            return;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: "/members/" + self.id + '/records',
+            dataType: 'json',
+            data: {num_members: self.num_members},
+            success: function(data){
+                self.has_error = false;
+                self.editing = false;
+                self.old_members = self.num_members;
+                return;
+            },
+            error: function(data){
+                var message = "Generic Error";
+                var cl = "error";
+                switch (data.status){
+                    case 404:
+                        message = "Cannot connect to server";
+                        cl = "error";
+                        break;
+                    case 422:
+                        message = data.responseJSON['num_members'][0];
+                        cl = "warning";
+                        break;
+                    case 500:
+                        message = "Internal Server Error";
+                        cl = "error";
+                        console.log(data);
+                    default:
+
+                }
+                $.notifyBar({
+                    cssClass: cl,
+                    html: message
+                });
+                self.has_error = true;
+                input.select();
+            }
+        });
+
+    }
+}
+
+function search(){
+    if (app.search_query == app.old_search){
+        return;
+    }
+    app.old_search = app.search_query;
+    $.ajax({
+        type: 'GET',
+        url: "/data/members",
+        dataType: 'json',
+        data: {search_c: app.search_column, search_q: app.search_query},
+        success: function(data){
+            while(members.length){
+                members.pop();
+            }
+            data.sort(function(a,b){
+                return a['last_name'].localeCompare(b['last_name']);
+            });
+            for (var i = 0; i < data.length; i++){
+                members.push(new member(data[i]['id'],data[i]['first_name'],data[i]['last_name'],data[i]['members'],data[i]['guests']));
+            }
+        },
+        error: function(data){
+            console.log(data);
+        }
+    });
+}
+
+const app = new Vue({
+    el: '#member-search',
+    data: {
+        members : members,
+        search_query: "",
+        old_search: "",
+        search_column: "last_name",
+        sort_col: "last_name",
+        sort_dir: "down"
+    },
+    methods: {
+        search: _.debounce(search,250),
+        search_col: function(column){
+            if (column != app.search_column){
+                app.search_column = column;
+                if (app.search_query != ""){
+                    //Required to actually perform the search
+                    app.old_search = ""
+                    search();
+                }
+            }
+        },
+        sort: function(column){
+
+            if (column == app.sort_col){
+                app.sort_dir = app.sort_dir == 'up' ? 'down' : 'up';
+            } else {
+                app.sort_col = column;
+                app.sort_dir = 'down';
+            }
+        }
+    },
+    computed: {
+        sorted_members: function(){
+            return this.members.sort(function(a,b){
+                if (typeof(a[app.sort_col]) == 'string'){
+                    return (app.sort_dir=='down' ? 1 : -1) * a[app.sort_col].localeCompare(b[app.sort_col]);
+                } else {
+                    return (app.sort_dir=='down' ? 1 : -1) * (a[app.sort_col] - (b[app.sort_col]));
                 }
             });
-
-            $.ajax({
-                type: 'POST',
-                url: "/members/" + $(this).parent().attr('id') + '/records',
-                dataType: 'json',
-                data: {num_members: val},
-                success: function(data){
-                    removeTextbox.call(this);
-                    $(this).removeClass('has-error');
-                },
-                error: function(data){
-                    var message = "Generic Error";
-                    var cl = "error";
-                    switch (data.status){
-                        case 404:
-                            message = "Cannot connect to server";
-                            cl = "error";
-                            break;
-                        case 422:
-                            message = data.responseJSON['num_members'][0];
-                            cl = "warning";
-                            break;
-                        case 500:
-                            message = "Internal Server Error";
-                            cl = "error";
-                            console.log(data);
-                        default:
-
-                    }
-                    $.notifyBar({
-                        cssClass: cl,
-                        html: message
-                    });
-                    $(this).addClass('has-error');
-                    input.select();
-                }
-            });
-
         }
     }
-
-
-    $(document).on('dblclick','td.memberCountDisplay',addTextbox);
-    $(document).on('focusout','td.memberCountEdit',submitRecord);
-    $(document).on('keyup','td.memberCountEdit',keyHandler);
-
-    $(document).on('paste','td.memberCountEdit',function() {
-        event.preventDefault();
-    });
-});
+})

@@ -1,19 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<div id="member-search">
+<div class="container">
     <div class="row">
         <form action="" autocomplete="off" class="form-horizontal" method="post" accept-charset="utf-8">
             <div class="input-group">
-                <input id="member-search" role="search" type="text" class="form-control" @keyup="search" v-model="search_query"/>
                 <span class="input-group-addon">
                     <i class="glyphicon glyphicon-search"></i>
                 </span>
+                <input id="member-search" role="search" type="search" class="form-control" @keyup="search" v-model="search_query" @keyup.esc="search_query = ''"/>
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search By<span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li v-on:click="search_col('last_name')"><a href="#">Last Name
+                                <span><i class="glyphicon glyphicon-ok" v-if="search_column == 'last_name'"></i> </span>
+                            </a>
+                        </li>
+                        <li v-on:click="search_col('first_name')"><a href="#">First Name
+                                <span><i class="glyphicon glyphicon-ok" v-if="search_column == 'first_name'"></i> </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </form>
     </div>
 </div>
-<div class="spacer"></div>
+<div style="height: 25px; margin: 0; padding: 0;"></div>
 <div class="container">
     <div class="row">
         <div class="table-responsive">
@@ -69,6 +83,7 @@
             </table>
         </div>
     </div>
+</div>
 </div>
 <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Scroll to top" data-toggle="tooltip" data-placement="left"><span class="glyphicon glyphicon-chevron-up"></span></a>
 @endsection
