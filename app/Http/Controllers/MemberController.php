@@ -19,12 +19,12 @@ class MemberController extends Controller
             foreach (SEARCH_COLUMNS as $col){
                 if ($request->search_c == $col){
                     $search_column = $request->search_c;
-                    $search_query = $request->search_q;
+                    $search_query = DB::getPdo()->quote($request->search_q.'%');
                     break;
                 }
             }
             if ($search_column){
-                $search_string = " EXISTS(SELECT 1 FROM adults WHERE adults.member_id = members.id AND {$search_column} LIKE '{$search_query}%')";
+                $search_string = "EXISTS(SELECT 1 FROM adults WHERE adults.member_id = members.id AND {$search_column} LIKE {$search_query})";
             }
         }
 
