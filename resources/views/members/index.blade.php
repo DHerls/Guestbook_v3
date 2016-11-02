@@ -21,14 +21,34 @@
                 <thead>
                     <tr>
                         <th class="col-sm-12 col-md-1">Info</th>
-                        <th class="col-sm-12 col-md-4">Last Names</th>
-                        <th class="col-sm-12 col-md-4">First Names</th>
-                        <th class="col-sm-12 col-md-1 text-center">Members</th>
-                        <th class="col-sm-12 col-md-1 text-center">Guests</th>
+                        <th class="col-sm-12 col-md-4 sortable" v-on:click="sort('last_name')">Last Names
+                            <span>
+                                <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == 'last_name' && sort_dir == 'up'"></i>
+                                <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == 'last_name' && sort_dir == 'down'"></i>
+                            </span>
+                        </th>
+                        <th class="col-sm-12 col-md-4 sortable" v-on:click="sort('first_name')">First Names
+                            <span>
+                                <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == 'first_name' && sort_dir == 'up'"></i>
+                                <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == 'first_name' && sort_dir == 'down'"></i>
+                            </span>
+                        </th>
+                        <th class="col-sm-12 col-md-1 text-center sortable" v-on:click="sort('num_members')">Members
+                            <span>
+                                <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == 'num_members' && sort_dir == 'up'"></i>
+                                <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == 'num_members' && sort_dir == 'down'"></i>
+                            </span>
+                        </th>
+                        <th class="col-sm-12 col-md-1 text-center sortable" v-on:click="sort('num_guests')">Guests
+                            <span>
+                                <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == 'num_guests' && sort_dir == 'up'"></i>
+                                <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == 'num_guests' && sort_dir == 'down'"></i>
+                            </span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="member in members">
+                    <template v-for="member in sorted_members">
                         <tr v-bind:id="'member-'+member.id">
                             <td><a v-bind:href="'/members/' + member.id" class="btn btn-info" role="button">
                                     <span class="glyphicon glyphicon-list-alt"></span>

@@ -22,9 +22,6 @@ $.ajax({
     url: "/data/members",
     dataType: 'json',
     success: function(data){
-        data.sort(function(a,b){
-            return a['last_name'].localeCompare(b['last_name']);
-        });
         for (var i = 0; i < data.length; i++){
             members.push(new member(data[i]['id'],data[i]['first_name'],data[i]['last_name'],data[i]['members'],data[i]['guests']));
         }
@@ -171,9 +168,31 @@ const app = new Vue({
         members : members,
         search_query: "",
         old_search: "",
-        search_column: "last_name"
+        search_column: "last_name",
+        sort_col: "last_name",
+        sort_dir: "down"
     },
     methods: {
-        search: _.debounce(search,250)
+        search: _.debounce(search,250),
+        sort: function(column){
+
+            if (column == app.sort_col){
+                app.sort_dir = app.sort_dir == 'up' ? 'down' : 'up';
+            } else {
+                app.sort_col = column;
+                app.sort_dir = 'down';
+            }
+        }
+    },
+    computed: {
+        sorted_members: function(){
+             return this.members.sort(function(a,b){
+                 if (typeof(a[app.sort_col]) == 'string'){
+                     return (app.sort_dir=='down' ? 1 : -1) * a[app.sort_col].localeCompare(b[app.sort_col]);
+                 } else {
+                     return (app.sort_dir=='down' ? 1 : -1) * (a[app.sort_col] - (b[app.sort_col]));
+                 }
+            });
+        }
     }
 })
