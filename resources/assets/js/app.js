@@ -7,8 +7,7 @@
 
 require('./bootstrap');
 require('./jquery.notifyBar');
-require('./tablesorter');
-//require('./memberlist');
+require('./scrollToTop');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -171,9 +170,10 @@ const app = new Vue({
     data: {
         members : members,
         search_query: "",
-        old_search: ""
+        old_search: "",
+        search_column: "last_name"
     },
     methods: {
         search: _.debounce(search,250)
     }
-});
+})
