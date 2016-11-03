@@ -34,8 +34,7 @@ class MemberController extends Controller
             $members = Member::all();
         }
 
-
-        if ($request->has("date")){
+        if ($request->has("date") && Auth::user()->isAdmin()){
             $date = date('Y-m-d', strtotime($request->date));
         } else {
             $date = date('Y-m-d');

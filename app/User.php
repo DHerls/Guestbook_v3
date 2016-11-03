@@ -13,6 +13,10 @@ class User extends Model implements AuthenticatableContract
 
     public $fillable = ['name', 'username', 'password'];
 
+    public function isAdmin(){
+        return $this->admin;
+    }
+
     public function guestRecords() {
         return $this->hasMany(GuestRecord::class);
     }
