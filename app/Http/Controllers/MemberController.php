@@ -72,10 +72,18 @@ class MemberController extends Controller
     }
 
     public function index(){
-        return view("members.index");
+        $columns = [
+        ['display' => 'Info', 'sortable' => false, 'col_size' => 1],
+        ['display' => 'Last Name', 'key' => 'last_name', 'sortable' => true, 'col_size' => 4],
+        ['display' => 'First Name', 'key' => 'first_name', 'sortable' => true, 'col_size' => 4],
+        ['display' => 'Members', 'key' => 'num_members', 'sortable' => true, 'col_size' => 1],
+        ['display' => 'Guests', 'key' => 'num_guests', 'sortable' => true, 'col_size' => 1]
+        ];
+        return view("members.index")->with(compact('columns'));
     }
 
     public function display(Request $request, Member $member){
+
         return view('members.display', compact('member'));
     }
 }
