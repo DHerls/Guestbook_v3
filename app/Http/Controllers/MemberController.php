@@ -42,10 +42,10 @@ class MemberController extends Controller
         }
 
         //dd($members);
-
+        //dd("DATE('created_at')= '{$date}'");
         $members->load(['adults',
-            'memberRecords' => function($query) use ($date){ $query->where(DB::raw("DATE('created_at')= {$date}"))->orderBy('created_at','desc');},
-            'guestRecords' => function($query) use ($date) { $query->where(DB::raw("DATE('created_at')= {$date}"));}
+            'memberRecords' => function($query) use ($date){ $query->whereRaw("DATE(created_at)= '{$date}'")->orderBy('created_at','desc');},
+            'guestRecords' => function($query) use ($date) { $query->whereRaw("DATE(created_at)= '{$date}'");}
         ]);
 
         $adults = array();
