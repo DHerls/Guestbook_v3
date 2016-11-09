@@ -78,11 +78,29 @@ class MemberController extends Controller
         ['display' => 'Members', 'key' => 'num_members', 'sortable' => true, 'col_size' => 1],
         ['display' => 'Guests', 'key' => 'num_guests', 'sortable' => true, 'col_size' => 1]
         ];
-        return view("members.index")->with(compact('columns'));
+        return view("members.test")->with(compact('columns'));
     }
 
     public function display(Request $request, Member $member){
 
         return view('members.display', compact('member'));
+    }
+
+    public function guests(){
+        $columns = [
+            ['display' => 'First Name',     'key' => 'first_name',      'sortable' => true, 'col_size' => 2],
+            ['display' => 'Last Name',      'key' => 'last_name',       'sortable' => true, 'col_size' => 2],
+            ['display' => 'City',           'key' => 'city',            'sortable' => true, 'col_size' => 1],
+            ['display' => '# Adults',       'key' => 'num_adults',      'sortable' => true, 'col_size' => 1],
+            ['display' => '# Children',     'key' => 'num_children',    'sortable' => true, 'col_size' => 1],
+            ['display' => 'Cost',           'key' => 'cost',            'sortable' => true, 'col_size' => 1],
+            ['display' => 'Payment Method', 'key' => 'payment',         'sortable' => true, 'col_size' => 2],
+            ['display' => 'Check-in Time',  'key' => 'check_in',        'sortable' => true, 'col_size' => 2],
+        ];
+        return view('members.guests')->with(compact('columns'));
+    }
+
+    public function test(){
+
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="member-search">
+<div id="member-search" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <div class="container">
     <div class="row">
         <form action="" autocomplete="off" class="form-horizontal" method="post" accept-charset="utf-8">
@@ -56,14 +56,17 @@
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                 </a>
                             </td>
-                            <td>@{{member.last_name}}</td>
-                            <td>@{{member.first_name}}</td>
+                            <td v-once>@{{member.last_name}}</td>
+                            <td v-once>@{{member.first_name}}</td>
                             <td v-if="member.editing" v-bind:class="{ 'has-error': member.has_error }">
                                 <input type="text" v-model="member.num_members"  class="text-center form-control" @blur="member.submit()" @keyup.enter="member.submit()" @keyup.esc="member.cancel()">
                             </td>
                             <td v-else class="text-center memberCountDisplay" @dblclick="member.edit()">@{{member.num_members}}</td>
 
-                            <td class="text-center">@{{member.num_guests}}</td>
+                            <td><a v-bind:href="'/members/' + member.id + '/guests'" class="btn btn-default" role="button" style="width: 92px">
+                                    @{{member.guest_string}}
+                                </a>
+                            </td>
                         </tr>
                     </template>
    `

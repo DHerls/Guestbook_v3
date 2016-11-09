@@ -26,19 +26,22 @@ function member(ids, first, last, mem, guests){
     this.editing = false;
     this.has_error = false;
 
-    this.edit = function() {
-        this.editing = true;
-        this.old_members = this.num_members;
-        Vue.nextTick((function() {
-            document.querySelector("tr#member-"+this.id + " td input").select();
-        }).bind(this));
+    this.guest_text = function(){
+        if (this.num_guests == 0){
+            return "No Guests";
+        } else if (this.num_guests == 1){
+            return "1 Guest";
+        } else {
+            return this.num_guests + " Guests";
+        }
     }
 
-    this.cancel = function() {
-        this.canceling = true;
-        this.num_members = this.old_members;
-        this.editing = false;
-        this.has_error = false;
+    this.id_url = function(){
+        return "/members/" + this.id;
+    }
+
+    this.guest_url = function(){
+        return this.id_url() + "/guests"
     }
 
     this.submit = function() {
@@ -150,15 +153,31 @@ function search(){
     });
 }
 
+Vue.component('member-table', require('./components/MemberTable.vue'));
+Vue.component('searchbar', require('./components/SearchBar.vue'));
+
+
 const app = new Vue({
-    el: '#member-search',
+    el: '#app',
     data: {
         members : members,
         search_query: "",
         old_search: "",
         search_column: "last_name",
         sort_col: "last_name",
-        sort_dir: "down"
+        sort_dir: "down",
+        data_obj: {
+            has_error: false,
+            editing: false,
+            data: "Test"
+        },
+        columns: [
+            {"type": "btn", "link": "id_url()", "key": "", "icon": "list-alt"},
+            {"type": "text", "key": "last_name"},
+            {"type": "text", "key": "first_name"},
+            {"type": "efield", "key": "num_members"},
+            {"type": "btn", "link": "guest_url()", "key": "guest_text()", "icon": ""}
+        ]
     },
     methods: {
         search: _.debounce(search,250),

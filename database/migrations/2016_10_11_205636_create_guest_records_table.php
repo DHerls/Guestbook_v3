@@ -20,6 +20,7 @@ class CreateGuestRecordsTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->tinyInteger('num_adults')->default(0);
             $table->tinyInteger('payment_method');
+            $table->smallInteger('price');
             $table->tinyInteger('num_children')->default(0);
             $table->binary('member_signature')->nullable();
             $table->binary('guest_signature')->nullable();
