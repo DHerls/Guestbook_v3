@@ -1,23 +1,113 @@
+Vue.component('searchbar', require('./components/SearchBar.vue'));
+Vue.component('editfield', require('./components/EditField.vue'));
+
 const app = new Vue({
-   e1: "#app",
+    el: '#app',
     data: {
         sort_col: "",
+        sort_dir: "down",
         data: [],
-        data_url: ""
+        data_url: "",
     },
     methods: {
         set_sort_col: function(column){
-            this.sort_col = column;
+            if (this.sort_col == column){
+                this.sort_dir = this.sort_dir == "up" ? "down" : "up";
+            } else {
+                this.sort_col = column;
+                this.sort_dir = "down";
+            }
         },
 
-        search: function(text, column){
+        search: function(text = "", column = this.sort_col){
+            $.ajax({
+                type: 'GET',
+                url: app.data_url,
+                dataType: 'json',
+                data: {search_c: column, search_q: text},
+                success: function(data){
+                    while(app.data.length){
+                        app.data.pop();
+                    }
+                    while (data.length){
+                        app.data.push(data.pop());
+                    }
+                },
+                error: function(data){
+                    console.log(data);
+                }
+            });
+        },
 
+        submit: function(data_obj, url){
+            var to_return;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                dataType: 'json',
+                data: data_obj,
+                async: false,
+                success: function(data){
+                    to_return = true;
+                },
+                error: function(data){
+                    to_return = false;
+                    var message = "Generic Error";
+                    var cl = "error";
+                    switch (data.status){
+                        case 404:
+                            message = "Cannot connect to server";
+                            cl = "error";
+                            break;
+                        case 422:
+                            message = data.responseJSON['num_members'][0];
+                            cl = "warning";
+                            break;
+                        case 500:
+                            message = "Internal Server Error";
+                            cl = "error";
+                            console.log(data);
+                        default:
+
+                    }
+                    $.notifyBar({
+                        cssClass: cl,
+                        html: message
+                    })
+                }
+            });
+            return to_return;
         }
     },
     computed: {
         sorted_data: function() {
+            if (this.data.length == 0){
+                return []
+            }
+            if (typeof(this.data[0][this.sort_col]) == 'string'){
+                this.data.sort(function(a,b){
+                    return (this.sort_dir=="up" ? -1 : 1) * a[app.sort_col].localeCompare(b[app.sort_col]);
+                });
+            } else {
+                this.data.sort(function(a,b){
+                    return (this.sort_dir=="up" ? -1 : 1) * (a[app.sort_col] - b[app.sort_col]);
+                });
+            }
 
+            return this.data;
         }
+    },
+    created: function () {
+        this.data_url = document.head.querySelector("[name=data-url]").content;
+        this.sort_col = document.head.querySelector("[name=sort-col]").content;
+        Vue.nextTick(this.search);
     }
 
 });
+

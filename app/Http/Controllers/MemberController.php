@@ -63,7 +63,14 @@ class MemberController extends Controller
 
             $adult['id'] = $member->id;
             $adult['members'] = $member->memberRecords->first() ? $member->memberRecords->first()->num_members : 0;
-            $adult['guests'] = $member->guestRecords->sum(DB::raw('num_children + num_adults'));
+            $num_guests = $member->guestRecords->sum(DB::raw('num_children + num_adults'));
+            if ($num_guests == 0){
+                $adult['guest_string'] = "No Guests";
+            } else if ($num_guests == 1){
+                $adult['guest_string'] = "1 Guest";
+            } else {
+                $adult['guest_string'] = $num_guests . " Guests";
+            }
             $adults[] = $adult;
         }
 
@@ -76,9 +83,9 @@ class MemberController extends Controller
         ['display' => 'Last Name', 'key' => 'last_name', 'sortable' => true, 'col_size' => 4],
         ['display' => 'First Name', 'key' => 'first_name', 'sortable' => true, 'col_size' => 4],
         ['display' => 'Members', 'key' => 'num_members', 'sortable' => true, 'col_size' => 1],
-        ['display' => 'Guests', 'key' => 'num_guests', 'sortable' => true, 'col_size' => 1]
+        ['display' => 'Guests', 'key' => 'guest_string', 'sortable' => true, 'col_size' => 1]
         ];
-        return view("members.test")->with(compact('columns'));
+        return view("members.index")->with(compact('columns'));
     }
 
     public function display(Request $request, Member $member){

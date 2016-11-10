@@ -8,7 +8,8 @@
 require('./bootstrap');
 require('./jquery.notifyBar');
 require('./scrollToTop');
-require('./memberlist');
+require('./sortsearchtable');
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

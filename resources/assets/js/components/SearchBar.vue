@@ -30,14 +30,17 @@
                 old_search: ''
             }
         },
-        props: ['search_columns'],
+        props: ['search_columns','search_url'],
         methods: {
             search: function() {
                 if (this.search_query == this.old_search){
                     return;
                 }
                 this.old_search = this.search_query;
-                this.$emit('search',search_query,search_column);
+                if (this.search_column== 0){
+                    this.search_column = this.search_columns[0];
+                }
+                this.$emit('search',this.search_query,this.search_column);
             },
             set_search_col(key){
                 this.search_column = key;

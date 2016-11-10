@@ -1,30 +1,17 @@
 @extends('layouts.app')
 
+@section('meta')
+    <meta name="data-url" content="{{Request::url()}}/data/members">
+    <meta name="sort-col" content="last_name">
+@endsection
+
 @section('content')
 <div id="member-search" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <div class="container">
     <div class="row">
-        <form action="" autocomplete="off" class="form-horizontal" method="post" accept-charset="utf-8">
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <i class="glyphicon glyphicon-search"></i>
-                </span>
-                <input id="member-search" role="search" type="search" class="form-control" @keyup="search" v-model="search_query" @keyup.esc="search_query = ''"/>
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search By<span class="caret"></span></button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li v-on:click="search_col('last_name')"><a href="#">Last Name
-                                <span><i class="glyphicon glyphicon-ok" v-if="search_column == 'last_name'"></i> </span>
-                            </a>
-                        </li>
-                        <li v-on:click="search_col('first_name')"><a href="#">First Name
-                                <span><i class="glyphicon glyphicon-ok" v-if="search_column == 'first_name'"></i> </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </form>
+        <searchbar v-bind:search_columns="{'last_name': 'Last Name','first_name': 'First Name'}"
+            v-on:search="search(arguments[0],arguments[1])"
+        ></searchbar>
     </div>
 </div>
 <div style="height: 25px; margin: 0; padding: 0;"></div>
@@ -36,7 +23,7 @@
                     <tr>
                         @foreach($columns as $column)
                             @if($column['sortable'])
-                                <th class="col-sm-12 col-md-{{$column['col_size']}} sortable" v-on:click="sort('{{$column['key']}}')">
+                                <th class="col-sm-12 col-md-{{$column['col_size']}} sortable" v-on:click="set_sort_col('{{$column['key']}}')">
                                     {{$column['display']}}
                                     <span>
                                         <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'up'"></i>
@@ -50,21 +37,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="member in sorted_members">
-                        <tr v-bind:id="'member-'+member.id">
-                            <td><a v-bind:href="'/members/' + member.id" class="btn btn-info" role="button">
+                    <template v-for="data in sorted_data">
+                        <tr v-bind:id="'member-'+data.id">
+                            <td><a v-bind:href="'/members/' + data.id" class="btn btn-info" role="button">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                 </a>
                             </td>
-                            <td v-once>@{{member.last_name}}</td>
-                            <td v-once>@{{member.first_name}}</td>
-                            <td v-if="member.editing" v-bind:class="{ 'has-error': member.has_error }">
-                                <input type="text" v-model="member.num_members"  class="text-center form-control" @blur="member.submit()" @keyup.enter="member.submit()" @keyup.esc="member.cancel()">
-                            </td>
-                            <td v-else class="text-center memberCountDisplay" @dblclick="member.edit()">@{{member.num_members}}</td>
-
-                            <td><a v-bind:href="'/members/' + member.id + '/guests'" class="btn btn-default" role="button" style="width: 92px">
-                                    @{{member.guest_string}}
+                            <td >@{{data.last_name}}</td>
+                            <td>@{{data.first_name}}</td>
+                            <td is="editfield" :text="data.members" :key_col="'num_members'" :submit_url="'/members/' + data.id + '/records'" :submit_func="submit"></td>
+                            <td><a v-bind:href="'/members/' + data.id + '/guests'" class="btn btn-default" role="button" style="width: 92px">
+                                    @{{data.guest_string}}
                                 </a>
                             </td>
                         </tr>
