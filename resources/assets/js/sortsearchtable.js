@@ -39,8 +39,7 @@ const app = new Vue({
             });
         },
 
-        submit: function(data_obj, url){
-            var to_return;
+        submit: function(data_obj, url, callback){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -52,12 +51,10 @@ const app = new Vue({
                 url: url,
                 dataType: 'json',
                 data: data_obj,
-                async: false,
                 success: function(data){
-                    to_return = true;
+                    callback(true);
                 },
                 error: function(data){
-                    to_return = false;
                     var message = "Generic Error";
                     var cl = "error";
                     switch (data.status){
@@ -66,7 +63,7 @@ const app = new Vue({
                             cl = "error";
                             break;
                         case 422:
-                            message = data.responseJSON['num_members'][0];
+                            message = data.responseJSON['members'][0];
                             cl = "warning";
                             break;
                         case 500:
@@ -80,9 +77,10 @@ const app = new Vue({
                         cssClass: cl,
                         html: message
                     })
+
+                    callback(false);
                 }
             });
-            return to_return;
         }
     },
     computed: {
@@ -92,11 +90,11 @@ const app = new Vue({
             }
             if (typeof(this.data[0][this.sort_col]) == 'string'){
                 this.data.sort(function(a,b){
-                    return (this.sort_dir=="up" ? -1 : 1) * a[app.sort_col].localeCompare(b[app.sort_col]);
+                    return (app.sort_dir=="up" ? -1 : 1) * a[app.sort_col].localeCompare(b[app.sort_col]);
                 });
             } else {
                 this.data.sort(function(a,b){
-                    return (this.sort_dir=="up" ? -1 : 1) * (a[app.sort_col] - b[app.sort_col]);
+                    return (app.sort_dir=="up" ? -1 : 1) * (a[app.sort_col] - b[app.sort_col]);
                 });
             }
 

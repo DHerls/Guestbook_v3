@@ -15,7 +15,7 @@ class MemberRecordController extends Controller
 {
     public function create(Request $request, Member $member){
         $this->validate($request, [
-            'num_members' => "required|numeric|max:{$member->numPeople()}",
+            'members' => "required|numeric|max:{$member->numPeople()}",
         ], [
             'max' => 'Only :max members registered to this account!'
         ]);
@@ -23,7 +23,7 @@ class MemberRecordController extends Controller
         $mRecord = new MemberRecord();
         $mRecord->member_id = $member->id;
         $mRecord->user_id = Auth::id();
-        $mRecord->num_members = $request->num_members;
+        $mRecord->num_members = $request->members;
         $mRecord->save();
 
 

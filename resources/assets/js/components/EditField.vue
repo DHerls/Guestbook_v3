@@ -1,7 +1,7 @@
 <template xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <td v-bind:class="{ 'has-error': has_error }">
-        <input v-if="editing" type="text" v-model="current_value"  class="text-center form-control" @blur="select()" @keyup.enter="submit()" @keyup.esc="cancel()">
-        <p v-else class="text-center" @dblclick="edit()">{{current_value}}</p>
+        <input v-if="editing" type="text" v-model="dataobj[key_col]"  class="text-center form-control" @blur="select()" @keyup.enter="submit()" @keyup.esc="cancel()">
+        <p v-else class="text-center" @dblclick="edit()">{{dataobj[key_col]}}</p>
     </td>
 </template>
 <style>
@@ -13,13 +13,12 @@
                 old_value: "",
                 editing: false,
                 has_error: false,
-                current_value: "",
             }
         },
-        props: ['text','key_col','submit_url','submit_func'],
+        props: ['dataobj','key_col','submit_url','submit_func'],
         methods: {
             edit: function(){
-                this.old_value = this.text;
+                this.old_value = this.dataobj[this.key_col];
                 this.editing = true;
                 Vue.nextTick(this.select.bind(this));
 
@@ -28,25 +27,25 @@
                 this.$el.getElementsByTagName('input')[0].select();
             },
             submit: function() {
-                if (this.current_value == this.old_value){
+                if (this.dataobj[this.key_col] == this.old_value){
                     return;
                 }
-                var obj = {};
-                obj[this.key_col] = this.current_value;
-                var result = this.submit_func(obj,this.submit_url);
-                console.log(result);
+                var toSend = {};
+                toSend[this.key_col] = this.dataobj[this.key_col];
+                this.submit_func(toSend,this.submit_url, this.callback);
+            },
+            callback: function(result){
                 if (result){
+                    this.has_error = false;
                     this.editing = false;
+                } else {
+                    this.has_error = true;
                 }
-
             },
             cancel: function() {
-                this.text = this.old_value;
+                this.dataobj[this.key_col] = this.old_value;
                 this.editing = false;
             }
-        },
-        created: function() {
-            this.current_value = this.text;
         }
     }
 </script>

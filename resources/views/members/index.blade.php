@@ -45,7 +45,7 @@
                             </td>
                             <td >@{{data.last_name}}</td>
                             <td>@{{data.first_name}}</td>
-                            <td is="editfield" :text="data.members" :key_col="'num_members'" :submit_url="'/members/' + data.id + '/records'" :submit_func="submit"></td>
+                            <td is="editfield" :dataobj="data" :key_col="'members'" :submit_url="'/members/' + data.id + '/records'" :submit_func="submit"></td>
                             <td><a v-bind:href="'/members/' + data.id + '/guests'" class="btn btn-default" role="button" style="width: 92px">
                                     @{{data.guest_string}}
                                 </a>
