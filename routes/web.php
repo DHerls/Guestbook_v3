@@ -11,16 +11,26 @@
 |
 */
 
+Route::group(['middleware' => ['web','auth','admin']], function() {
+
+    Route::get('/members/new','MemberController@create');
+
+    Route::post('/members','MemberController@create');
+    Route::post('/members/{member}/adults','SetAdults');
+    Route::post('/members/{member}/children','MemberRecordController@create');
+    Route::post('/members/{member}/phones','MemberRecordController@create');
+    Route::post('/members/{member}/emails','MemberRecordController@create');
+
+});
+
 Route::group(['middleware' => ['web','auth']], function() {
     Route::get('/', 'MemberController@index');
+    Route::get('/members', 'MemberController@index');
     Route::get('/test', 'MemberController@test');
     Route::get('/members/{member}','MemberController@display');
     Route::get('/members/{member}/guests','MemberController@guests');
 
-
     Route::post('/members/{member}/records','MemberRecordController@create');
-
-    Route::get('/data/members','MemberController@memberData');
 });
 
 Route::group(['middleware' => 'web'], function() {

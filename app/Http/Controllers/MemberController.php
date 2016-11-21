@@ -77,7 +77,10 @@ class MemberController extends Controller
         return response()->json($adults);
     }
 
-    public function index(){
+    public function index(Request $request){
+        if ($request->ajax()){
+            return $this->memberData($request);
+        }
         $columns = [
         ['display' => 'Info', 'sortable' => false, 'col_size' => 1],
         ['display' => 'Last Name', 'key' => 'last_name', 'sortable' => true, 'col_size' => 4],
@@ -107,7 +110,55 @@ class MemberController extends Controller
         return view('members.guests')->with(compact('columns'));
     }
 
-    public function test(){
+    public function create(Request $request){
+        if($request->isMethod('get')){
+            return view('members.new');
+        }
 
+        $this->validate($request,[
+           'address1' => 'required|string',
+           'address2' => 'string',
+           'city' => 'required|string',
+           'zip' => 'required|numeric|min:1000|max:99999',
+            'adults.*.first_name' => 'required|string',
+            'adults.*.last_name' => 'required|string',
+            'children.*.first_name' => 'required|string',
+            'children.*.last_name' => 'required|string',
+            'children.*.birth_year' => "numeric|min:{date('Y')-25}|max:{date('Y')}",
+            'phones.*.num' => "required|numeric",
+            'phones.*.desc' => "string",
+            'emails.*.address' => "required|email",
+            'emails.*.desc' => "string",
+        ]);
+
+        $member = Member;
+        $member->address_line_1 = $request->address1;
+        $member->address_line_2 = $request->address2;
+        $member->city = $request->city;
+        $member->zip = $request->zip;
+        $member->save();
+
+        foreach ($request->adults as $adult){
+            $member->adults()->create($adult);
+        }
+
+        foreach ($request->children as $child){
+            $member->children()->create($child);
+        }
+
+        foreach ($request->phones as $phone){
+            $member->children()->create($phone);
+        }
+
+        foreach ($request->emails as $email){
+            $member->children()->create($email);
+        }
+
+    }
+
+    public function test(){
+        $member = Member::find(1);
+        $member->load('adults','children','phones','emails');
+        return response()->json($member);
     }
 }

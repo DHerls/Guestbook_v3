@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('meta')
-    <meta name="data-url" content="{{Request::url()}}/data/members">
+    <meta name="data-url" content="{{Request::url()}}/members">
     <meta name="sort-col" content="last_name">
 @endsection
 
@@ -14,7 +14,15 @@
         ></searchbar>
     </div>
 </div>
-<div style="height: 25px; margin: 0; padding: 0;"></div>
+    @if(Auth::user()->isAdmin())
+        <div class="container">
+            <div class="row">
+                <a href="/members/new" class="btn btn-primary pull-right" role="button">Add Member <span class="glyphicon glyphicon-plus"></span> </a>
+            </div>
+        </div>
+    @else
+        <div style="height: 25px; margin: 0; padding: 0;"></div>
+    @endif
 <div class="container">
     <div class="row">
         <div class="table-responsive">

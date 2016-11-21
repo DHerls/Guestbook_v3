@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
             'name' => 'Dan Herlihy',
             'username' => 'DHerls',
             'password' => bcrypt('password'),
+            'admin' => true
         ]);
     }
 }

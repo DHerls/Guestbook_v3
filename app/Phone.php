@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Phone extends Model
 {
+    protected $fillable = array('number', 'description');
 
     public function member(){
         return $this->belongsTo(Member::class);
