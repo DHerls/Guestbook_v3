@@ -153,7 +153,6 @@ function search(){
     });
 }
 
-Vue.component('member-table', require('./components/MemberTable.vue'));
 Vue.component('searchbar', require('./components/SearchBar.vue'));
 
 
