@@ -1,9 +1,13 @@
 <template>
     <div class="panel panel-info">
-        <div v-once class="panel-heading">{{title}}<button class="pull-right">+</button></div>
+        <div v-once class="panel-heading">
+            {{title}}
+            <button class="btn btn-default pull-right glyphicon glyphicon-plus" v-on:click="addRow"></button>
+            <div class="clearfix"></div>
+        </div>
         <div class="panel-body">
             <table>
-                <tr v-for="object in data">
+                <tr v-for="object in rows">
                     <td><input type="text" v-model="object[columns[0]]"></td>
                     <td><input type="text" v-model="object[columns[1]]"></td>
                 </tr>
@@ -17,13 +21,18 @@
     export default{
         data(){
             return{
-                msg:'hello vue'
+                msg:'hello vue',
+                rows: []
             }
         },
         props: [
             'title',
-            'data',
             'columns'
-        ]
+        ],
+        methods: {
+            addRow: function(){
+                this.rows.add()
+            }
+        }
     }
 </script>

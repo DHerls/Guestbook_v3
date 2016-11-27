@@ -71,5 +71,5 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript" src="/js/0.app.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
 @endsection
