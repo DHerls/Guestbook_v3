@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <multiple-edit v-bind:title="'Test'"></multiple-edit>
+            <multiple-edit v-bind:title="'Adults'" v-bind:columns="columns.adults"></multiple-edit>
         </div>
     </div>
 @endsection

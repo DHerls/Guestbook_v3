@@ -6,11 +6,18 @@
             <div class="clearfix"></div>
         </div>
         <div class="panel-body">
-            <table>
-                <tr v-for="object in rows">
-                    <td><input type="text" v-model="object[columns[0]]"></td>
-                    <td><input type="text" v-model="object[columns[1]]"></td>
-                </tr>
+            <table class="table table-responsive">
+                <thead>
+                    <th v-for="title in columns.titles">{{title}}</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr v-for="object, index in rows">
+                        <td v-for="key in columns.keys"><input type="text" v-model="object[key]" class="form-control"></td>
+                        <td v-if="index != 0" v-on:click="remove(index)"><button class="btn btn-default text-center glyphicon glyphicon-remove"></button></td>
+                    </tr>
+                </tbody>
+
             </table>
         </div>
     </div>
@@ -30,9 +37,19 @@
             'columns'
         ],
         methods: {
-            addRow: function(){
-                this.rows.add()
+            addRow: function () {
+                var obj = {};
+                for (var i = 0; i< this.columns.keys.length; i++){
+                    obj[this.columns.keys[i]] = '';
+                }
+                this.rows.push(obj)
+            },
+            remove: function(rowNum){
+                this.rows.splice(rowNum,1);
             }
+        },
+        mounted: function(){
+            this.addRow();
         }
     }
 </script>
