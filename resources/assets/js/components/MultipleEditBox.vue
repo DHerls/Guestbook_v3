@@ -6,15 +6,18 @@
             <div class="clearfix"></div>
         </div>
         <div class="panel-body">
-            <table class="table table-responsive">
+            <table class="table table-responsive form-group">
                 <thead>
                     <th v-for="title in columns.titles">{{title}}</th>
                     <th></th>
                 </thead>
                 <tbody>
                     <tr v-for="object, index in rows">
-                        <td v-for="key in columns.keys"><input type="text" v-model="object[key]" class="form-control"></td>
-                        <td v-if="index != 0" v-on:click="remove(index)"><button class="btn btn-default text-center glyphicon glyphicon-remove"></button></td>
+                        <td v-for="key in columns.keys" v-bind:class="{ 'has-error': object.errors[key] }">
+                            <p v-if="object.errors[key]">{{object.errors[key]}}</p>
+                            <input type="text" v-model="object[key]" class="form-control">
+                        </td>
+                        <td v-if="index != 0" class="fit"><button v-on:click="remove(index)" class="btn btn-danger text-center glyphicon glyphicon-remove"></button></td>
                     </tr>
                 </tbody>
 
@@ -23,18 +26,23 @@
     </div>
 </template>
 <style>
+    .table td.fit,
+    .table th.fit {
+        white-space: nowrap;
+        width: 1%;
+    }
 </style>
 <script>
     export default{
         data(){
             return{
                 msg:'hello vue',
-                rows: []
             }
         },
         props: [
             'title',
-            'columns'
+            'columns',
+            'rows'
         ],
         methods: {
             addRow: function () {
@@ -42,7 +50,8 @@
                 for (var i = 0; i< this.columns.keys.length; i++){
                     obj[this.columns.keys[i]] = '';
                 }
-                this.rows.push(obj)
+                obj.errors = {};
+                this.rows.push(obj);
             },
             remove: function(rowNum){
                 this.rows.splice(rowNum,1);

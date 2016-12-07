@@ -118,8 +118,10 @@ class MemberController extends Controller
         $this->validate($request,[
            'address1' => 'required|string',
            'address2' => 'string',
+           'state' => 'required|string',
            'city' => 'required|string',
            'zip' => 'required|numeric|min:1000|max:99999',
+            'adults' => 'required|array|min:1',
             'adults.*.first_name' => 'required|string',
             'adults.*.last_name' => 'required|string',
             'children.*.first_name' => 'required|string',
@@ -153,7 +155,7 @@ class MemberController extends Controller
         foreach ($request->emails as $email){
             $member->children()->create($email);
         }
-
+        return response()->json(['id' => $member->id]);
     }
 
     public function test(){
