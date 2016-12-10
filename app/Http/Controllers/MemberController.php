@@ -126,35 +126,45 @@ class MemberController extends Controller
             'adults.*.last_name' => 'required|string',
             'children.*.first_name' => 'required|string',
             'children.*.last_name' => 'required|string',
-            'children.*.birth_year' => "numeric|min:{date('Y')-25}|max:{date('Y')}",
-            'phones.*.num' => "required|numeric",
-            'phones.*.desc' => "string",
+            'children.*.birth_year' => "numeric|min:" . (date('Y')-25) . "|max:" . date('Y'),
+            'phones.*.number' => "required|numeric",
+            'phones.*.description' => "string",
             'emails.*.address' => "required|email",
-            'emails.*.desc' => "string",
+            'emails.*.description' => "string",
         ]);
 
-        $member = Member;
-        $member->address_line_1 = $request->address1;
-        $member->address_line_2 = $request->address2;
-        $member->city = $request->city;
-        $member->zip = $request->zip;
+        $member = Member::create([
+            'address_line_1' => $request->address1,
+            'address_line_2' => $request->address2,
+            'city' => $request->city,
+            'state' => $request->state,
+            'zip' => $request->zip,
+        ]);
         $member->save();
 
         foreach ($request->adults as $adult){
             $member->adults()->create($adult);
         }
 
-        foreach ($request->children as $child){
-            $member->children()->create($child);
+        if ($request->children){
+            foreach ($request->children as $child){
+                $member->children()->create($child);
+            }
         }
 
-        foreach ($request->phones as $phone){
-            $member->children()->create($phone);
+        if ($request->phones){
+            foreach ($request->phones as $phone){
+                $member->phones()->create($phone);
+            }
         }
 
-        foreach ($request->emails as $email){
-            $member->children()->create($email);
+        if ($request->emails){
+            foreach ($request->emails as $email){
+                $member->emails()->create($email);
+            }
         }
+
+
         return response()->json(['id' => $member->id]);
     }
 

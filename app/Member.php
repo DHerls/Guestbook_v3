@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Member extends Model
 {
 
+    public $fillable = ['address_line_1','address_line_2','city','state','zip'];
+
     public function adults(){
         return $this->hasMany(Adult::class);
     }

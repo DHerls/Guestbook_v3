@@ -20,7 +20,7 @@ class CreateMembersTable extends Migration
             $table->string('city',45);
             $table->string('state',2);
             $table->string('zip',6);
-            $table->decimal('current_balance');
+            $table->decimal('current_balance')->default(0);
             $table->boolean('disabled')->default(false);
             $table->timestamps();
         });

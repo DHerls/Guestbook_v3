@@ -5874,4 +5874,8 @@ button.close {
   pointer-events: auto;
   cursor: pointer; }
 
+p.error-msg {
+  margin: 0;
+  color: red; }
+
 /*# sourceMappingURL=app.css.map */

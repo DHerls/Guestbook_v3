@@ -1,21 +1,21 @@
 <template>
     <div class="panel panel-info">
         <div v-once class="panel-heading">
-            {{title}}
+            {{info.title}}
             <button class="btn btn-default pull-right glyphicon glyphicon-plus" v-on:click="addRow"></button>
             <div class="clearfix"></div>
         </div>
         <div class="panel-body">
             <table class="table table-responsive form-group">
                 <thead>
-                    <th v-for="title in columns.titles">{{title}}</th>
+                    <th v-for="column in info.columns">{{column.title}}</th>
                     <th></th>
                 </thead>
                 <tbody>
-                    <tr v-for="object, index in rows">
-                        <td v-for="key in columns.keys" v-bind:class="{ 'has-error': object.errors[key] }">
-                            <p v-if="object.errors[key]">{{object.errors[key]}}</p>
-                            <input type="text" v-model="object[key]" class="form-control">
+                    <tr v-for="object, index in info.rows">
+                        <td v-for="column in info.columns" v-bind:class="{ 'has-error': object.errors[column.key] }">
+                            <input type="text" v-model="object[column.key]" class="form-control">
+                            <p class="error-msg" v-if="object.errors[column.key]">{{object.errors[column.key]}}</p>
                         </td>
                         <td v-if="index != 0" class="fit"><button v-on:click="remove(index)" class="btn btn-danger text-center glyphicon glyphicon-remove"></button></td>
                     </tr>
@@ -36,25 +36,23 @@
     export default{
         data(){
             return{
-                msg:'hello vue',
             }
         },
         props: [
-            'title',
-            'columns',
-            'rows'
+            'info'
         ],
         methods: {
             addRow: function () {
                 var obj = {};
-                for (var i = 0; i< this.columns.keys.length; i++){
-                    obj[this.columns.keys[i]] = '';
-                }
                 obj.errors = {};
-                this.rows.push(obj);
+                for (var i = 0; i< this.info.columns.length; i++){
+                    obj[this.info.columns[i].key] = '';
+                    obj.errors[this.info.columns[i].key] = '';
+                }
+                this.info.rows.push(obj);
             },
             remove: function(rowNum){
-                this.rows.splice(rowNum,1);
+                this.info.rows.splice(rowNum,1);
             }
         },
         mounted: function(){
