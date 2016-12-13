@@ -17,6 +17,7 @@
     @if(Auth::user()->isAdmin())
         <div class="container">
             <div class="row">
+                <br>
                 <a href="/members/new" class="btn btn-primary pull-right" role="button">Add Member <span class="glyphicon glyphicon-plus"></span> </a>
             </div>
         </div>
