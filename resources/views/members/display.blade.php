@@ -1,9 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row row-eq-height">
+@if(Auth::user()->isAdmin())
+    <div class="container">
+        <div class="row">
+            <button class="btn btn-danger pull-right" type="submit">Delete User</button>
+        </div>
+    </div>
+    <br>
 
+@endif
+<div class="container-fluid">
+    <div class="row">
+        <Multiple-Display></Multiple-Display>
+    </div>
+    <div class="row row-eq-height">
         <div class="col-xs-12 col-sm-6 col-lg-3">
             <div class="panel panel-info">
                 <div class="panel-heading">Adults</div>
@@ -104,4 +115,8 @@
 </div>
 
 
+@endsection
+
+@section('scripts')
+    <script type="text/javascript" src="/js/edit.js"></script>
 @endsection

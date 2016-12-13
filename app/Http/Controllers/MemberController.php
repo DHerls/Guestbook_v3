@@ -92,8 +92,12 @@ class MemberController extends Controller
     }
 
     public function display(Request $request, Member $member){
+        if (!$request->ajax()){
+            return view('members.display', compact('member'));;
+        }
+        $member->load(['adults','children','phones','emails']);
+        return response()->json($member);
 
-        return view('members.display', compact('member'));
     }
 
     public function guests(){
