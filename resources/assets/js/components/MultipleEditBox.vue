@@ -2,7 +2,6 @@
     <div class="panel panel-info">
         <div v-once class="panel-heading">
             {{info.title}}
-            <button class="btn btn-default pull-right glyphicon glyphicon-plus" v-on:click="addRow"></button>
             <div class="clearfix"></div>
         </div>
         <div class="panel-body">
@@ -22,6 +21,8 @@
                 </tbody>
 
             </table>
+            <button class="btn btn-default pull-right add glyphicon glyphicon-plus" v-on:click="addRow"></button>
+
         </div>
     </div>
 </template>
@@ -30,6 +31,14 @@
     .table th.fit {
         white-space: nowrap;
         width: 1%;
+    }
+
+    .table{
+        margin-bottom: 8px;
+    }
+
+    button.add {
+        margin-right: 7px;
     }
 </style>
 <script>
