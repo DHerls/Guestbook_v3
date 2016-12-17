@@ -3,9 +3,6 @@ var memberFields = require('./json/memberFields.json');
 
 Vue.component('multiple-edit',require('./components/MultipleEditBox.vue'));
 
-var email_re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-var memberFields = require('./json/memberFields.json');
-
 const app = new Vue ({
     el: "#app",
     data: {
