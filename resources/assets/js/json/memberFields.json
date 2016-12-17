@@ -1,81 +1,37 @@
 {
   "adults": {
-    "columns": [
-      {
-        "key": "first_name",
-        "title": "First Name",
-        "required": true,
-        "type": "string"
-      },
-      {
-        "key": "last_name",
-        "title": "Last Name",
-        "required": true,
-        "type": "string"
-      }
+    "columns":[
+      {"key": "first_name", "title": "First Name", "validation": "required|string|max:45"},
+      {"key": "last_name", "title": "Last Name", "validation": "required|string|max:45"}
     ],
     "rows": [],
     "title": "Adults",
     "required": true
   },
   "children": {
-    "columns": [
-      {
-        "key": "first_name",
-        "title": "First Name",
-        "required": true,
-        "type": "string"
-      },
-      {
-        "key": "last_name",
-        "title": "Last Name",
-        "required": true,
-        "type": "string"
-      },
-      {
-        "key": "birth_year",
-        "title": "Birth Year",
-        "required": false,
-        "type": "num"
-      }
+    "columns":[
+      {"key": "first_name", "title": "First Name", "validation": "required|string|max:45"},
+      {"key": "last_name", "title": "Last Name", "validation": "required|string|max:45"},
+      {"key": "birth_year", "title": "Birth Year", "validation": "numeric|min:4|max:4"}
     ],
     "title": "Children",
     "rows": []
   },
   "phones": {
-    "columns": [
-      {
-        "key": "number",
-        "title": "Phone Number",
-        "required": true,
-        "type": "num"
-      },
-      {
-        "key": "description",
-        "title": "Description",
-        "required": false,
-        "type": "string"
-      }
+    "columns":[
+      {"key": "number", "title": "Phone Number", "validation": "required|numeric|min:7|max:13"},
+      {"key": "description", "title": "Description", "validation": "string|max:45"}
     ],
     "title": "Phone Numbers",
     "rows": []
   },
   "emails": {
-    "columns": [
-      {
-        "key": "address",
-        "title": "Email Address",
-        "required": true,
-        "type": "email"
-      },
-      {
-        "key": "description",
-        "title": "Description",
-        "required": false,
-        "type": "string"
-      }
+    "columns":[
+      {"key": "address", "title": "Email Address", "validation": "required|email"},
+      {"key": "description", "title": "Description", "validation": "string"}
     ],
     "rows": [],
     "title": "Email Addresses"
   }
+
 }

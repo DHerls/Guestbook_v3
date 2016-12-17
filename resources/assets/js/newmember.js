@@ -13,9 +13,7 @@ const app = new Vue ({
             {key: "city", title: "City", required: true, width: 2, error: ''},
             {key: "state", title: "State", required: true, width: 2, error: ''},
             {key: "zip", title: "Zip Code", required: true, width: 2, error: ''}
-        ]
-        ,
-
+            ]
     },
     methods: {
         remove_blanks: function() {
