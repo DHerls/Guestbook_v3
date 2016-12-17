@@ -39,7 +39,8 @@ module.exports = {
                     limit: 10000,
                     name: '../fonts/[name].[hash:7].[ext]'
                 }
-            }
+            },
+            { test: /\.json$/, loader: 'json' },
         ]
     },
     resolve: {

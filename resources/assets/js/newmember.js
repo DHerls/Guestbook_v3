@@ -3,47 +3,12 @@ console.log(validator);
 Vue.component('multiple-edit',require('./components/MultipleEditBox.vue'));
 
 var email_re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+var memberFields = require('./json/memberFields.json');
 
 const app = new Vue ({
     el: "#app",
     data: {
-        info: {
-            adults: {
-                columns:[
-                    {key: 'first_name', title: "First Name", validation: "required|string|max:45"},
-                    {key: 'last_name', title: "Last Name", validation: "required|string|max:45"}
-                ],
-                rows: [],
-                title: "Adults",
-                required: true
-            },
-            children: {
-                columns:[
-                    {key: 'first_name', title: "First Name", validation: "required|string|max:45"},
-                    {key: 'last_name', title: "Last Name", validation: "required|string|max:45"},
-                    {key: 'birth_year', title: "Birth Year", validation: "numeric|min:4|max:4"}
-                ],
-                title: "Children",
-                rows: []
-            },
-            phones: {
-                columns:[
-                    {key: 'number', title: "Phone Number", validation: "required|numeric|min:7|max:13"},
-                    {key: 'description', title: "Description", validation: "string|max:45"}
-                ],
-                title: "Phone Numbers",
-                rows: []
-            },
-            emails: {
-                columns:[
-                    {key: 'address', title: "Email Address", validation: "required|email"},
-                    {key: 'description', title: "Description", validation: "string"}
-                ],
-                rows: [],
-                title: "Email Addresses"
-            },
-
-        },
+        info: memberFields,
         address: [
             {key: "address1", title: "Address Line 1", required: true, width: 3, error: ''},
             {key: "address2", title: "Address Line 2", required: false, width: 3, error: ''},
