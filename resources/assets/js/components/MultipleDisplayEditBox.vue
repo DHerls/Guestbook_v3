@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-info">
-        <div v-once class="panel-heading">
+        <div class="panel-heading">
             <!--{{info.title}}-->
             <span  v-if="editing" class="pull-right">
                     <button class="btn btn-default glyphicon glyphicon-remove" v-on:click="cancel"></button>
@@ -49,7 +49,7 @@
     export default{
         data(){
             return{
-                editing: true
+                editing: false
             }
         },
         props: [
@@ -67,7 +67,17 @@
             },
             remove: function(rowNum){
 //                this.info.rows.splice(rowNum,1);
+            },
+            edit: function(){
+                this.editing = true;
+            },
+            cancel: function(){
+                this.editing = false;
+            },
+            confirm: function() {
+                this.editing = false;
             }
+
         },
         mounted: function(){
 //            this.addRow();
