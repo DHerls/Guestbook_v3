@@ -1,3 +1,5 @@
+import {validator} from "./validator";
+console.log(validator);
 Vue.component('multiple-edit',require('./components/MultipleEditBox.vue'));
 
 var email_re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -8,8 +10,8 @@ const app = new Vue ({
         info: {
             adults: {
                 columns:[
-                    {key: 'first_name', title: "First Name", required: true, type: 'string'},
-                    {key: 'last_name', title: "Last Name", required: true, type: 'string'}
+                    {key: 'first_name', title: "First Name", validation: "required|string|max:45"},
+                    {key: 'last_name', title: "Last Name", validation: "required|string|max:45"}
                 ],
                 rows: [],
                 title: "Adults",
@@ -17,25 +19,25 @@ const app = new Vue ({
             },
             children: {
                 columns:[
-                    {key: 'first_name', title: "First Name", required: true, type: 'string'},
-                    {key: 'last_name', title: "Last Name", required: true, type: 'string'},
-                    {key: 'birth_year', title: "Birth Year", required: false, type: 'num'}
+                    {key: 'first_name', title: "First Name", validation: "required|string|max:45"},
+                    {key: 'last_name', title: "Last Name", validation: "required|string|max:45"},
+                    {key: 'birth_year', title: "Birth Year", validation: "numeric|min:4|max:4"}
                 ],
                 title: "Children",
                 rows: []
             },
             phones: {
                 columns:[
-                    {key: 'number', title: "Phone Number", required: true, type: 'num'},
-                    {key: 'description', title: "Description", required: false, type: 'string'}
+                    {key: 'number', title: "Phone Number", validation: "required|numeric|min:7|max:13"},
+                    {key: 'description', title: "Description", validation: "string|max:45"}
                 ],
                 title: "Phone Numbers",
                 rows: []
             },
             emails: {
                 columns:[
-                    {key: 'address', title: "Email Address", required: true, type: 'email'},
-                    {key: 'description', title: "Description", required: false, type: 'string'}
+                    {key: 'address', title: "Email Address", validation: "required|email"},
+                    {key: 'description', title: "Description", validation: "string"}
                 ],
                 rows: [],
                 title: "Email Addresses"
@@ -87,35 +89,10 @@ const app = new Vue ({
                     if (box.required || !this.rowIsEmpty(row)) {
                         for (var i_col = 0; i_col < box.columns.length; i_col++) {
                             column = box.columns[i_col];
-
-                            //Check for required fields
-                            if (column.required && !row[column.key]) {
-                                row.errors[column.key] = column.title + " is required";
-                                is_validated = false;
-                            }
-
-                            //Check for field types
-                            var error = "";
-                            switch(column.type){
-                                case "string":
-                                    if (typeof row[column.key] != 'string'){
-                                        error = column.title + " must be a string."
-                                    }
-                                    break;
-                                case "num":
-                                    if (isNaN(row[column.key])){
-                                        error = column.title + " must be a number."
-                                    }
-                                    break;
-                                case "email":
-                                    if (!email_re.test(row[column.key])){
-                                        error = column.title + " must be a valid email address."
-                                    }
-                                    break;
-                            }
+                            var error = validator.validate(row[column.key],column.validation,column.title);
                             if (error){
-                                row.errors[column.key] = error;
                                 is_validated = false;
+                                row.errors[column.key] = error;
                             }
                         }
                     }

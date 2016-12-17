@@ -5,7 +5,7 @@ module.exports = {
     entry: {
         app: ['./assets/js/bootstrap.js', './assets/js/jquery.notifyBar.js'],
         index: ['./assets/js/sortsearchtable.js', './assets/js/scrollToTop.js'],
-        new: './assets/js/newmember.js',
+        new: ['./assets/js/newmember.js'],
         edit: './assets/js/editmember.js'
     },
     output: {
