@@ -6,6 +6,7 @@
     ],
     "rows": [],
     "title": "Adults",
+    "url": "adults",
     "required": true
   },
   "children": {
@@ -15,6 +16,7 @@
       {"key": "birth_year", "title": "Birth Year", "validation": "numeric|min:4|max:4"}
     ],
     "title": "Children",
+    "url": "children",
     "rows": []
   },
   "phones": {
@@ -23,6 +25,7 @@
       {"key": "description", "title": "Description", "validation": "string|max:45"}
     ],
     "title": "Phone Numbers",
+    "url": "phones",
     "rows": []
   },
   "emails": {
@@ -31,6 +34,7 @@
       {"key": "description", "title": "Description", "validation": "string"}
     ],
     "rows": [],
+    "url": "emails",
     "title": "Email Addresses"
   }
 

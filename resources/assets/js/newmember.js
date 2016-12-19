@@ -110,7 +110,6 @@ const app = new Vue ({
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            console.log(data_obj)
             $.ajax({
                 type: 'POST',
                 url: "/members",

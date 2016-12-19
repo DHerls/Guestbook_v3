@@ -16,10 +16,10 @@ Route::group(['middleware' => ['web','auth','admin']], function() {
     Route::get('/members/new','MemberController@create');
 
     Route::post('/members','MemberController@create');
-    Route::post('/members/{member}/adults','SetAdults');
-    Route::post('/members/{member}/children','MemberRecordController@create');
-    Route::post('/members/{member}/phones','MemberRecordController@create');
-    Route::post('/members/{member}/emails','MemberRecordController@create');
+    Route::post('/members/{member}/adults','Member\SetAdults');
+    Route::post('/members/{member}/children','Member\SetChildren');
+    Route::post('/members/{member}/phones','Member\SetPhones');
+    Route::post('/members/{member}/emails','Member\SetEmails');
 
 });
 
