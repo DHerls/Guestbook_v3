@@ -13,7 +13,7 @@
     "columns":[
       {"key": "first_name", "title": "First Name", "validation": "required|string|max:45"},
       {"key": "last_name", "title": "Last Name", "validation": "required|string|max:45"},
-      {"key": "birth_year", "title": "Birth Year", "validation": "numeric|min:4|max:4"}
+      {"key": "birth_year", "title": "Birth Year", "validation": "numeric|min:4|max:4", "display": "(%%)"}
     ],
     "title": "Children",
     "url": "children",
@@ -21,8 +21,12 @@
   },
   "phones": {
     "columns":[
-      {"key": "number", "title": "Phone Number", "validation": "required|numeric|min:7|max:13"},
-      {"key": "description", "title": "Description", "validation": "string|max:45"}
+      {"key": "number",
+        "title": "Phone Number",
+        "validation": "required|numeric|min:7|max:13",
+        "regex":"^(1?)([0-9]{3})([0-9]{3})([0-9]+)",
+        "display": "{1:%%-}{2:(%%) }{3:%%-}{4:%%}"},
+      {"key": "description", "title": "Description", "validation": "string|max:45", "display": "(%%)"}
     ],
     "title": "Phone Numbers",
     "url": "phones",
@@ -31,7 +35,7 @@
   "emails": {
     "columns":[
       {"key": "address", "title": "Email Address", "validation": "required|email"},
-      {"key": "description", "title": "Description", "validation": "string"}
+      {"key": "description", "title": "Description", "validation": "string", "display": "(%%)"}
     ],
     "rows": [],
     "url": "emails",

@@ -10,7 +10,7 @@
             <div class="clearfix"></div>
         </div>
         <div class="panel-body">
-            <table class="table table-responsive form-group">
+            <table v-if="editing" class="table table-responsive form-group">
                 <thead>
                     <th v-for="column in info.columns">{{column.title}}</th>
                     <th></th>
@@ -18,8 +18,7 @@
                 <tbody>
                     <tr v-for="object, index in info.rows">
                         <td  v-for="column in info.columns" v-bind:class="{ 'has-error': object.errors[column.key] }">
-                            <input v-if="editing" type="text" v-model="object[column.key]" class="form-control">
-                            <p v-else>{{object[column.key]}}</p>
+                            <input type="text" v-model="object[column.key]" class="form-control">
                             <p class="error-msg" v-if="object.errors[column.key]">{{object.errors[column.key]}}</p>
                         </td>
                         <td v-if="index != 0" class="fit"><button v-if="editing" v-on:click="remove(index)" class="btn btn-danger text-center glyphicon glyphicon-remove"></button></td>
@@ -27,6 +26,9 @@
                 </tbody>
 
             </table>
+            <ul v-else>
+                <li v-for="object in info.rows">{{display(object)}}</li>
+            </ul>
             <button v-if="editing" class="btn btn-default pull-right add glyphicon glyphicon-plus" v-on:click="addRow"></button>
         </div>
     </div>
@@ -120,6 +122,41 @@
                 return true;
 
             },
+
+            display: function(row){
+                var string = ""
+                var col;
+                for (var i_col = 0; i_col < this.info.columns.length; i_col++){
+                    col = this.info.columns[i_col];
+                    if (!col.display){
+                        string += row[col.key] + " ";
+                    } else if (!col.regex){
+                        string += col.display.replace("%%",row[col.key]) + " ";
+                    } else {
+                        var reg = new RegExp(col.regex);
+                        var groups = reg.exec(row[col.key]);
+
+                        var disp = col.display;
+                        //Matches a display sections formated {#: replace}
+                        var disp_reg = /{([0-9]+):(.*?(?=%%)%%.*?)}/g;
+
+                        var match;
+                        //While there are display sections
+                        while (match = disp_reg.exec(col.display)){
+                            console.log(match[0]);
+                            if (groups[match[1]]){
+                                //Replace match with the replacement part of the section, with %% substituted
+                                disp = disp.replace(match[0],match[2].replace("%%",groups[match[1]]))
+                            } else {
+                                disp = disp.replace(match[0],"");
+                            }
+                        }
+                        string += disp + " ";
+                    }
+                }
+                return string;
+            },
+
             confirm: function() {
                 if (!this.rowsChanged()){
                     this.editing = false;
