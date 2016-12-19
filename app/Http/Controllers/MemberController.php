@@ -92,7 +92,11 @@ class MemberController extends Controller
     }
 
     public function display(Member $member){
-        return view('members.display', compact('member'));;
+        if (\Auth::user()->isAdmin()){
+            return view('members.edit', compact('member'));;
+        } else {
+            return view('members.display', compact('member'));;
+        }
     }
 
     public function individualData(Member $member) {

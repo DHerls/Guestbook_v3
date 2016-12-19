@@ -47,7 +47,6 @@
     }
 </style>
 <script>
-    var jquery = require("jquery");
     import {validator} from "../validator"
     export default{
         data(){
