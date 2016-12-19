@@ -18,7 +18,7 @@ class CreateChildrenTable extends Migration
             $table->integer('member_id')->unsigned()->index();
             $table->string('first_name',45);
             $table->string('last_name',45);
-            $table->mediumInteger('birth_year');
+            $table->mediumInteger('birth_year')->nullable();
             $table->timestamps();
         });
     }
