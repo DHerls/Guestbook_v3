@@ -7,5 +7,5 @@ Homestead.yaml
 .env
 /public/js/*
 /public/css/*
-_*
+_ide_helper.php
 .phpstorm.meta.php
