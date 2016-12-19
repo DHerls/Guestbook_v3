@@ -55,9 +55,9 @@ class MemberController extends Controller
             })->toArray());
             $adult['last_name'] = implode('/',$last_names);
 
-            $first_names = array_unique($member->adults->map(function ($item) {
+            $first_names = $member->adults->map(function ($item) {
                 return $item->first_name;
-            })->toArray());
+            })->toArray();
             $adult['first_name'] = implode('/',$first_names);
 
 
