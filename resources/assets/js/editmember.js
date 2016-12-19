@@ -11,7 +11,7 @@ const app = new Vue({
     },
     created: function() {
         $.get({
-            url: window.location.href,
+            url: window.location.href + "/json",
             success: function(data){
                 //For each category in memberFields
                 for (var title in app.info){

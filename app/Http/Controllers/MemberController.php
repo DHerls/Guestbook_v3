@@ -91,13 +91,13 @@ class MemberController extends Controller
         return view("members.index")->with(compact('columns'));
     }
 
-    public function display(Request $request, Member $member){
-        if (!$request->ajax()){
-            return view('members.display', compact('member'));;
-        }
+    public function display(Member $member){
+        return view('members.display', compact('member'));;
+    }
+
+    public function individualData(Member $member) {
         $member->load(['adults','children','phones','emails']);
         return response()->json($member);
-
     }
 
     public function guests(){
