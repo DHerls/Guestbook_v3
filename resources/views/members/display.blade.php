@@ -2,9 +2,14 @@
 
 @section('content')
 @if(Auth::user()->isAdmin())
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <button class="btn btn-danger pull-right" type="submit">Delete User</button>
+            <form action="{{Request::url()}}/delete" method="post">
+                {{ csrf_field() }}
+                <button id="delete-button" class="btn btn-danger pull-right" type="submit" onclick="return confirm('Are you sure?')">
+                    Delete User
+                </button>
+            </form>
         </div>
     </div>
     <br>

@@ -5878,4 +5878,7 @@ p.error-msg {
   margin: 0;
   color: red; }
 
+#delete-button {
+  margin-right: 2%; }
+
 /*# sourceMappingURL=app.css.map */
