@@ -3,9 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Member extends Model
 {
+
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
 
     public $fillable = ['address_line_1','address_line_2','city','state','zip'];
 

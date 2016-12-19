@@ -15,11 +15,14 @@ class CreateChildrenTable extends Migration
     {
         Schema::create('children', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('member_id')->unsigned()->index();
+            $table->integer('member_id')->unsigned();
             $table->string('first_name',45);
             $table->string('last_name',45);
             $table->mediumInteger('birth_year')->nullable();
             $table->timestamps();
+
+            $table->foreign('member_id')->references('id')->on('members');
+
         });
     }
 

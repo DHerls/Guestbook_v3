@@ -15,10 +15,13 @@ class CreateMemberRecordsTable extends Migration
     {
         Schema::create('member_records', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('member_id')->unsigned()->index();
-            $table->integer('user_id')->unsigned()->index();
+            $table->integer('member_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->tinyInteger('num_members');
             $table->timestamps();
+
+            $table->foreign('member_id')->references('id')->on('members');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

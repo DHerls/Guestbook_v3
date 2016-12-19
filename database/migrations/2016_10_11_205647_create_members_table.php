@@ -23,6 +23,7 @@ class CreateMembersTable extends Migration
             $table->decimal('current_balance')->default(0);
             $table->boolean('disabled')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

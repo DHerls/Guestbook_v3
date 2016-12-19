@@ -15,10 +15,13 @@ class CreateEmailsTable extends Migration
     {
         Schema::create('emails', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('member_id')->unsigned()->index();
+            $table->integer('member_id')->unsigned();
             $table->string('address',60);
             $table->string('description',45)->nullable();
             $table->timestamps();
+
+            $table->foreign('member_id')->references('id')->on('members');
+
         });
     }
 
