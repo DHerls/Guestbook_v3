@@ -21,7 +21,9 @@
                             <input type="text" v-model="object[column.key]" class="form-control">
                             <p class="error-msg" v-if="object.errors[column.key]">{{object.errors[column.key]}}</p>
                         </td>
-                        <td v-if="index != 0" class="fit"><button v-if="editing" v-on:click="remove(index)" class="btn btn-danger text-center glyphicon glyphicon-remove"></button></td>
+                        <td v-if="index != 0 || !info.required" class="fit">
+                            <button v-if="editing" v-on:click="remove(index)" class="btn btn-danger text-center glyphicon glyphicon-remove"></button>
+                        </td>
                     </tr>
                 </tbody>
 
@@ -71,7 +73,14 @@
                 this.info.rows.push(obj);
             },
             remove: function(rowNum){
-                this.info.rows.splice(rowNum,1);
+                if (rowNum == 0 && this.info.rows.length == 1){
+                    for (var i = 0; i < this.info.columns.length; i++){
+                        this.info.rows[0][this.info.columns[i].key] = "";
+                        this.info.rows[0].errors[this.info.columns[i].key] = "";
+                    }
+                } else {
+                    this.info.rows.splice(rowNum, 1);
+                }
             },
             edit: function(){
                 this.editing = true;
