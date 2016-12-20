@@ -1,3 +1,4 @@
+<!--suppress XmlUnboundNsPrefix -->
 <template>
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -50,6 +51,7 @@
         margin-right: 7px;
     }
 </style>
+<!--suppress JSUnresolvedVariable -->
 <script>
     import {validator} from "../validator"
     export default{
@@ -133,7 +135,7 @@
             },
 
             display: function(row){
-                var string = ""
+                var string = "";
                 var col;
                 for (var i_col = 0; i_col < this.info.columns.length; i_col++){
                     col = this.info.columns[i_col];
@@ -150,7 +152,7 @@
                         var groups = reg.exec(row[col.key]);
 
                         var disp = col.display;
-                        //Matches a display sections formated {#: replace}
+                        //Matches a display sections formatted {#: replace}
                         var disp_reg = /{([0-9]+):(.*?(?=%%)%%.*?)}/g;
 
                         var match;
