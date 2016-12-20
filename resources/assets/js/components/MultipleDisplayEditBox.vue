@@ -29,7 +29,7 @@
             <ul v-else>
                 <li v-for="object in info.rows">{{display(object)}}</li>
             </ul>
-            <button v-if="editing" class="btn btn-default pull-right add glyphicon glyphicon-plus" v-on:click="addRow"></button>
+            <button v-if="editing && (!info.limit || info.rows.length < info.limit)" class="btn btn-default pull-right add glyphicon glyphicon-plus" v-on:click="addRow"></button>
         </div>
     </div>
 </template>
@@ -129,9 +129,13 @@
                 for (var i_col = 0; i_col < this.info.columns.length; i_col++){
                     col = this.info.columns[i_col];
                     if (!col.display){
-                        string += row[col.key] + " ";
+                        if (row[col.key]) {
+                            string += row[col.key] + " ";
+                        }
                     } else if (!col.regex){
-                        string += col.display.replace("%%",row[col.key]) + " ";
+                        if (row[col.key]){
+                            string += col.display.replace("%%",row[col.key]) + " ";
+                        }
                     } else {
                         var reg = new RegExp(col.regex);
                         var groups = reg.exec(row[col.key]);
@@ -143,7 +147,6 @@
                         var match;
                         //While there are display sections
                         while (match = disp_reg.exec(col.display)){
-                            console.log(match[0]);
                             if (groups[match[1]]){
                                 //Replace match with the replacement part of the section, with %% substituted
                                 disp = disp.replace(match[0],match[2].replace("%%",groups[match[1]]))
@@ -156,78 +159,85 @@
                 }
                 return string;
             },
+            removeBlanks: function(){
+                var to_remove;
+                to_remove = [];
+                for (var i_row = 0; i_row < this.info.rows.length; i_row++){
+                    if (i_row != 0 && this.rowIsEmpty(this.info.rows[i_row])){
+                        to_remove.push(i_row);
+                    }
+                }
+                for (var i_row = 0; i_row < to_remove.length; i_row++){
+                    this.info.rows.splice(to_remove[i_row]-i_row,1);
+                }
+            },
+            validate: function(){
+                var is_validated = true;
+                var row;
+                var column;
+                for (var i_row = 0; i_row < this.info.rows.length; i_row++) {
+                    row = this.info.rows[i_row];
+                    row.errors = {};
 
+                    //Make sure the form is required or there is data to validate
+                    if (this.info.required || !this.rowIsEmpty(row)) {
+                        for (var i_col = 0; i_col < this.info.columns.length; i_col++) {
+                            column = this.info.columns[i_col];
+                            var error = validator.validate(row[column.key],column.validation,column.title);
+                            if (error){
+                                is_validated = false;
+                                row.errors[column.key] = error;
+                            }
+                        }
+                    }
+                }
+
+                return is_validated;
+            },
             confirm: function() {
-                if (!this.rowsChanged()){
-                    this.editing = false;
+                if (!this.validate()){
                     return;
                 }
 
-                var validated = true;
-                var message;
-
-                //Validate fields
+                var rows = [];
                 var row;
-                var col;
-                
-                for(var i_row = 0; i_row < this.info.rows.length; i_row++){
+                var newRow;
+                for (var i_row = 0; i_row < this.info.rows.length; i_row++){
                     row = this.info.rows[i_row];
-                    if (this.info.required || !this.rowIsEmpty(row)) {
-                        row.errors = {};
-                        for (var i_col = 0; i_col < this.info.columns.length; i_col++){
-                            col = this.info.columns[i_col];
-                            message = validator.validate(row[col.key],
-                                    col.validation,
-                                    col.title);
-                            if (message){
-                                row.errors[col.key] = message;
-                                validated = false;
-                            }
+
+                    if (i_row != 0 || !this.rowIsEmpty(row)){
+                        newRow = {};
+                        for (var col = 0; col < this.info.columns.length; col++){
+                            newRow[this.info.columns[col].key] = row[this.info.columns[col].key];
                         }
+                        rows.push(newRow);
                     }
                 }
 
-                if (validated){
-                    var rows = [];
-                    var newRow;
-                    for (var i_row = 0; i_row < this.info.rows.length; i_row++){
-                        row = this.info.rows[i_row];
+                var dataObj = {};
+                dataObj[this.info.url] = rows;
 
-                        if (i_row != 0 || !this.rowIsEmpty(row)){
-                            newRow = {};
-                            for (var col = 0; col < this.info.columns.length; col++){
-                                if (row[this.info.columns[col].key]) {
-                                    newRow[this.info.columns[col].key] = row[this.info.columns[col].key];
-                                }
-                            }
-                            rows.push(newRow);
-                        }
+                var app = this;
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-
-                    var dataObj = {};
-                    dataObj[this.info.url] = rows;
-
-                    var app = this;
-
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        type: 'POST',
-                        url: window.location.href + "/"  + this.info.url,
-                        dataType: 'json',
-                        data: dataObj,
-                        success: function(data){
-                            app.editing = false;
-                        },
-                        error: function(data){
-                            console.log(data);
-                        }
-                    });
-                }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: window.location.href + "/"  + this.info.url,
+                    dataType: 'json',
+                    data: dataObj,
+                    success: function(data){
+                        app.editing = false;
+                    },
+                    error: function(data){
+                        console.log(data);
+                    }
+                });
             }
+
 
         }
     }

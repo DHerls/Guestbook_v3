@@ -1,10 +1,12 @@
 Vue.component('multiple-display',require('./components/MultipleDisplayEditBox.vue'));
 var memberFields = require('./json/memberFields.json');
+var addressFields = require('./json/addressFields.json');
 
 const app = new Vue({
     el: "#app",
     data: {
-        info: memberFields
+        info: memberFields,
+        address: addressFields
     },
     methods: {
 
@@ -28,6 +30,13 @@ const app = new Vue({
                     }
 
                 }
+
+                row = {};
+                for (var i = 0; i < app.address.columns.length; i++){
+                    row[app.address.columns[i].key] = data[app.address.columns[i].key];
+                }
+                row.errors = {};
+                app.address.rows.push(row);
             }
         });
     }

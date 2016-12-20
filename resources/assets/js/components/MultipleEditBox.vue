@@ -21,7 +21,7 @@
                 </tbody>
 
             </table>
-            <button class="btn btn-default pull-right add glyphicon glyphicon-plus" v-on:click="addRow"></button>
+            <button v-if="!info.limit || info.rows.length < info.limit" class="btn btn-default pull-right add glyphicon glyphicon-plus" v-on:click="addRow"></button>
 
         </div>
     </div>

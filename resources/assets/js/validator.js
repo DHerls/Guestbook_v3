@@ -47,6 +47,9 @@ var validator = {
     },
     numeric: function (input) {
         var num_rex = /[0-9]/;
+        if (typeof input == "number") {
+            return;
+        }
         if (!input.match(num_rex)){
             return "must be a number";
         }

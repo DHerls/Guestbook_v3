@@ -93,9 +93,9 @@ class MemberController extends Controller
 
     public function display(Member $member){
         if (\Auth::user()->isAdmin()){
-            return view('members.edit', compact('member'));;
+            return view('members.edit');
         } else {
-            return view('members.display', compact('member'));;
+            return view('members.display', compact('member'));
         }
     }
 
@@ -124,8 +124,8 @@ class MemberController extends Controller
         }
 
         $this->validate($request,[
-           'address1' => 'required|string',
-           'address2' => 'string',
+           'address_line_1' => 'required|string',
+           'address_line_2' => 'string',
            'state' => 'required|string',
            'city' => 'required|string',
            'zip' => 'required|numeric|min:1000|max:99999',
@@ -142,8 +142,8 @@ class MemberController extends Controller
         ]);
 
         $member = Member::create([
-            'address_line_1' => $request->address1,
-            'address_line_2' => $request->address2,
+            'address_line_1' => $request->address_line_1,
+            'address_line_2' => $request->address_line_2,
             'city' => $request->city,
             'state' => $request->state,
             'zip' => $request->zip,

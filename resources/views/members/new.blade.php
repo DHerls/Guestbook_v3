@@ -19,17 +19,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">Address</div>
-                    <div class="panel-body">
-                        <div v-for="field in address" v-bind:class="['col-md-' + field.width, field.error ? 'has-error' : '']">
-                            <label for="field.key">@{{ field.title }}</label>
-                            <input class="form-control" id="field.key" v-model="field.value" requried>
-                            <p v-if="field.error" class="error-msg">@{{ field.error }}</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-xs-12">
+                <multiple-edit v-bind:info="address"></multiple-edit>
             </div>
         </div>
         <div class="row">

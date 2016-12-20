@@ -19,6 +19,11 @@
                 <Multiple-Display v-bind:info="box"></Multiple-Display>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                <Multiple-Display v-bind:info="address"></Multiple-Display>
+            </div>
+        </div>
     </div>
 
     <hr>

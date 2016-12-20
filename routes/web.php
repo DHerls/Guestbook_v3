@@ -20,6 +20,7 @@ Route::group(['middleware' => ['web','auth','admin']], function() {
     Route::post('/members/{member}/children','Member\SetChildren');
     Route::post('/members/{member}/phones','Member\SetPhones');
     Route::post('/members/{member}/emails','Member\SetEmails');
+    Route::post('/members/{member}/address','Member\SetAddress');
 
     Route::post('/members/{member}/delete','Member\Delete');
 

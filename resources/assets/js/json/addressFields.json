@@ -1,0 +1,14 @@
+{
+  "columns":[
+    {"key": "address_line_1", "title": "Address Line 1", "validation": "required|string|max:45"},
+    {"key": "address_line_2", "title": "Address Line 2", "validation": "string|max:45"},
+    {"key": "city", "title": "City", "validation": "required|string|max:45"},
+    {"key": "state", "title": "State", "validation": "required|string|max:2"},
+    {"key": "zip", "title": "Zip Code", "validation": "required|numeric|min:5|max:5"}
+  ],
+  "rows": [],
+  "title": "Address",
+  "url": "address",
+  "required": true,
+  "limit": 1
+}

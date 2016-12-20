@@ -1,5 +1,6 @@
 import {validator} from "./validator";
 var memberFields = require('./json/memberFields.json');
+var addressFields = require('./json/addressFields.json');
 
 Vue.component('multiple-edit',require('./components/MultipleEditBox.vue'));
 
@@ -7,64 +8,42 @@ const app = new Vue ({
     el: "#app",
     data: {
         info: memberFields,
-        address: [
-            {key: "address1", title: "Address Line 1", required: true, width: 3, error: ''},
-            {key: "address2", title: "Address Line 2", required: false, width: 3, error: ''},
-            {key: "city", title: "City", required: true, width: 2, error: ''},
-            {key: "state", title: "State", required: true, width: 2, error: ''},
-            {key: "zip", title: "Zip Code", required: true, width: 2, error: ''}
-            ]
+        address: addressFields
     },
     methods: {
-        remove_blanks: function() {
+        remove_blanks: function(box) {
             var to_remove;
-            var box;
-            for (var box_name in this.info){
-                box = this.info[box_name];
-                to_remove = [];
-                for (var i_row = 0; i_row < box.rows.length; i_row++){
-                    if (i_row != 0 && this.rowIsEmpty(box.rows[i_row])){
-                        to_remove.push(i_row);
-                    }
-                }
-                for (var i_row = 0; i_row < to_remove.length; i_row++){
-                    box.rows.splice(to_remove[i_row]-i_row,1);
+            to_remove = [];
+            for (var i_row = 0; i_row < box.rows.length; i_row++){
+                if (i_row != 0 && this.rowIsEmpty(box.rows[i_row])){
+                    to_remove.push(i_row);
                 }
             }
+            for (var i_row = 0; i_row < to_remove.length; i_row++){
+                box.rows.splice(to_remove[i_row]-i_row,1);
+            }
         },
-        validate: function(){
-            this.remove_blanks();
+        validate: function(box){
+            this.remove_blanks(box);
 
             var is_validated = true;
 
-            var box;
             var row;
             var column;
-            for (var box_name in this.info) {
-                box = this.info[box_name];
-                for (var i_row = 0; i_row < box.rows.length; i_row++) {
-                    row = box.rows[i_row];
-                    row.errors = {};
+            for (var i_row = 0; i_row < box.rows.length; i_row++) {
+                row = box.rows[i_row];
+                row.errors = {};
 
-                    //Make sure the form is required or there is data to validate
-                    if (box.required || !this.rowIsEmpty(row)) {
-                        for (var i_col = 0; i_col < box.columns.length; i_col++) {
-                            column = box.columns[i_col];
-                            var error = validator.validate(row[column.key],column.validation,column.title);
-                            if (error){
-                                is_validated = false;
-                                row.errors[column.key] = error;
-                            }
+                //Make sure the form is required or there is data to validate
+                if (box.required || !this.rowIsEmpty(row)) {
+                    for (var i_col = 0; i_col < box.columns.length; i_col++) {
+                        column = box.columns[i_col];
+                        var error = validator.validate(row[column.key],column.validation,column.title);
+                        if (error){
+                            is_validated = false;
+                            row.errors[column.key] = error;
                         }
                     }
-                }
-            }
-            //Special logic for fucking addresses
-            for (var i = 0; i < this.address.length; i++){
-                this.address[i].error = "";
-                if (this.address[i].required && !this.address[i].value){
-                    this.address[i].error = this.address[i].title + " is required";
-                    is_validated = false;
                 }
             }
 
@@ -89,7 +68,17 @@ const app = new Vue ({
             return true;
         },
         submit: function() {
-            if (!this.validate()){
+            var validated = true;
+            for (var box_name in this.info) {
+                if (!this.validate(this.info[box_name])) {
+                    validated = false;
+                }
+            }
+            if (!this.validate(this.address)) {
+                validated = false;
+            }
+
+            if (!validated){
                 return;
             }
 
@@ -101,8 +90,8 @@ const app = new Vue ({
                 }
             }
 
-            for (var i = 0; i < this.address.length; i++){
-                data_obj[this.address[i].key] = this.address[i].value;
+            for (var i = 0; i < this.address.columns.length; i++){
+                data_obj[this.address.columns[i].key] = this.address.rows[0][this.address.columns[i].key];
             }
 
             $.ajaxSetup({
