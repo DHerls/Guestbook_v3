@@ -107,7 +107,9 @@ const app = new Vue ({
 
             var data_obj = {};
             for (var title in this.info){
-                data_obj[title] = this.info[title].rows;
+                if (!(this.filledRows(this.info[title]) === 0)) {
+                    data_obj[title] = this.info[title].rows;
+                }
             }
             data_obj.payment = this.payment;
 
