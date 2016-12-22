@@ -22,7 +22,6 @@ class MemberRecordController extends Controller
 
         $mRecord = new MemberRecord();
         $mRecord->member_id = $member->id;
-        $mRecord->user_id = Auth::id();
         $mRecord->num_members = $request->members;
         $mRecord->save();
 
