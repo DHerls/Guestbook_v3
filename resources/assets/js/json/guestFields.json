@@ -1,0 +1,22 @@
+{
+  "adults": {
+    "columns":[
+      {"key": "first_name", "title": "First Name", "validation": "required|string|max:45"},
+      {"key": "last_name", "title": "Last Name", "validation": "required|string|max:45"},
+      {"key": "city", "title": "City", "validation": "required|string|max:45"}
+    ],
+    "rows": [],
+    "title": "Adults",
+    "price": {"weekend": 10, "weekday": 5}
+  },
+  "children": {
+    "columns":[
+      {"key": "first_name", "title": "First Name", "validation": "required|string|max:45"},
+      {"key": "last_name", "title": "Last Name", "validation": "required|string|max:45"},
+      {"key": "city", "title": "City", "validation": "required|string|max:45"}
+    ],
+    "title": "Children",
+    "rows": [],
+    "price": {"weekend": 8, "weekday": 4}
+  }
+}

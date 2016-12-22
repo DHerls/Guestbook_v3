@@ -6,7 +6,8 @@ module.exports = {
         app: ['./assets/js/bootstrap.js', './assets/js/jquery.notifyBar.js'],
         index: ['./assets/js/sortsearchtable.js', './assets/js/scrollToTop.js'],
         new: ['./assets/js/newmember.js'],
-        edit: './assets/js/editmember.js'
+        edit: './assets/js/editmember.js',
+        checkin: './assets/js/checkinguest.js'
     },
     output: {
         path: path.resolve('public/js'),

@@ -4,7 +4,7 @@
 
     <div class="container">
         <div class="row">
-            <button class="btn btn-primary pull-right">Check in Guest <i class="glyphicon glyphicon-plus"></i> </button>
+            <a href="{{Request::url()}}/new" class="btn btn-primary pull-right">Check in Guest <i class="glyphicon glyphicon-plus"></i> </a>
         </div>
         <div class="row">
             <div class="table-responsive">

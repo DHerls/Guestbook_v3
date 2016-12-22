@@ -32,8 +32,11 @@ Route::group(['middleware' => ['web','auth']], function() {
     Route::get('/test', 'MemberController@test');
     Route::get('/members/{member}','MemberController@display');
     Route::get('/members/{member}/json','MemberController@individualData');
-    Route::get('/members/{member}/guests','MemberController@guests');
 
+    Route::get('/members/{member}/guests','MemberController@guests');
+    Route::get('/members/{member}/guests/new','GuestRecordController@check_in');
+
+    Route::post('/members/{member}/guests/new','GuestRecordController@create');
     Route::post('/members/{member}/records','MemberRecordController@create');
 });
 
