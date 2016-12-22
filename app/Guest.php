@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Guest extends Model
 {
+    protected $fillable = ['first_name', 'last_name', 'city'];
+
     public function guestRecords() {
-        return $this->hasMany(GuestRecord::class);
+        return $this->belongsToMany(GuestRecord::class,'guest_guest_record');
     }
 
     public function guestVisits(){

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class GuestRecord extends Model
 {
+    use MonitorUserTrait;
+
     public function user(){
         return $this->belongsTo(User::class);
     }
@@ -14,7 +16,7 @@ class GuestRecord extends Model
         return $this->belongsTo(Member::class);
     }
 
-    public function guest() {
-        return $this->belongsTo(Guest::class);
+    public function guests() {
+        return $this->belongsToMany(Guest::class,'guest_guest_record');
     }
 }

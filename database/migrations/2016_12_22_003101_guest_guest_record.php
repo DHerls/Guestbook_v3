@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGuestVisitsTable extends Migration
+class GuestGuestRecord extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class CreateGuestVisitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('guest_visits', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('guest_guest_record', function (Blueprint $table) {
+            $table->integer('guest_record_id')->unsigned();
             $table->integer('guest_id')->unsigned();
-            $table->integer('year');
-            $table->tinyInteger('num_visits')->default(0);
-            $table->timestamps();
 
+            $table->foreign('guest_record_id')->references('id')->on('guest_records');
             $table->foreign('guest_id')->references('id')->on('guests');
-
         });
     }
 
@@ -32,6 +29,6 @@ class CreateGuestVisitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('guest_visits');
+        Schema::dropIfExists('guest_guest_record');
     }
 }

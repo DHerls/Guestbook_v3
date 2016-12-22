@@ -17,16 +17,12 @@ class CreateGuestRecordsTable extends Migration
             $table->increments('id');
             $table->integer('member_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->integer('guest_id')->unsigned();
-            $table->tinyInteger('num_adults')->default(0);
-            $table->tinyInteger('payment_method');
             $table->smallInteger('price');
-            $table->tinyInteger('num_children')->default(0);
+            $table->enum('payment_method',['account','cash','pass']);
             $table->binary('member_signature')->nullable();
             $table->binary('guest_signature')->nullable();
             $table->timestamps();
 
-            $table->foreign('guest_id')->references('id')->on('guests');
             $table->foreign('member_id')->references('id')->on('members');
             $table->foreign('user_id')->references('id')->on('users');
         });
