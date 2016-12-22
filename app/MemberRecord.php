@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MemberRecord extends Model
 {
+    use MonitorUserTrait;
+
     public function user(){
         return $this->belongsTo(User::class);
     }
