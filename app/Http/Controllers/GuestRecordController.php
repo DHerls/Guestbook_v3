@@ -11,10 +11,12 @@ use App\GuestRecord;
 
 class GuestRecordController extends Controller
 {
-    private $ADULT_WEEKEND = 10;
-    private $ADULT_WEEKDAY = 5;
-    private $CHILD_WEEKEND = 8;
-    private $CHILD_WEEKDAY = 4;
+    const ADULT_WEEKEND = 10;
+    const ADULT_WEEKDAY = 5;
+    const CHILD_WEEKEND = 8;
+    const CHILD_WEEKDAY = 4;
+
+    const MAX_VISITS = 5;
 
     public function check_in(Member $member) {
         $last_names = array_unique($member->adults->map(function ($item) {
@@ -44,15 +46,21 @@ class GuestRecordController extends Controller
         $price = 0;
         $isWeekend = date('N') >= 6;
         if (isset($request['adults'])){
-            $price += sizeof($request->adults) * ($isWeekend ? $this->ADULT_WEEKEND : $this->ADULT_WEEKDAY);
+            if ($request->payment != 'pass'){
+                $price += sizeof($request->adults) * ($isWeekend ? GuestRecordController::ADULT_WEEKEND : GuestRecordController::ADULT_WEEKDAY);
+            }
             foreach ($request->adults as $adult){
+                $adult['type'] = 'adult';
                 $model = Guest::firstOrCreate($adult);
                 array_push($guests,$model);
             }
         }
         if (isset($request['children'])){
-            $price += sizeof($request->children) * ($isWeekend ? $this->CHILD_WEEKEND : $this->CHILD_WEEKDAY);
+            if ($request->payment != 'pass'){
+                $price += sizeof($request->children) * ($isWeekend ? GuestRecordController::CHILD_WEEKEND : GuestRecordController::CHILD_WEEKDAY);
+            }
             foreach ($request->children as $child){
+                $child['type'] = 'child';
                 $model = Guest::firstOrCreate($child);
                 array_push($guests,$model);
             }
@@ -61,7 +69,7 @@ class GuestRecordController extends Controller
         $too_many_visits = [];
         foreach ($guests as $guest){
             $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
-            if ($visits->num_visits >= 5){
+            if ($visits->num_visits >= GuestRecordController::MAX_VISITS){
                 array_push($too_many_visits,$model);
             }
         }
