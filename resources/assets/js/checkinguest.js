@@ -106,9 +106,21 @@ const app = new Vue ({
             }
 
             var data_obj = {};
+            var newRow = {};
+            var row;
+            var col;
             for (var title in this.info){
                 if (!(this.filledRows(this.info[title]) === 0)) {
-                    data_obj[title] = this.info[title].rows;
+                    data_obj[title] = [];
+                    for (var i_row = 0; i_row < this.info[title].rows.length; i_row++){
+                        row = this.info[title].rows[i_row];
+                        newRow = {};
+                        for (var i_col = 0; i_col < this.info[title].columns.length; i_col++){
+                            col = this.info[title].columns[i_col];
+                            newRow[col.key] = row[col.key];
+                        }
+                        data_obj[title].push(newRow);
+                    }
                 }
             }
             data_obj.payment = this.payment;
@@ -127,7 +139,21 @@ const app = new Vue ({
                     console.log(data);
                 },
                 error: function(data){
-                    console.log(data)
+                    for (var title in app.info){
+                        app.info[title].visits = [];
+                    }
+                    if (data.status == 403){
+                        for (var i = 0; i < data.responseJSON.length; i++){
+                            var guest = data.responseJSON[i];
+                            if (guest.type == 'adult'){
+                                app.info['adults'].visits.push(guest);
+                            } else {
+                                app.info['children'].visits.push(guest);
+                            }
+                        }
+                    } else {
+                        console.log(data);
+                    }
                 }
             });
 

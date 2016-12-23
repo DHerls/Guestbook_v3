@@ -6,6 +6,12 @@
     <br>
     <div class="row">
         <div class="col-xs-12 col-md-6" v-for="box in info">
+            <div class="alert alert-danger" role="alert" v-if="box.visits.length > 0">
+                The following have already visited 5 or more times:
+                <ul>
+                    <li v-for="guest in box.visits">@{{guest.first_name}} @{{ guest.last_name }} (@{{ guest.city }})</li>
+                </ul>
+            </div>
             <Multiple-Edit v-bind:info="box"></Multiple-Edit>
         </div>
     </div>

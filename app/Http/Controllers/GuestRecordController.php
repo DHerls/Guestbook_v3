@@ -40,7 +40,6 @@ class GuestRecordController extends Controller
         ]);
 
 
-
         $guests = [];
 
         $price = 0;
@@ -70,13 +69,12 @@ class GuestRecordController extends Controller
         foreach ($guests as $guest){
             $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
             if ($visits->num_visits >= GuestRecordController::MAX_VISITS){
-                array_push($too_many_visits,$model);
+                array_push($too_many_visits,$guest);
             }
         }
 
         if (sizeof($too_many_visits) > 0){
-            //TODO send error message back
-            return $too_many_visits;
+            return response()->json($too_many_visits,403);
         }
         foreach ($guests as $guest){
             $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
