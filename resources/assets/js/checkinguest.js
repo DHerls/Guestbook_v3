@@ -136,7 +136,7 @@ const app = new Vue ({
                 dataType: 'json',
                 data: data_obj,
                 success: function(data){
-                    console.log(data);
+                    window.location.href = window.location.href.substring(0,window.location.href.search('/guests')+7);
                 },
                 error: function(data){
                     for (var title in app.info){
