@@ -9,7 +9,8 @@ module.exports = {
         new: ['./assets/js/newmember.js'],
         edit: './assets/js/editmember.js',
         checkin: './assets/js/checkinguest.js',
-        guests: ['./assets/js/guesttable.js','signature_pad']
+        guests: './assets/js/guesttable.js',
+        test: ['./assets/js/test.js']
     },
     output: {
         path: path.resolve('public/js'),
@@ -18,6 +19,7 @@ module.exports = {
     },
     module: {
         loaders: [
+            {test: /signature_pad/, loader: 'expose?SignaturePad'},
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,

@@ -1,9 +1,12 @@
 import {validator} from "./validator";
+let SignaturePad = require("signature_pad");
+
 var guestFields = require('./json/guestFields.json');
 
 Vue.component('multiple-edit',require('./components/MultipleEditBox.vue'));
 Vue.component('vue-radio',require('./components/VueRadio.vue'));
 
+Vue.config.ignoredElements = ['canvas']
 const app = new Vue ({
     el: "#app",
     data: {
@@ -179,3 +182,9 @@ const app = new Vue ({
         }
     }
 });
+
+var memberCanvas = document.querySelector('canvas');
+// var guestCanvas = document.querySelector('guest-canvas');
+
+var memberSig = new SignaturePad(memberCanvas);
+// var guestSig = new SignaturePad(guestCanvas);

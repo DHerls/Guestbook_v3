@@ -19,6 +19,16 @@
         <h2 class="text-center">Cost: $@{{cost}}</h2>
     </div>
     <div class="row">
+
+        <div class="col-md-6">
+            Member Signature:
+            <canvas></canvas>
+        </div>
+        <div class="col-md-6">
+            Guest Signature:
+        </div>
+    </div>
+    <div class="row">
         <div class="pull-left">
             <vue-radio v-bind:values="paymentMethods" v-on:select="setPayment(arguments[0])" v-bind:default="'account'"></vue-radio>
         </div>

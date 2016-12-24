@@ -167,8 +167,6 @@ class MemberController extends Controller
     }
 
     public function test(){
-        $member = Member::find(1);
-        $member->load('adults','children','phones','emails');
-        return response()->json($member);
+        return view('members.test');
     }
 }
