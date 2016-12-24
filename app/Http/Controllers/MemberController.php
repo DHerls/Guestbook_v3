@@ -44,7 +44,6 @@ class MemberController extends Controller
         //dd("DATE('created_at')= '{$date}'");
         $members->load(['adults',
             'memberRecords' => function($query) use ($date){ $query->whereRaw("DATE(created_at)= '{$date}'")->orderBy('created_at','desc');},
-            'guestRecords' => function($query) use ($date) { $query->whereRaw("DATE(created_at)= '{$date}'");}
         ]);
 
         $adults = array();
@@ -63,7 +62,12 @@ class MemberController extends Controller
 
             $adult['id'] = $member->id;
             $adult['members'] = $member->memberRecords->first() ? $member->memberRecords->first()->num_members : 0;
-            $num_guests = $member->guestRecords->sum(DB::raw('num_children + num_adults'));
+            $num_guests = DB::table('guest_guest_record')
+                ->join('guests','guest_guest_record.guest_id','=','guests.id')
+                ->join('guest_records','guest_guest_record.guest_record_id','=','guest_records.id')
+                ->whereDate('guest_records.created_at', Date("Y-m-d"))
+                ->where('guest_records.member_id',$member->id)
+                ->count();
             if ($num_guests == 0){
                 $adult['guest_string'] = "No Guests";
             } else if ($num_guests == 1){
@@ -102,20 +106,6 @@ class MemberController extends Controller
     public function individualData(Member $member) {
         $member->load(['adults','children','phones','emails']);
         return response()->json($member);
-    }
-
-    public function guests(){
-        $columns = [
-            ['display' => 'First Name',     'key' => 'first_name',      'sortable' => true, 'col_size' => 2],
-            ['display' => 'Last Name',      'key' => 'last_name',       'sortable' => true, 'col_size' => 2],
-            ['display' => 'City',           'key' => 'city',            'sortable' => true, 'col_size' => 1],
-            ['display' => '# Adults',       'key' => 'num_adults',      'sortable' => true, 'col_size' => 1],
-            ['display' => '# Children',     'key' => 'num_children',    'sortable' => true, 'col_size' => 1],
-            ['display' => 'Cost',           'key' => 'cost',            'sortable' => true, 'col_size' => 1],
-            ['display' => 'Payment Method', 'key' => 'payment',         'sortable' => true, 'col_size' => 2],
-            ['display' => 'Check-in Time',  'key' => 'check_in',        'sortable' => true, 'col_size' => 2],
-        ];
-        return view('members.guests')->with(compact('columns'));
     }
 
     public function create(Request $request){

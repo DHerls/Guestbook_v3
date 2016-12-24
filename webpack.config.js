@@ -7,7 +7,8 @@ module.exports = {
         index: ['./assets/js/sortsearchtable.js', './assets/js/scrollToTop.js'],
         new: ['./assets/js/newmember.js'],
         edit: './assets/js/editmember.js',
-        checkin: './assets/js/checkinguest.js'
+        checkin: './assets/js/checkinguest.js',
+        guests: './assets/js/guesttable.js'
     },
     output: {
         path: path.resolve('public/js'),

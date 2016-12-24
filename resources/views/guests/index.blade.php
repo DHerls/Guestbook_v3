@@ -4,8 +4,10 @@
 
     <div class="container">
         <div class="row">
+            <h3 class="pull-left">Current Guests for: {{$last_names}}</h3>
             <a href="{{Request::url()}}/new" class="btn btn-primary pull-right">Check in Guest <i class="glyphicon glyphicon-plus"></i> </a>
         </div>
+        <br>
         <div class="row">
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -27,8 +29,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <edit-field v-bind:data_obj="data_obj"></edit-field>
+                        <tr v-for="row in sorted_rows">
+                            <td>
+                                <ul>
+                                    <li v-for="adult in row.adults">@{{adult.first_name}} @{{ adult.last_name }} (@{{ adult.city }})</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li v-for="child in row.children">@{{child.first_name}} @{{ child.last_name }} (@{{ child.city }})</li>
+                                </ul>
+                            </td>
+                            <td>$@{{ row.cost }}</td>
+                            <td>@{{ row.payment }}</td>
+                            <td>@{{ row.checkIn }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -36,4 +50,8 @@
         </div>
     </div>
 
+@endsection
+
+@section('scripts')
+    <script type="text/javascript" src="/js/guests.js"></script>
 @endsection
