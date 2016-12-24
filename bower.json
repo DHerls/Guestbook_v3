@@ -1,0 +1,22 @@
+{
+  "name": "Guestbook_v3",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Dan H <djherls@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/DHerls/Guestbook_v3",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "signature_pad": "^1.5.3",
+    "jqnotifybar": "^1.5.5"
+  }
+}

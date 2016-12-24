@@ -18,6 +18,4 @@ elixir(mix => {
 
 
     mix.sass('app.scss')
-       .webpack('sortsearchtable.js')
-        .webpack('newmember.js')
 });

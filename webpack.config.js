@@ -1,14 +1,15 @@
 var path = require("path");
+var webpack = require("webpack");
 
 module.exports = {
     context: path.resolve('resources'),
     entry: {
-        app: ['./assets/js/bootstrap.js', './assets/js/jquery.notifyBar.js'],
+        app: ['./assets/js/bootstrap.js', 'jqnotifybar'],
         index: ['./assets/js/sortsearchtable.js', './assets/js/scrollToTop.js'],
         new: ['./assets/js/newmember.js'],
         edit: './assets/js/editmember.js',
         checkin: './assets/js/checkinguest.js',
-        guests: './assets/js/guesttable.js'
+        guests: ['./assets/js/guesttable.js','signature_pad']
     },
     output: {
         path: path.resolve('public/js'),
@@ -19,8 +20,11 @@ module.exports = {
         loaders: [
             {
                 test: /\.js$/,
-                loader: 'buble',
-                exclude: /node_modules/
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel-loader',
+                query: {
+                    presets: ['es2015']
+                }
             },
             {
                 test: /\.vue$/,
@@ -48,11 +52,18 @@ module.exports = {
     resolve: {
         alias: {
             vue: 'vue/dist/vue.js'
-        }
+        },
+        modulesDirectories: ["web_modules", "node_modules", "bower_components"]
+
     },
     vue: {
         loaders: {
-            js: 'buble-loader'
+            js: 'babel-loader'
         }
     },
+    plugins: [
+        new webpack.ResolverPlugin(
+            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin(".bower.json", ["main"])
+        )
+    ]
 }
