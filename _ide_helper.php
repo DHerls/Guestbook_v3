@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.3.18 on 2016-10-11.
+ * Generated for Laravel 5.3.18 on 2016-12-27.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -11159,6 +11159,11 @@ namespace {
         public static function hasMacro($name){
             return \Illuminate\Routing\UrlGenerator::hasMacro($name);
         }
+        
+    }
+
+
+    class Uuid extends \Webpatser\Uuid\Uuid{
         
     }
 

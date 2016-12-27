@@ -75,6 +75,9 @@ class MemberController extends Controller
             } else {
                 $adult['guest_string'] = $num_guests . " Guests";
             }
+
+            $adult['balance'] = floatval($member->current_balance);
+
             $adults[] = $adult;
         }
 
@@ -88,7 +91,8 @@ class MemberController extends Controller
         $columns = [
         ['display' => 'Info', 'sortable' => false, 'col_size' => 1],
         ['display' => 'Last Name', 'key' => 'last_name', 'sortable' => true, 'col_size' => 4],
-        ['display' => 'First Name', 'key' => 'first_name', 'sortable' => true, 'col_size' => 4],
+        ['display' => 'First Name', 'key' => 'first_name', 'sortable' => true, 'col_size' => 3],
+        ['display' => 'Balance', 'key' => 'balance', 'sortable' => true, 'col_size' => 1],
         ['display' => 'Members', 'key' => 'members', 'sortable' => true, 'col_size' => 1],
         ['display' => 'Guests', 'key' => 'guest_string', 'sortable' => true, 'col_size' => 2]
         ];

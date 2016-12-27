@@ -54,6 +54,7 @@
                             </td>
                             <td >@{{data.last_name}}</td>
                             <td>@{{data.first_name}}</td>
+                            <td>$@{{ data.balance }}</td>
                             <td is="editfield" :dataobj="data" :key_col="'members'" :submit_url="'/members/' + data.id + '/records'" :submit_func="submit"></td>
                             <td>
                                 <div class="btn-group">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BalanceRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -92,7 +93,9 @@ class GuestRecordController extends Controller
             $record->guests()->save($guest);
         }
 
-        //TODO Actually apply price to account
+        $balance_record = new BalanceRecord();
+        $balance_record->change_amount = $price;
+        $member->balanceRecords()->save($balance_record);
 
         return response()->json($price);
     }
