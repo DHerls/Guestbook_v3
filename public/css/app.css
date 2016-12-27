@@ -5887,4 +5887,8 @@ canvas.signature {
   background: white;
   border: 1px black solid; }
 
+.btn-group {
+  display: -webkit-box;
+  display: flex; }
+
 /*# sourceMappingURL=app.css.map */

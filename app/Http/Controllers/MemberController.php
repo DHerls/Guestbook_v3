@@ -90,7 +90,7 @@ class MemberController extends Controller
         ['display' => 'Last Name', 'key' => 'last_name', 'sortable' => true, 'col_size' => 4],
         ['display' => 'First Name', 'key' => 'first_name', 'sortable' => true, 'col_size' => 4],
         ['display' => 'Members', 'key' => 'members', 'sortable' => true, 'col_size' => 1],
-        ['display' => 'Guests', 'key' => 'guest_string', 'sortable' => true, 'col_size' => 1]
+        ['display' => 'Guests', 'key' => 'guest_string', 'sortable' => true, 'col_size' => 2]
         ];
         return view("members.index")->with(compact('columns'));
     }

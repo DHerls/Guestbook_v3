@@ -55,9 +55,16 @@
                             <td >@{{data.last_name}}</td>
                             <td>@{{data.first_name}}</td>
                             <td is="editfield" :dataobj="data" :key_col="'members'" :submit_url="'/members/' + data.id + '/records'" :submit_func="submit"></td>
-                            <td><a v-bind:href="'/members/' + data.id + '/guests'" class="btn btn-default" role="button" style="width: 92px">
-                                    @{{data.guest_string}}
-                                </a>
+                            <td>
+                                <div class="btn-group">
+                                    <a v-bind:href="'/members/' + data.id + '/guests'" class="btn btn-default" role="button">
+                                        @{{data.guest_string}}
+                                    </a>
+                                    <a v-bind:href="'/members/' + data.id + '/guests/new'" class="btn btn-default" role="button" title="Quick Add">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </a>
+                                </div>
+
                             </td>
                         </tr>
                     </template>
