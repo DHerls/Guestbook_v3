@@ -16,7 +16,9 @@ const app = new Vue ({
             account: "Apply to Account",
             cash: "Paid in Cash",
             pass: "Free Pass",
-        }
+        },
+        mSigError: false,
+        gSigError: false,
     },
     methods: {
         filledRows: function (box) {
@@ -101,6 +103,20 @@ const app = new Vue ({
                 }
             }
 
+            if (memberSig.isEmpty()){
+                this.mSigError = true;
+                validated = false;
+            } else {
+                this.mSigError = false;
+            }
+
+            if (guestSig.isEmpty()){
+                this.gSigError = true;
+                validated = false;
+            } else {
+                this.gSigError = false;
+            }
+
             return validated;
         },
         submit: function(){
@@ -127,6 +143,8 @@ const app = new Vue ({
                 }
             }
             data_obj.payment = this.payment;
+            data_obj.member_sig = memberSig.toDataURL();
+            data_obj.guest_sig = guestSig.toDataURL();
 
             $.ajaxSetup({
                 headers: {
@@ -183,8 +201,22 @@ const app = new Vue ({
     }
 });
 
-var memberCanvas = document.querySelector('canvas');
-// var guestCanvas = document.querySelector('guest-canvas');
+var memberCanvas = document.getElementById("memberSig");
+memberCanvas.width = memberCanvas.offsetWidth;
+memberCanvas.height = memberCanvas.offsetWidth * 35 / 110;
+
+var guestCanvas = document.getElementById("guestSig");
+guestCanvas.width = guestCanvas.offsetWidth;
+guestCanvas.height = guestCanvas.offsetWidth * 35 / 110;
+
 
 var memberSig = new SignaturePad(memberCanvas);
-// var guestSig = new SignaturePad(guestCanvas);
+var guestSig = new SignaturePad(guestCanvas);
+
+window.clear_sig = function(type) {
+    if (type === 'guest'){
+        guestSig.clear();
+    } else if (type === 'member'){
+        memberSig.clear();
+    }
+};

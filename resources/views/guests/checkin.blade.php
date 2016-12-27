@@ -21,13 +21,25 @@
     <div class="row">
 
         <div class="col-md-6">
-            Member Signature:
-            <canvas></canvas>
+            <h4>Member Signature:
+                <button class="btn btn-sm btn-default pull-right" onclick="clear_sig('member')">Clear</button>
+            </h4>
+            <div class="alert alert-danger" role="alert" v-if="mSigError">
+                Member Signature is required
+            </div>
+            <canvas class="signature" id="memberSig" width="300" height="100"></canvas>
         </div>
         <div class="col-md-6">
-            Guest Signature:
+            <h4>Guest Signature:
+                <button class="btn btn-sm btn-default pull-right" onclick="clear_sig('guest')">Clear</button>
+            </h4>
+            <div class="alert alert-danger" role="alert" v-if="gSigError">
+                Guest Signature is required
+            </div>
+            <canvas class="signature" id="guestSig" width="300" height="100"></canvas>
         </div>
     </div>
+    <br>
     <div class="row">
         <div class="pull-left">
             <vue-radio v-bind:values="paymentMethods" v-on:select="setPayment(arguments[0])" v-bind:default="'account'"></vue-radio>

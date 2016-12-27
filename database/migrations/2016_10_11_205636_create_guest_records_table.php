@@ -19,8 +19,8 @@ class CreateGuestRecordsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->smallInteger('price');
             $table->enum('payment_method',['account','cash','pass']);
-            $table->binary('member_signature')->nullable();
-            $table->binary('guest_signature')->nullable();
+            $table->string('member_signature', 80);
+            $table->string('guest_signature', 80);
             $table->timestamps();
 
             $table->foreign('member_id')->references('id')->on('members');

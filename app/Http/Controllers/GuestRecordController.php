@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\Http\Requests;
 use App\Member;
 use App\Guest;
 use App\GuestRecord;
+
+use Webpatser\Uuid\Uuid;
 
 class GuestRecordController extends Controller
 {
@@ -29,6 +32,8 @@ class GuestRecordController extends Controller
             'children.*.first_name' => 'required|string|max:45',
             'children.*.last_name' => 'required|string|max:45',
             'children.*.city' => 'required|string|max:45',
+            'member_sig' => 'required|string',
+            'guest_sig' => 'required|string'
         ]);
 
 
@@ -77,8 +82,10 @@ class GuestRecordController extends Controller
         $record = new GuestRecord();
         $record->price = $price;
         $record->payment_method = $request->payment;
-        $record->member_signature = "";
-        $record->guest_signature = "";
+
+        $record->member_signature = $this->storeImage($request->member_sig);
+        $record->guest_signature = $this->storeImage($request->guest_sig);
+
         $member->guestRecords()->save($record);
 
         foreach ($guests as $guest){
@@ -88,5 +95,14 @@ class GuestRecordController extends Controller
         //TODO Actually apply price to account
 
         return response()->json($price);
+    }
+
+    public function storeImage($url) {
+        $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $url));
+        $uuid = Uuid::generate();
+        $path = 'signatures/' . $uuid . '.png';
+        Storage::put($path, $data);
+
+        return $path;
     }
 }
