@@ -76,7 +76,7 @@ const app = new Vue({
                     newRow.children = app.get_children(data[i]);
                     newRow.cost = data[i].price;
                     newRow.payment = app.get_payment(data[i]);
-                    newRow.checkIn = app.get_time(data[i].created_at);
+                    newRow.checkIn = data[i].created_at;
                     app.rows.push(newRow);
                 }
             }

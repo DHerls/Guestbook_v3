@@ -42,7 +42,7 @@
                             </td>
                             <td>$@{{ row.cost }}</td>
                             <td>@{{ row.payment }}</td>
-                            <td>@{{ row.checkIn }}</td>
+                            <td>@{{ get_time(row.checkIn) }}</td>
                         </tr>
                     </tbody>
                 </table>
