@@ -18,6 +18,7 @@ class CreateBalanceRecordsTable extends Migration
             $table->integer('member_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->decimal('change_amount');
+            $table->string('reason',45);
             $table->timestamps();
 
             $table->foreign('member_id')->references('id')->on('members');
