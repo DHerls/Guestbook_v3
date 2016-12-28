@@ -6,55 +6,47 @@
         <div class="col-xs-12 col-sm-6 col-lg-3">
             <div class="panel panel-info">
                 <div class="panel-heading">Adults</div>
-                <div class="panel-body">
-                    <ul>
-                        @foreach($member->adults as $adult)
-                            <li>{{$adult->first_name}} {{$adult->last_name}}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                <ul class="list-group">
+                    @foreach($member->adults as $adult)
+                        <li class="list-group-item">{{$adult->first_name}} {{$adult->last_name}}</li>
+                    @endforeach
+                </ul>
             </div>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-lg-3">
             <div class="panel panel-info">
                 <div class="panel-heading">Children</div>
-                <div class="panel-body">
-                    <ul>
-                        @foreach($member->children as $child)
-                            <li>{{$child->first_name}} {{$child->last_name}}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                <ul class="list-group">
+                    @foreach($member->children as $child)
+                        <li class="list-group-item">{{$child->first_name}} {{$child->last_name}}</li>
+                    @endforeach
+                </ul>
             </div>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-lg-3">
             <div class="panel panel-info">
                 <div class="panel-heading">Email Addresses</div>
-                <div class="panel-body">
-                    <ul>
-                        @foreach($member->emails as $email)
-                            <li>
-                                <a href="mailto:{{$email->address}}">{{$email->address}}</a>
-                                {{($email->description) ? ("({$email->description})") : ("")}}
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+                <ul class="list-group">
+                    @foreach($member->emails as $email)
+                        <li class="list-group-item">
+                            <a href="mailto:{{$email->address}}">{{$email->address}}</a>
+                            {{($email->description) ? ("({$email->description})") : ("")}}
+                        </li>
+                    @endforeach
+                </ul>
             </div>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-lg-3">
             <div class="panel panel-info">
                 <div class="panel-heading">Phone Numbers</div>
-                <div class="panel-body">
-                    <ul>
-                        @foreach($member->phones as $phone)
-                            <li>{{$phone->fancyNumber()}}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                <ul class="list-group">
+                    @foreach($member->phones as $phone)
+                        <li class="list-group-item">{{$phone->fancyNumber()}}</li>
+                    @endforeach
+                </ul>
             </div>
         </div>
     </div>
