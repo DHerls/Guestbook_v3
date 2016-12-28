@@ -1,6 +1,8 @@
 Vue.component('searchbar', require('./components/SearchBar.vue'));
 Vue.component('editfield', require('./components/EditField.vue'));
 
+import {validator} from "./validator";
+
 const app = new Vue({
     el: '#app',
     data: {
@@ -8,6 +10,13 @@ const app = new Vue({
         sort_dir: "down",
         data: [],
         data_url: "",
+        currentMember: {},
+        balance: {
+            amount: 0,
+            reason: "",
+            amount_error: "",
+            reason_error: ""
+        }
     },
     methods: {
         set_sort_col: function(column){
@@ -37,6 +46,42 @@ const app = new Vue({
                     console.log(data);
                 }
             });
+        },
+
+        set_member: function(data){
+            this.currentMember = data;
+        },
+
+        charge: function () {
+            this.balance.amount_error = validator.validate(this.balance.amount,"required|numeric","Amount");
+            this.balance.reason_error = validator.validate(this.balance.reason,"required|string|max:45","Reason");
+            if (!this.balance.amount_error && !this.balance.reason_error){
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: window.location.href + "/members/" + app.currentMember.id + "/balance",
+                    dataType: 'json',
+                    data: {amount: app.balance.amount, reason: app.balance.reason},
+                    success: function(data){
+                        app.currentMember.balance = app.currentMember.balance + app.balance.amount;
+                        app.balance = {
+                            amount: 0,
+                            reason: "",
+                            amount_error: "",
+                            reason_error: ""
+                        };
+                        $("#balanceModal").modal("hide");
+                    },
+                    error: function(data){
+                        console.log(data);
+                    }
+                });
+            }
         },
 
         submit: function(data_obj, url, callback){

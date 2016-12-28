@@ -54,7 +54,13 @@
                             </td>
                             <td >@{{data.last_name}}</td>
                             <td>@{{data.first_name}}</td>
-                            <td>$@{{ data.balance }}</td>
+                            <td>
+                                $@{{ data.balance.toFixed(2) }}
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal"
+                                        data-target="#balanceModal" v-on:click="set_member(data)" title="Charge to Account">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                </button>
+                            </td>
                             <td is="editfield" :dataobj="data" :key_col="'members'" :submit_url="'/members/' + data.id + '/records'" :submit_func="submit"></td>
                             <td>
                                 <div class="btn-group">
@@ -72,6 +78,40 @@
    `
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" id="balanceModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Charge: @{{ currentMember.last_name }}</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label for="balanceAmount">Amount:</label>
+                            <p class="error-msg" v-if="balance.amount_error">@{{ balance.amount_error }}</p>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="number" id="balanceAmount" class="form-control" v-model="balance.amount">
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="balanceReason">Reason:</label>
+                            <p class="error-msg" v-if="balance.reason_error">@{{ balance.reason_error }}</p>
+                            <input type="text" id="balanceReason" v-model="balance.reason" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-3 col-sm-offset-9">
+                            <button class="btn btn-primary pull-right" v-on:click="charge()">Charge to Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
