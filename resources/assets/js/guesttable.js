@@ -54,11 +54,11 @@ const app = new Vue({
             }
             if (typeof(this.rows[0][this.sort_col]) == 'string'){
                 this.rows.sort(function(a,b){
-                    return (app.sort_dir=="up" ? -1 : 1) * a[app.sort_col].localeCompare(b[app.sort_col]);
+                    return (app.sort_dir=="down" ? -1 : 1) * a[app.sort_col].localeCompare(b[app.sort_col]);
                 });
             } else {
                 this.rows.sort(function(a,b){
-                    return (app.sort_dir=="up" ? -1 : 1) * (a[app.sort_col] - b[app.sort_col]);
+                    return (app.sort_dir=="down" ? -1 : 1) * (a[app.sort_col] - b[app.sort_col]);
                 });
             }
 

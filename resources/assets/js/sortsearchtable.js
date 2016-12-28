@@ -7,7 +7,7 @@ const app = new Vue({
     el: '#app',
     data: {
         sort_col: "",
-        sort_dir: "down",
+        sort_dir: "up",
         data: [],
         data_url: "",
         currentMember: {},
@@ -135,11 +135,11 @@ const app = new Vue({
             }
             if (typeof(this.data[0][this.sort_col]) == 'string'){
                 this.data.sort(function(a,b){
-                    return (app.sort_dir=="up" ? -1 : 1) * a[app.sort_col].localeCompare(b[app.sort_col]);
+                    return (app.sort_dir=="down" ? -1 : 1) * a[app.sort_col].localeCompare(b[app.sort_col]);
                 });
             } else {
                 this.data.sort(function(a,b){
-                    return (app.sort_dir=="up" ? -1 : 1) * (a[app.sort_col] - b[app.sort_col]);
+                    return (app.sort_dir=="down" ? -1 : 1) * (a[app.sort_col] - b[app.sort_col]);
                 });
             }
 
