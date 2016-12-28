@@ -68,13 +68,7 @@ class MemberController extends Controller
                 ->whereDate('guest_records.created_at', Date("Y-m-d"))
                 ->where('guest_records.member_id',$member->id)
                 ->count();
-            if ($num_guests == 0){
-                $adult['guest_string'] = "No Guests";
-            } else if ($num_guests == 1){
-                $adult['guest_string'] = "1 Guest";
-            } else {
-                $adult['guest_string'] = $num_guests . " Guests";
-            }
+            $adult['num_guests'] = $num_guests;
 
             $adult['balance'] = floatval($member->current_balance);
 
@@ -94,7 +88,7 @@ class MemberController extends Controller
         ['display' => 'First Name', 'key' => 'first_name', 'sortable' => true, 'col_size' => 3],
         ['display' => 'Balance', 'key' => 'balance', 'sortable' => true, 'col_size' => 1],
         ['display' => 'Members', 'key' => 'members', 'sortable' => true, 'col_size' => 1],
-        ['display' => 'Guests', 'key' => 'guest_string', 'sortable' => true, 'col_size' => 2]
+        ['display' => 'Guests', 'key' => 'num_guests', 'sortable' => true, 'col_size' => 2]
         ];
         return view("members.index")->with(compact('columns'));
     }

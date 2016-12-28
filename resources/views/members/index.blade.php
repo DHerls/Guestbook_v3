@@ -65,7 +65,7 @@
                             <td>
                                 <div class="btn-group">
                                     <a v-bind:href="'/members/' + data.id + '/guests'" class="btn btn-default" role="button">
-                                        @{{data.guest_string}}
+                                        @{{guest_string(data.num_guests)}}
                                     </a>
                                     <a v-bind:href="'/members/' + data.id + '/guests/new'" class="btn btn-default" role="button" title="Quick Add">
                                         <i class="glyphicon glyphicon-plus"></i>

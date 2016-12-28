@@ -11,7 +11,7 @@ const app = new Vue({
                 this.sort_dir = this.sort_dir == "up" ? "down" : "up";
             } else {
                 this.sort_col = column;
-                this.sort_dir = "down";
+                this.sort_dir = "up";
             }
         },
         get_adults(row){

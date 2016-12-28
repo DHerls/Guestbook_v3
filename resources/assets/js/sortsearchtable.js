@@ -19,12 +19,21 @@ const app = new Vue({
         }
     },
     methods: {
+        guest_string: function(num){
+            if (num == 0){
+                return "No Guests"
+            } else if (num == "1"){
+                return "1 Guest"
+            } else {
+                return num + " Guests";
+            }
+        },
         set_sort_col: function(column){
             if (this.sort_col == column){
                 this.sort_dir = this.sort_dir == "up" ? "down" : "up";
             } else {
                 this.sort_col = column;
-                this.sort_dir = "down";
+                this.sort_dir = "up";
             }
         },
 
