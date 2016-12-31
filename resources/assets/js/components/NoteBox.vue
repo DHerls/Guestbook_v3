@@ -25,7 +25,7 @@
                 <td>{{note.time}}</td>
                 <td>{{note.user}}</td>
                 <td>{{note.note}}</td>
-                <td class="fit"><button v-on:click="remove(index,note.id)" class="btn btn-danger text-center" title="Remove Note">
+                <td class="fit"><button v-on:click="remove(index,note.id)" class="btn btn-default btn-sm text-center" title="Remove Note">
                     <i class="glyphicon glyphicon-remove"></i>
                 </button></td>
             </tr>

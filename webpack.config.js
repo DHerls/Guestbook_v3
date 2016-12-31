@@ -10,6 +10,7 @@ module.exports = {
         edit: './assets/js/editmember.js',
         checkin: './assets/js/checkinguest.js',
         guests: './assets/js/guesttable.js',
+        display: './assets/js/displaymember.js',
         test: ['./assets/js/test.js']
     },
     output: {

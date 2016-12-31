@@ -67,3 +67,7 @@
 
     @include('members.records')
 @endsection
+
+@section('scripts')
+    <script type="text/javascript" src="/js/display.js"></script>
+@endsection

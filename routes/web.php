@@ -40,7 +40,9 @@ Route::group(['middleware' => ['web','auth']], function() {
     Route::post('/members/{member}/guests/new','GuestRecordController@create');
     Route::post('/members/{member}/records','MemberRecordController@create');
 
-    Route::post('members/{member}/balance','Member\ChargeAccount');
+    Route::post('members/{member}/balance','Member\BalanceController@charge');
+    Route::get('members/{member}/balance/json','Member\BalanceController@json');
+
 
     Route::get('members/{member}/notes/json','Member\NoteController@get');
 

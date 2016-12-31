@@ -36,7 +36,13 @@
                             <td>{{$record->adults}}</td>
                             <td>{{$record->children}}</td>
                             <td>${{$record->price}}</td>
-                            <td>{{$record->payment_method}}</td>
+                            @if($record->payment_method == "account")
+                                <td>Charged to Account</td>
+                            @elseif($record->payment_method == "cash")
+                                <td>Paid Cash</td>
+                            @elseif($record->payment_method == "pass")
+                                <td>Free Pass</td>
+                            @endif
                         </tr>
                     @endforeach
                     </tbody>
@@ -46,34 +52,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12 col-lg-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">Balance Updates</div>
-                <div class="panel-body">
-                    <h4>Current Balance: ${{$member->current_balance}}</h4>
-                </div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>User</th>
-                        <th>Amount</th>
-                        <th>Reason</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($balanceRecords as $record)
-                        <tr>
-                            <td>{{date("m-d-y",strtotime($record->created_at))}}</td>
-                            <td>{{date("g:i a",strtotime($record->created_at))}}</td>
-                            <td>{{$record->user->name}}</td>
-                            <td>${{$record->change_amount}}</td>
-                            <td>{{$record->reason}}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <balance-box v-bind:current_balance="{{$member->current_balance}}"></balance-box>
         </div>
         <div class="col-sm-12 col-lg-6">
             <div class="panel panel-info">
