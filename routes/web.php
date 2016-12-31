@@ -24,8 +24,6 @@ Route::group(['middleware' => ['web','auth','admin']], function() {
 
     Route::post('/members/{member}/delete','Member\Delete');
 
-    Route::post('members/{member}/balance','Member\ChargeAccount');
-
 });
 
 Route::group(['middleware' => ['web','auth']], function() {
@@ -41,6 +39,8 @@ Route::group(['middleware' => ['web','auth']], function() {
 
     Route::post('/members/{member}/guests/new','GuestRecordController@create');
     Route::post('/members/{member}/records','MemberRecordController@create');
+
+    Route::post('members/{member}/balance','Member\ChargeAccount');
 });
 
 Route::group(['middleware' => 'web'], function() {
