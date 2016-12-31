@@ -10,29 +10,29 @@
             <button v-else class="btn btn-default pull-right glyphicon glyphicon-pencil" v-on:click="edit"></button>
             <div class="clearfix"></div>
         </div>
-        <div class="panel-body">
-            <table v-if="editing" class="table table-responsive form-group">
+        <div v-if="editing" class="panel-body">
+            <table  class="table table-responsive form-group">
                 <thead>
-                    <th v-for="column in info.columns">{{column.title}}</th>
-                    <th></th>
+                <th v-for="column in info.columns">{{column.title}}</th>
+                <th></th>
                 </thead>
                 <tbody>
-                    <tr v-for="object, index in info.rows">
-                        <td  v-for="column in info.columns" v-bind:class="{ 'has-error': object.errors[column.key] }">
-                            <input type="text" v-model="object[column.key]" class="form-control">
-                            <p class="error-msg" v-if="object.errors[column.key]">{{object.errors[column.key]}}</p>
-                        </td>
-                        <td v-if="index != 0 || !info.required" class="fit">
-                            <button v-if="editing" v-on:click="remove(index)" class="btn btn-danger text-center glyphicon glyphicon-remove"></button>
-                        </td>
-                    </tr>
+                <tr v-for="object, index in info.rows">
+                    <td  v-for="column in info.columns" v-bind:class="{ 'has-error': object.errors[column.key] }">
+                        <input type="text" v-model="object[column.key]" class="form-control">
+                        <p class="error-msg" v-if="object.errors[column.key]">{{object.errors[column.key]}}</p>
+                    </td>
+                    <td v-if="index != 0 || !info.required" class="fit">
+                        <button v-if="editing" v-on:click="remove(index)" class="btn btn-danger text-center glyphicon glyphicon-remove"></button>
+                    </td>
+                </tr>
                 </tbody>
-
             </table>
-            <ul v-else>
-                <li v-for="object in info.rows">{{display(object)}}</li>
-            </ul>
-            <button v-if="editing && (!info.limit || info.rows.length < info.limit)" class="btn btn-default pull-right add glyphicon glyphicon-plus" v-on:click="addRow"></button>
+            <button v-if="!info.limit || info.rows.length < info.limit" class="btn btn-default pull-right add glyphicon glyphicon-plus" v-on:click="addRow"></button>
+        </div>
+        <ul class="list-group" v-else>
+            <li class="list-group-item" v-for="object in info.rows">{{display(object)}}</li>
+        </ul>
         </div>
     </div>
 </template>
