@@ -26,46 +26,7 @@
         </div>
     </div>
 
-    <hr>
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12 col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">Comments</div>
-                    <div class="panel-body">
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">Balance Updates</div>
-                    <div class="panel-body">
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">Member Records</div>
-                    <div class="panel-body">
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">Guest Records</div>
-                    <div class="panel-body">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    @include('members.records')
 @endsection
 
 @section('scripts')

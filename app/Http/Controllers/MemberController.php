@@ -94,10 +94,19 @@ class MemberController extends Controller
     }
 
     public function display(Member $member){
+        $memberRecords = $member->memberRecords()->latest()->limit(5)->with('user')->get();
+        $guestRecords = $member->guestRecords()->latest()->limit(5)->with('user')->get();
+        $balanceRecords = $member->balanceRecords()->latest()->limit(5)->with('user')->get();
+
+        foreach ($guestRecords as $record){
+            $record['adults'] = $record->guests()->where('type','adult')->count();
+            $record['children'] = $record->guests()->where('type','child')->count();
+        }
+
         if (\Auth::user()->isAdmin()){
-            return view('members.edit');
+            return view('members.edit', compact('member', 'memberRecords', 'guestRecords', 'balanceRecords'));
         } else {
-            return view('members.display', compact('member'));
+            return view('members.display', compact('member', 'memberRecords', 'guestRecords', 'balanceRecords'));
         }
     }
 
