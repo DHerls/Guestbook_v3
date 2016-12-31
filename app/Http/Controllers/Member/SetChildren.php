@@ -20,19 +20,29 @@ class SetChildren extends Controller
             'children.*.birth_year' => "numeric|min:" . (date('Y')-25) . "|max:" . date('Y')
         ]);
 
+        $newChildren = [];
+        for ($i = 0; $i < sizeof($request->children); $i++){
+            $child = $request->children[$i];
+            if ($child['birth_year'] == ''){
+                unset($child['birth_year']);
+            }
+            $newChildren[] = $child;
+
+        }
+
         $count = 0;
         $children = $member->children()->get();
         foreach ($children as $child) {
-            if ($count < sizeof($request->children)) {
-                $child->update($request->children[$count]);
+            if ($count < sizeof($newChildren)) {
+                $child->update($newChildren[$count]);
                 $count += 1;
             } else {
                 $child->delete();
             }
         }
 
-        for ($i = $count; $i < sizeof($request->children); $i++){
-            $member->children()->create($request->children[$i]);
+        for ($i = $count; $i < sizeof($newChildren); $i++){
+            $member->children()->create($newChildren[$i]);
         }
         return response()->json(array());
     }
