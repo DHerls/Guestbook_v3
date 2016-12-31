@@ -41,6 +41,8 @@ Route::group(['middleware' => ['web','auth']], function() {
     Route::post('/members/{member}/records','MemberRecordController@create');
 
     Route::post('members/{member}/balance','Member\ChargeAccount');
+
+    Route::post('members/{member}/notes','Member\NoteController@create');
 });
 
 Route::group(['middleware' => 'web'], function() {

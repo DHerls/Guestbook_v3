@@ -4,8 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class Note extends Model
 {
+    use MonitorUserTrait;
+
     public function member(){
         return $this->belongsTo(Member::class);
     }

@@ -6,9 +6,26 @@
         <div class="col-sm-12 col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">Notes</div>
-                <div class="panel-body">
-
-                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>User</th>
+                        <th>Note</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($notes as $note)
+                        <tr>
+                            <td>{{date("m-d-y",strtotime($note->created_at))}}</td>
+                            <td>{{date("g:i a",strtotime($note->created_at))}}</td>
+                            <td>{{$note->user->name}}</td>
+                            <td>{{$note->note}}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="col-sm-12 col-lg-6">

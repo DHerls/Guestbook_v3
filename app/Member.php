@@ -37,8 +37,8 @@ class Member extends Model
         return $this->hasMany(MemberRecord::class);
     }
 
-    public function comments(){
-        return $this->hasMany(Comment::class);
+    public function notes(){
+        return $this->hasMany(Note::class);
     }
 
     public function balanceRecords(){

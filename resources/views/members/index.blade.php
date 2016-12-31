@@ -73,9 +73,16 @@
                                 </div>
 
                             </td>
+                            <td>
+                                @{{data.note}}
+                                <button type="button" class="btn btn-default pull-right" data-toggle="modal"
+                                        data-target="#noteModal" v-on:click="set_member(data)" title="Add Note">
+                                    <i class="glyphicon glyphicon-edit"></i>
+                                </button>
+                            </td>
                         </tr>
                     </template>
-   `
+
                 </tbody>
             </table>
         </div>
@@ -108,6 +115,31 @@
                     <div class="row">
                         <div class="col-sm-3 col-sm-offset-9">
                             <button class="btn btn-primary pull-right" v-on:click="charge()">Charge to Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" id="noteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Add Note: @{{ currentMember.last_name }}</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="noteText">Note:</label>
+                            <p class="error-msg" v-if="note.error">@{{ note.error }}</p>
+                            <input type="text" id="noteText" class="form-control" v-model="note.text">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-3 col-sm-offset-9">
+                            <button class="btn btn-primary pull-right" v-on:click="addNote()">Add Note</button>
                         </div>
                     </div>
                 </div>

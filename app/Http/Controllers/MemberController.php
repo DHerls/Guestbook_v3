@@ -44,6 +44,7 @@ class MemberController extends Controller
         //dd("DATE('created_at')= '{$date}'");
         $members->load(['adults',
             'memberRecords' => function($query) use ($date){ $query->whereRaw("DATE(created_at)= '{$date}'")->orderBy('created_at','desc');},
+            'notes' => function($query) { $query->latest()->limit(1);}
         ]);
 
         $adults = array();
@@ -72,6 +73,8 @@ class MemberController extends Controller
 
             $adult['balance'] = floatval($member->current_balance);
 
+            $adult['note'] = $member->notes->first() ? $member->notes->first()->note : "";
+
             $adults[] = $adult;
         }
 
@@ -84,11 +87,12 @@ class MemberController extends Controller
         }
         $columns = [
         ['display' => 'Info', 'sortable' => false, 'col_size' => 1],
-        ['display' => 'Last Name', 'key' => 'last_name', 'sortable' => true, 'col_size' => 4],
-        ['display' => 'First Name', 'key' => 'first_name', 'sortable' => true, 'col_size' => 3],
+        ['display' => 'Last Name', 'key' => 'last_name', 'sortable' => true, 'col_size' => 2],
+        ['display' => 'First Name', 'key' => 'first_name', 'sortable' => true, 'col_size' => 2],
         ['display' => 'Balance', 'key' => 'balance', 'sortable' => true, 'col_size' => 1],
         ['display' => 'Members', 'key' => 'members', 'sortable' => true, 'col_size' => 1],
-        ['display' => 'Guests', 'key' => 'num_guests', 'sortable' => true, 'col_size' => 2]
+        ['display' => 'Guests', 'key' => 'num_guests', 'sortable' => true, 'col_size' => 2],
+        ['display' => 'Notes', 'key' => 'note', 'sortable' => true, 'col_size' => 3]
         ];
         return view("members.index")->with(compact('columns'));
     }
@@ -97,6 +101,7 @@ class MemberController extends Controller
         $memberRecords = $member->memberRecords()->latest()->limit(5)->with('user')->get();
         $guestRecords = $member->guestRecords()->latest()->limit(5)->with('user')->get();
         $balanceRecords = $member->balanceRecords()->latest()->limit(5)->with('user')->get();
+        $notes = $member->notes()->latest()->limit(5)->with('user')->get();
 
         foreach ($guestRecords as $record){
             $record['adults'] = $record->guests()->where('type','adult')->count();
@@ -104,9 +109,9 @@ class MemberController extends Controller
         }
 
         if (\Auth::user()->isAdmin()){
-            return view('members.edit', compact('member', 'memberRecords', 'guestRecords', 'balanceRecords'));
+            return view('members.edit', compact('member', 'memberRecords', 'guestRecords', 'balanceRecords', 'notes'));
         } else {
-            return view('members.display', compact('member', 'memberRecords', 'guestRecords', 'balanceRecords'));
+            return view('members.display', compact('member', 'memberRecords', 'guestRecords', 'balanceRecords', 'notes'));
         }
     }
 

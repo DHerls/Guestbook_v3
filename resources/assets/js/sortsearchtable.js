@@ -16,6 +16,10 @@ const app = new Vue({
             reason: "",
             amount_error: "",
             reason_error: ""
+        },
+        note: {
+            text: "",
+            error: ""
         }
     },
     methods: {
@@ -60,7 +64,35 @@ const app = new Vue({
         set_member: function(data){
             this.currentMember = data;
         },
+        addNote: function(){
+            this.note.error = validator.validate(this.note.text,"required|string|max:255","Text");
+            if (this.note.error){
+                return;
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
+            $.ajax({
+                type: 'POST',
+                url: window.location.href + "/members/" + app.currentMember.id + "/notes",
+                dataType: 'json',
+                data: {note: app.note.text},
+                success: function(data){
+                    app.currentMember.note = app.note.text;
+                    app.note = {
+                        text: "",
+                        error: ""
+                    };
+                    $("#noteModal").modal("hide");
+                },
+                error: function(data){
+                    console.log(data);
+                }
+            });
+        },
         charge: function () {
             this.balance.amount_error = validator.validate(this.balance.amount,"required|numeric","Amount");
             this.balance.reason_error = validator.validate(this.balance.reason,"required|string|max:45","Reason");
