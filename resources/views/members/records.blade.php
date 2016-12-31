@@ -4,33 +4,17 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12 col-lg-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">Notes</div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>User</th>
-                        <th>Note</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($notes as $note)
-                        <tr>
-                            <td>{{date("m-d-y",strtotime($note->created_at))}}</td>
-                            <td>{{date("g:i a",strtotime($note->created_at))}}</td>
-                            <td>{{$note->user->name}}</td>
-                            <td>{{$note->note}}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <note-box></note-box>
         </div>
         <div class="col-sm-12 col-lg-6">
             <div class="panel panel-info">
-                <div class="panel-heading">Guest Records</div>
+                <div class="panel-heading">
+                    <a class="link-muted" href="{{Request::url()}}/guests">Guest Records</a>
+                    <a class="btn btn-default pull-right" href="/members/{{$member->id}}/guests/new" title="Check in Guest">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </a>
+                    <div class="clearfix"></div>
+                </div>
                 <table class="table">
                     <thead>
                     <tr>
@@ -59,6 +43,8 @@
                 </table>
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12 col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">Balance Updates</div>

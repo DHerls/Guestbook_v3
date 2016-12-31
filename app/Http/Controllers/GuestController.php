@@ -21,7 +21,8 @@ class GuestController extends Controller
             return $item->last_name;
         })->toArray());
         $last_names = implode('/',$last_names);
-        return view('guests.index')->with(compact('columns'))->with(compact('last_names'));
+        $id = $member->id;
+        return view('guests.index')->with(compact('columns'))->with(compact('last_names',"id"));
     }
 
     public function json(Member $member) {

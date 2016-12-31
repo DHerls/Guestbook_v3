@@ -68,3 +68,18 @@ canvas.signature {
 .btn-group {
   display: flex;
 }
+
+.link-muted {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.link-muted:link {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.link-muted:hover {
+  color: inherit;
+  text-decoration: underline;
+}

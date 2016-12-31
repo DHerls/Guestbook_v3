@@ -4,7 +4,9 @@
 
     <div class="container">
         <div class="row">
-            <h3 class="pull-left">Current Guests for: {{$last_names}}</h3>
+            <h3 class="pull-left">Current Guests for:
+                <a class="link-muted" href="/members/{{$id}}">{{$last_names}}</a>
+            </h3>
             <a href="{{Request::url()}}/new" class="btn btn-primary pull-right">Check in Guest <i class="glyphicon glyphicon-plus"></i> </a>
         </div>
         <br>
@@ -18,9 +20,9 @@
                                     <th class="col-sm-1 col-md-{{$column['col_size']}} sortable" v-on:click="sort('{{$column['key']}}')">
                                         {{$column['display']}}
                                         <span>
-                                        <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'up'"></i>
-                                        <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'down'"></i>
-                                    </span>
+                                            <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'up'"></i>
+                                            <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'down'"></i>
+                                        </span>
                                     </th>
                                 @else
                                     <th class="col-sm-12 col-md-{{$column['col_size']}}">{{$column['display']}}</th>

@@ -1,4 +1,5 @@
 Vue.component('multiple-display',require('./components/MultipleDisplayEditBox.vue'));
+Vue.component('note-box',require('./components/NoteBox.vue'));
 var memberFields = require('./json/memberFields.json');
 var addressFields = require('./json/addressFields.json');
 

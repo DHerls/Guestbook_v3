@@ -42,7 +42,10 @@ Route::group(['middleware' => ['web','auth']], function() {
 
     Route::post('members/{member}/balance','Member\ChargeAccount');
 
+    Route::get('members/{member}/notes/json','Member\NoteController@get');
+
     Route::post('members/{member}/notes','Member\NoteController@create');
+    Route::post('members/{member}/notes/{note}/delete','Member\NoteController@delete');
 });
 
 Route::group(['middleware' => 'web'], function() {
