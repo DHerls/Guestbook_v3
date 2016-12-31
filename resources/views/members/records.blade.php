@@ -1,7 +1,7 @@
 
 <hr>
 
-<div class="container-fluid">
+<div class="container-fluid" v-cloak>
     <div class="row">
         <div class="col-sm-12 col-lg-6">
             <note-box></note-box>

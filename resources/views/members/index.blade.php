@@ -24,7 +24,7 @@
     @else
         <div style="height: 25px; margin: 0; padding: 0;"></div>
     @endif
-<div class="container">
+<div class="container" v-cloak>
     <div class="row">
         <div class="table-responsive">
             <table class="table table-hover" id="memberTable">

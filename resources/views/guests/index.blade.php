@@ -10,7 +10,7 @@
             <a href="{{Request::url()}}/new" class="btn btn-primary pull-right">Check in Guest <i class="glyphicon glyphicon-plus"></i> </a>
         </div>
         <br>
-        <div class="row">
+        <div class="row" v-cloak>
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>

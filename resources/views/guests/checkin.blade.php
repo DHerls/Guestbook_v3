@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container" v-cloak>
     <h3>Check In Guests for: {{$last_names}}</h3>
     <br>
     <div class="row">

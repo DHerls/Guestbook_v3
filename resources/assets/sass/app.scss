@@ -83,3 +83,7 @@ canvas.signature {
   color: inherit;
   text-decoration: underline;
 }
+
+[v-cloak] {
+  display: none;
+}
