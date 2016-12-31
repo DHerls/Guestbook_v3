@@ -93,9 +93,11 @@ class GuestRecordController extends Controller
             $record->guests()->save($guest);
         }
 
-        $balance_record = new BalanceRecord();
-        $balance_record->change_amount = $price;
-        $balance_record->reason = "Guest Check-In";
+        if ($record->payment_method == 'account') {
+            $balance_record = new BalanceRecord();
+            $balance_record->change_amount = $price;
+            $balance_record->reason = "Guest Check-In";
+        }
         $member->balanceRecords()->save($balance_record);
 
         return response()->json($price);
