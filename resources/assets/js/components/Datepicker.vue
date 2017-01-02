@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="datepicker">
         <input type="text" class="form-control datepicker-input" v-on:click="inputClick" :value="dateString" readonly>
         <div class="popup" v-if="show">
             <div class="text-center">
@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="week in month">
-                    <td v-for="date in week" :class="{'non-month': isNonMonth(date), 'selected': date.getTime() === value.getTime(), 'disabled': isDisabled(date)}" @click="select(date)">
+                    <td v-for="date in week" class="datepicker-item" :class="{'non-month': isNonMonth(date), 'selected': date.getTime() === value.getTime(), 'disabled': isDisabled(date)}" @click="select(date)">
                         {{date.getDate()}}
                     </td>
                 </tr>
@@ -143,6 +143,9 @@
         border: 1px solid grey;
         border-radius: 5px;
     }
+    div.datepicker {
+        display: inline-block;
+    }
     input.form-control.datepicker-input[readonly] {
         background: white;
         width: 200px;
@@ -150,10 +153,10 @@
     table {
         width: 100%;
     }
-    td:hover {
+    td.datepicker-item:hover {
         background: rgba(30, 144, 255, 0.22);
     }
-    td {
+    td.datepicker-item {
         width: 25px;
         height: 25px;
         cursor: default;
@@ -175,7 +178,7 @@
         background: dodgerblue;
         color: white;
     }
-    td.disabled {
+    td.datepicker-item.disabled {
         background: #c5c5c5;
         color: #8a8282;
         border-radius: 0;
