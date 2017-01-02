@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Member;
+use App\GuestRecord;
+use Carbon\Carbon;
 
 class GuestController extends Controller
 {
@@ -25,8 +27,17 @@ class GuestController extends Controller
         return view('guests.index')->with(compact('columns'))->with(compact('last_names',"id"));
     }
 
-    public function json(Member $member) {
-        return response()->json($member->guestRecords()->whereDate('created_at', '=', date('Y-m-d'))->with('guests')->get());
+    public function json(Member $member, Request $request) {
+        if (\Auth::user()->isAdmin()){
+            $records  = $member->guestRecords()->whereBetween('created_at',[
+                $request['start']['year'] . '-' . $request['start']['month'] . '-' . $request['start']['date']. ' 00:00:00',
+                $request['end']['year'] . '-' . $request['end']['month'] . '-' . $request['end']['date'] . ' 23:59:59'
+            ])->with('guests')->get();
+            return response()->json($records);
+        } else {
+            return response()->json($member->guestRecords()->whereDate('created_at', '=', date('Y-m-d'))->with('guests')->get());
+        }
+
     }
 
     public function check_in(Member $member) {

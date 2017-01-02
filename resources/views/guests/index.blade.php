@@ -9,6 +9,15 @@
             </h3>
             <a href="{{Request::url()}}/new" class="btn btn-primary pull-right">Check in Guest <i class="glyphicon glyphicon-plus"></i> </a>
         </div>
+        @if(Auth::user()->isAdmin())
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 text-center">
+                <datepicker v-model="date1" v-bind:end="date2"></datepicker>
+                -
+                <datepicker v-model="date2" v-bind:start="date1"></datepicker>
+            </div>
+        </div>
+        @endif
         <br>
         <div class="row" v-cloak>
             <div class="table-responsive">

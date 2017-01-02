@@ -1,8 +1,17 @@
+function today(){
+    var tempDate = new Date();
+    return new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate());
+}
+
+Vue.component('datepicker',require('./components/Datepicker.vue'));
+
 const app = new Vue({
     el: '#app',
     data: {
         sort_col: "checkIn",
         sort_dir: "down",
+        date1: today(),
+        date2: today(),
         rows: [],
     },
     methods: {
@@ -41,10 +50,40 @@ const app = new Vue({
         },
         get_time(timestring){
             var options = {
-                hour: "2-digit", minute: "2-digit"
+                month:'2-digit', day:'2-digit', year: '2-digit', hour: "2-digit", minute: "2-digit"
             };
             var date = new Date(timestring);
             return date.toLocaleTimeString('en-us',options);
+        },
+        getData: function(){
+            $.get({
+                url: window.location.href + "/json",
+                data: {
+                    start: {
+                        year: this.date1.getFullYear(),
+                        month: this.date1.getMonth()+1,
+                        date: this.date1.getDate()
+                    },
+                    end: {
+                        year: this.date2.getFullYear(),
+                        month: this.date2.getMonth()+1,
+                        date: this.date2.getDate()
+                    }
+                },
+                success: function(data){
+                    app.rows = [];
+                    var newRow = {};
+                    for (var i = 0; i < data.length; i++){
+                        newRow = {};
+                        newRow.adults = app.get_adults(data[i]);
+                        newRow.children = app.get_children(data[i]);
+                        newRow.cost = data[i].price;
+                        newRow.payment = app.get_payment(data[i]);
+                        newRow.checkIn = data[i].created_at;
+                        app.rows.push(newRow);
+                    }
+                }
+            });
         }
     },
     computed: {
@@ -65,22 +104,16 @@ const app = new Vue({
             return this.rows;
         }
     },
+    watch:{
+        date1: function (val) {
+            this.getData();
+        },
+        date2: function (val) {
+            this.getData();
+        }
+    },
     created: function () {
-        $.get({
-            url: window.location.href + "/json",
-            success: function(data){
-               var newRow = {};
-                for (var i = 0; i < data.length; i++){
-                    newRow = {};
-                    newRow.adults = app.get_adults(data[i]);
-                    newRow.children = app.get_children(data[i]);
-                    newRow.cost = data[i].price;
-                    newRow.payment = app.get_payment(data[i]);
-                    newRow.checkIn = data[i].created_at;
-                    app.rows.push(newRow);
-                }
-            }
-        });
+        this.getData();
     }
 
 });
