@@ -4,24 +4,28 @@ function today(){
 }
 
 Vue.component('datepicker',require('./components/Datepicker.vue'));
+Vue.component('paginator',require('./components/Paginator.vue'));
 
 const app = new Vue({
     el: '#app',
     data: {
-        sort_col: "checkIn",
-        sort_dir: "down",
+        sort_col: "created_at",
+        sort_dir: "desc",
         date1: today(),
         date2: today(),
+        page: 1,
+        maxPages: 1,
         rows: [],
     },
     methods: {
         sort: function(column){
             if (this.sort_col == column){
-                this.sort_dir = this.sort_dir == "up" ? "down" : "up";
+                this.sort_dir = this.sort_dir == "asc" ? "desc" : "asc";
             } else {
                 this.sort_col = column;
-                this.sort_dir = "up";
+                this.sort_dir = "asc";
             }
+            this.getData();
         },
         get_adults(row){
             return this.get_type(row,'adult');
@@ -56,9 +60,19 @@ const app = new Vue({
             return date.toLocaleTimeString('en-us',options);
         },
         getData: function(){
+            this.rows = [
+                {
+                    'adults' : [{'city': 'Loading...'}],
+                    'children' : [{'city': 'Loading...'}],
+                    'payment' : 'Loading...',
+                }
+            ]
             $.get({
                 url: window.location.href + "/json",
                 data: {
+                    page: this.page,
+                    sort_col: this.sort_col,
+                    sort_dir: this.sort_dir,
                     start: {
                         year: this.date1.getFullYear(),
                         month: this.date1.getMonth()+1,
@@ -71,37 +85,21 @@ const app = new Vue({
                     }
                 },
                 success: function(data){
+                    app.maxPages = data.last_page;
+                    var dataRows = data.data;
                     app.rows = [];
                     var newRow = {};
-                    for (var i = 0; i < data.length; i++){
+                    for (var i = 0; i < dataRows.length; i++){
                         newRow = {};
-                        newRow.adults = app.get_adults(data[i]);
-                        newRow.children = app.get_children(data[i]);
-                        newRow.cost = data[i].price;
-                        newRow.payment = app.get_payment(data[i]);
-                        newRow.checkIn = data[i].created_at;
+                        newRow.adults = app.get_adults(dataRows[i]);
+                        newRow.children = app.get_children(dataRows[i]);
+                        newRow.cost = dataRows[i].price;
+                        newRow.payment = app.get_payment(dataRows[i]);
+                        newRow.checkIn = dataRows[i].created_at;
                         app.rows.push(newRow);
                     }
                 }
             });
-        }
-    },
-    computed: {
-        sorted_rows: function() {
-            if (this.rows.length == 0){
-                return []
-            }
-            if (typeof(this.rows[0][this.sort_col]) == 'string'){
-                this.rows.sort(function(a,b){
-                    return (app.sort_dir=="down" ? -1 : 1) * a[app.sort_col].localeCompare(b[app.sort_col]);
-                });
-            } else {
-                this.rows.sort(function(a,b){
-                    return (app.sort_dir=="down" ? -1 : 1) * (a[app.sort_col] - b[app.sort_col]);
-                });
-            }
-
-            return this.rows;
         }
     },
     watch:{
@@ -109,6 +107,9 @@ const app = new Vue({
             this.getData();
         },
         date2: function (val) {
+            this.getData();
+        },
+        page: function (val) {
             this.getData();
         }
     },

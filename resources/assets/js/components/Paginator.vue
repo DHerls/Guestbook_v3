@@ -1,5 +1,5 @@
 <template>
-    <div class="btn-group btn-group-sm">
+    <div id="paginator" class="btn-group btn-group-sm">
         <button class="btn btn-default btn-arrow" @click="firstPage"><i class="glyphicon glyphicon-step-backward"></i></button>
         <button class="btn btn-default btn-arrow" @click="prevPage"><i class="glyphicon glyphicon-chevron-left"></i></button>
         <button class="btn btn-number" :class="{'btn-primary': n == value, 'btn-default': n!=value}" v-for="n in range" @click="setPage(n)">{{n}}</button>
@@ -73,5 +73,8 @@
         padding-right: 5px;
         width: 30px;
         height: 30px;
+    }
+    div#paginator {
+        display: inline-block;
     }
 </style>

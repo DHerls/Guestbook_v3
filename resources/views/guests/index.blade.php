@@ -29,8 +29,8 @@
                                     <th class="col-sm-1 col-md-{{$column['col_size']}} sortable" v-on:click="sort('{{$column['key']}}')">
                                         {{$column['display']}}
                                         <span>
-                                            <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'up'"></i>
-                                            <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'down'"></i>
+                                            <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'asc'"></i>
+                                            <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'desc'"></i>
                                         </span>
                                     </th>
                                 @else
@@ -40,7 +40,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="row in sorted_rows">
+                        <tr v-for="row in rows">
                             <td>
                                 <ul>
                                     <li v-for="adult in row.adults">@{{adult.first_name}} @{{ adult.last_name }} (@{{ adult.city }})</li>
@@ -57,6 +57,11 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4 text-center">
+                <paginator v-model="page" v-bind:max="maxPages"></paginator>
             </div>
         </div>
     </div>

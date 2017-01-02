@@ -2,7 +2,11 @@
 
 @section('content')
 <div class="container" v-cloak>
-    <h3>Check In Guests for: {{$last_names}}</h3>
+    <div class="row">
+        <h3 class="pull-left">Check In Guests for:
+            <a class="link-muted" href="/members/{{$id}}">{{$last_names}}</a>
+        </h3>
+    </div>
     <br>
     <div class="row">
         <div class="col-xs-12 col-md-6" v-for="box in info">
