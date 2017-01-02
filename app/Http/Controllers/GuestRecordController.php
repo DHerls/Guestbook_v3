@@ -97,8 +97,8 @@ class GuestRecordController extends Controller
             $balance_record = new BalanceRecord();
             $balance_record->change_amount = $price;
             $balance_record->reason = "Guest Check-In";
+            $member->balanceRecords()->save($balance_record);
         }
-        $member->balanceRecords()->save($balance_record);
 
         return response()->json($price);
     }
