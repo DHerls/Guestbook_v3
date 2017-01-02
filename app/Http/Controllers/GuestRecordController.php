@@ -34,7 +34,8 @@ class GuestRecordController extends Controller
             'children.*.last_name' => 'required|string|max:45',
             'children.*.city' => 'required|string|max:45',
             'member_sig' => 'required|string',
-            'guest_sig' => 'required|string'
+            'guest_sig' => 'required|string',
+            'payment' => 'required|string|in:account,cash,pass'
         ]);
 
 
