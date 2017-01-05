@@ -25,10 +25,10 @@
                 </thead>
                 <tbody>
                 <tr v-for="record in records">
-                    <td>{{record.date}}</td>
-                    <td>{{record.time}}</td>
-                    <td>{{record.user}}</td>
-                    <td>${{record.amount}}</td>
+                    <td>{{get_date(record.created_at)}}</td>
+                    <td>{{get_time(record.created_at)}}</td>
+                    <td>{{record.name}}</td>
+                    <td>${{record.change_amount}}</td>
                     <td>{{record.reason}}</td>
                 </tr>
                 </tbody>
@@ -79,7 +79,7 @@
 </style>
 <script>
     import {validator} from "../validator";
-
+    var dateFormat = require('dateformat');
     export default {
         data(){
             return {
@@ -94,6 +94,12 @@
         },
         props: ['current_balance'],
         methods: {
+            get_time: function (datetime) {
+                return dateFormat(datetime, 'hh:mm TT');
+            },
+            get_date: function (datetime) {
+                return dateFormat(datetime, 'mm-dd-yy');
+            },
             charge: function () {
                 var app = this;
 
@@ -137,7 +143,7 @@
         created: function(){
             var app = this;
             $.get({
-                url: window.location.href + "/balance/json",
+                url: window.location.href + "/balance/quick",
                 success: function(data){
                     app.records = data;
                 }

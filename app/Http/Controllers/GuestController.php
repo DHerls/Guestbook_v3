@@ -51,10 +51,6 @@ class GuestController extends Controller
                 ->join('users','guest_records.user_id','=','users.id')
                 ->orderBy($request->sort_col,$request->sort_dir)
                 ->paginate(10,['users.name','users.id','guest_records.price','guest_records.created_at','guest_records.payment_method','guest_records.id']);
-            
-
-
-
             return response()->json($records);
         } else {
             return response()->json($member->guestRecords()->whereDate('created_at', '=', date('Y-m-d'))->with('guests')

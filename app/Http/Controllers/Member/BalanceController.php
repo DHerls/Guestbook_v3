@@ -33,21 +33,11 @@ class BalanceController extends Controller
         return response()->json($returnRecord);
     }
 
-    public function json(Member $member, Request $request){
-        $balanceRecords = $member->balanceRecords()->latest()->limit(5)->with('user')->get();
-        $smallRecords = [];
+    public function lastFive(Member $member){
+        $balanceRecords = $member->balanceRecords()->latest()->limit(5)
+            ->join('users','users.id','=','balance_records.user_id')
+            ->get(['users.name','users.id','balance_records.change_amount','balance_records.reason','balance_records.id','balance_records.created_at']);
 
-        foreach ($balanceRecords as $record){
-            $newRecord = [
-                'date' => $record->created_at->format('m-d-y'),
-                'time' => $record->created_at->format('g:i a'),
-                'user' => $record->user->name,
-                'amount' => $record->change_amount,
-                'reason' => $record->reason
-            ];
-            $smallRecords[] = $newRecord;
-        }
-
-        return response()->json($smallRecords);
+        return response()->json($balanceRecords);
     }
 }

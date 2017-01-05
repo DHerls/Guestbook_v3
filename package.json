@@ -12,6 +12,7 @@
     "babel-preset-stage-0": "^6.1.2",
     "babel-runtime": "^5.8.0",
     "bootstrap-sass": "^3.3.7",
+    "dateformat": "^2.0.0",
     "expose-loader": "^0.7.1",
     "gulp": "^3.9.1",
     "jquery": "^3.1.0",

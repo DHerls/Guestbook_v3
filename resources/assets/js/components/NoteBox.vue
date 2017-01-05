@@ -21,9 +21,9 @@
             </thead>
             <tbody>
             <tr v-for="note, index in notes">
-                <td>{{note.date}}</td>
-                <td>{{note.time}}</td>
-                <td>{{note.user}}</td>
+                <td>{{get_date(note.created_at)}}</td>
+                <td>{{get_time(note.created_at)}}</td>
+                <td>{{note.name}}</td>
                 <td>{{note.note}}</td>
                 <td class="fit"><button v-on:click="remove(index,note.id)" class="btn btn-default btn-sm text-center" title="Remove Note">
                     <i class="glyphicon glyphicon-remove"></i>
@@ -67,6 +67,8 @@
     }
 </style>
 <script>
+    var dateFormat = require('dateformat');
+
     export default {
         data(){
             return {
@@ -78,6 +80,12 @@
             }
         },
         methods: {
+            get_time: function (datetime) {
+                return dateFormat(datetime, 'hh:mm TT');
+            },
+            get_date: function (datetime) {
+                return dateFormat(datetime, 'mm-dd-yy');
+            },
             addNote: function(){
                 var validated = true;
                 if (!this.note.text){
@@ -147,7 +155,7 @@
         created: function(){
             var app = this;
             $.get({
-                url: window.location.href + "/notes/json",
+                url: window.location.href + "/notes/quick",
                 success: function(data){
                     app.notes = data;
                 }
