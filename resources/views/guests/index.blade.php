@@ -41,6 +41,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="row in rows">
+                            <td>@{{ row.user }}</td>
                             <td>
                                 <ul>
                                     <li v-for="adult in row.adults">@{{adult.first_name}} @{{ adult.last_name }} (@{{ adult.city }})</li>

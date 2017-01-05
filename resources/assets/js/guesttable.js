@@ -96,6 +96,7 @@ const app = new Vue({
                         newRow.cost = dataRows[i].price;
                         newRow.payment = app.get_payment(dataRows[i]);
                         newRow.checkIn = dataRows[i].created_at;
+                        newRow.user = dataRows[i].name;
                         app.rows.push(newRow);
                     }
                 }
