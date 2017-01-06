@@ -37,9 +37,38 @@ class NoteController extends Controller
         return response()->json($notes);
     }
 
-    public function delete(Member $member, Note $note) {
+    public function delete(Member $member, Note $note, Request $request) {
         $note->delete();
-        return $this->lastFive($member);
+
+        return response()->json();
+    }
+
+    public function get(Member $member){
+        $columns = [
+            ['display' => 'User',           'key' => 'name',            'sortable' => true, 'col_size' => 1],
+            ['display' => 'Note',       'key' => 'note',      'sortable' => true, 'col_size' =>4],
+            ['display' => 'Created At',  'key' => 'created_at',        'sortable' => true, 'col_size' => 2],
+        ];
+        $last_names = array_unique($member->adults->map(function ($item) {
+            return $item->last_name;
+        })->toArray());
+        $last_names = implode('/',$last_names);
+        $id = $member->id;
+        return view('members.notes')->with(compact('columns'))->with(compact('last_names',"id"));
+    }
+
+    public function json(Member $member, Request $request) {
+        $this->validate($request,[
+            'sort_col' => 'required|string|in:created_at,note,name',
+            'sort_dir' => 'required|string|in:asc,desc',
+        ]);
+
+        $records  = $member->notes()
+            ->join('users','notes.user_id','=','users.id')
+            ->orderBy($request->sort_col,$request->sort_dir)
+            ->paginate(10,['users.name','users.id','notes.note','notes.created_at','notes.id']);
+
+        return response()->json($records);
     }
 
 }

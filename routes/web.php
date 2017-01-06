@@ -45,8 +45,9 @@ Route::group(['middleware' => ['web','auth']], function() {
     Route::get('members/{member}/balance/quick','Member\BalanceController@lastFive');
 
 
-    Route::get('members/{member}/notes/json','Member\NoteController@get');
+    Route::get('members/{member}/notes/json','Member\NoteController@json');
     Route::get('members/{member}/notes/quick','Member\NoteController@lastFive');
+    Route::get('members/{member}/notes','Member\NoteController@get');
 
     Route::post('members/{member}/notes','Member\NoteController@create');
     Route::post('members/{member}/notes/{note}/delete','Member\NoteController@delete');

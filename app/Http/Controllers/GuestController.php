@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Member;
 use App\GuestRecord;
-use Carbon\Carbon;
 
 class GuestController extends Controller
 {

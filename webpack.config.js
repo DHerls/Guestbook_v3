@@ -11,6 +11,7 @@ module.exports = {
         checkin: './assets/js/checkinguest.js',
         guests: './assets/js/guesttable.js',
         display: './assets/js/displaymember.js',
+        notes: './assets/js/notetable.js',
         test: ['./assets/js/test.js']
     },
     output: {

@@ -2,7 +2,7 @@
     <div>
     <div class="panel panel-info">
         <div class="panel-heading">
-            Notes
+            <a :href="here() + '/notes'" class="link-muted">Notes</a>
             <button type="button" class="btn btn-default pull-right" data-toggle="modal"
                     data-target="#noteModal" title="Add Note">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -59,13 +59,6 @@
     </div>
     </div>
 </template>
-<style>
-    .table td.fit,
-    .table th.fit {
-        white-space: nowrap;
-        width: 1%;
-    }
-</style>
 <script>
     var dateFormat = require('dateformat');
 
@@ -80,6 +73,9 @@
             }
         },
         methods: {
+            here: function () {
+                return window.location.href;
+            },
             get_time: function (datetime) {
                 return dateFormat(datetime, 'hh:mm TT');
             },
@@ -144,22 +140,25 @@
                     dataType: 'json',
                     data: {},
                     success: function(data){
-                        app.notes = data;
+                        app.get_data();
                     },
                     error: function(data){
                         console.log(data);
                     }
                 });
+            },
+            get_data(){
+                var app = this;
+                $.get({
+                    url: window.location.href + "/notes/quick",
+                    success: function(data){
+                        app.notes = data;
+                    }
+                });
             }
         },
         created: function(){
-            var app = this;
-            $.get({
-                url: window.location.href + "/notes/quick",
-                success: function(data){
-                    app.notes = data;
-                }
-            });
+            this.get_data();
         }
     }
 </script>
