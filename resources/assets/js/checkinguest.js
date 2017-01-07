@@ -19,6 +19,10 @@ const app = new Vue ({
         },
         mSigError: false,
         gSigError: false,
+        visits: [],
+        username: "",
+        password: "",
+        login_error: "",
     },
     methods: {
         filledRows: function (box) {
@@ -119,7 +123,21 @@ const app = new Vue ({
 
             return validated;
         },
-        submit: function(){
+        hide_override: function () {
+            $('#overrideModal').modal('hide');
+        },
+        hide_admin: function () {
+            $('#adminModal').modal('hide');
+        },
+        override: function(){
+            this.submit(true);
+            this.username = "";
+            this.password = "";
+        },
+        request_override() {
+            $('#adminModal').modal('show');
+        },
+        submit: function(override = false){
             if (!this.validate()){
                 return;
             }
@@ -145,6 +163,13 @@ const app = new Vue ({
             data_obj.payment = this.payment;
             data_obj.member_sig = memberSig.toDataURL();
             data_obj.guest_sig = guestSig.toDataURL();
+            if (override){
+                data_obj.override = 1;
+                data_obj.username = this.username;
+                data_obj.password = this.password;
+            } else {
+                data_obj.override = 0;
+            }
 
             $.ajaxSetup({
                 headers: {
@@ -160,21 +185,15 @@ const app = new Vue ({
                     window.location.href = window.location.href.substring(0,window.location.href.search('/guests')+7);
                 },
                 error: function(data){
-                    for (var title in app.info){
-                        app.info[title].visits = [];
-                    }
                     if (data.status == 403){
-                        for (var i = 0; i < data.responseJSON.length; i++){
-                            var guest = data.responseJSON[i];
-                            if (guest.type == 'adult'){
-                                app.info['adults'].visits.push(guest);
-                            } else {
-                                app.info['children'].visits.push(guest);
-                            }
-                        }
+                        app.visits = data.responseJSON;
+                        $('#overrideModal').modal('show');
+                    } else if (data.status == 401 && override) {
+                        app.login_error = "The Username or Password is Incorrect";
                     } else {
                         console.log(data);
                     }
+
                 }
             });
 

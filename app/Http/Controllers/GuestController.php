@@ -52,7 +52,7 @@ class GuestController extends Controller
                 ->paginate(10,['users.name','users.id','guest_records.price','guest_records.created_at','guest_records.payment_method','guest_records.id']);
         } else {
             $records  = $member->guestRecords()
-                ->whereDate('created_at', '=', date('Y-m-d'))
+                ->whereDate('guest_records.created_at', '=', date('Y-m-d'))
                 ->with(array(
                     'guests' => function($query) {
                         $query->addSelect(array('guests.id', 'first_name','last_name','type','city'));

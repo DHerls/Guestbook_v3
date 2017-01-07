@@ -24,6 +24,8 @@ class GuestRecordController extends Controller
 
     public function create(Member $member, Request $request) {
 
+//        return response()->json($request, 451);
+
         $this->validate($request, [
             'adults' => 'array',
             'adults.*.first_name' => 'required|string|max:45',
@@ -35,7 +37,8 @@ class GuestRecordController extends Controller
             'children.*.city' => 'required|string|max:45',
             'member_sig' => 'required|string',
             'guest_sig' => 'required|string',
-            'payment' => 'required|string|in:account,cash,pass'
+            'payment' => 'required|string|in:account,cash,pass',
+            'override' => 'required|boolean'
         ]);
 
 
@@ -64,17 +67,25 @@ class GuestRecordController extends Controller
             }
         }
 
-        $too_many_visits = [];
-        foreach ($guests as $guest){
-            $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
-            if ($visits->num_visits >= GuestRecordController::MAX_VISITS){
-                array_push($too_many_visits,$guest);
+        if (!$request->override){
+            $too_many_visits = [];
+            foreach ($guests as $guest){
+                $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
+                if ($visits->num_visits >= GuestRecordController::MAX_VISITS){
+                    array_push($too_many_visits,$guest);
+                }
+            }
+
+            if (sizeof($too_many_visits) > 0){
+                return response()->json($too_many_visits,403);
+            }
+        } else {
+            //FIXME Brute force vulnerability
+            if (!\Auth::user()->isAdmin() && !\Auth::once(['username' => $request->username, 'password' => $request->password])){
+                return response('',401);
             }
         }
 
-        if (sizeof($too_many_visits) > 0){
-            return response()->json($too_many_visits,403);
-        }
         foreach ($guests as $guest){
             $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
             $visits->num_visits += 1;
