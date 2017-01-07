@@ -3,7 +3,7 @@
     <div>
         <div class="panel panel-info">
             <div class="panel-heading">
-                Balance
+                <a :href="here() + '/balance'" class="link-muted">Balance</a>
                 <button type="button" class="btn btn-default pull-right" data-toggle="modal"
                         data-target="#balanceModal" title="Charge Account">
                     <i class="glyphicon glyphicon-plus"></i>
@@ -94,6 +94,9 @@
         },
         props: ['current_balance'],
         methods: {
+            here: function () {
+                return window.location.href;
+            },
             get_time: function (datetime) {
                 return dateFormat(datetime, 'hh:mm TT');
             },

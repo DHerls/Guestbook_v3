@@ -12,6 +12,7 @@ module.exports = {
         guests: './assets/js/guesttable.js',
         display: './assets/js/displaymember.js',
         notes: './assets/js/notetable.js',
+        balance: './assets/js/balancetable.js',
         test: ['./assets/js/test.js']
     },
     output: {

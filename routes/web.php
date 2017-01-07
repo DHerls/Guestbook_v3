@@ -41,6 +41,7 @@ Route::group(['middleware' => ['web','auth']], function() {
     Route::post('/members/{member}/records','MemberRecordController@create');
 
     Route::post('members/{member}/balance','Member\BalanceController@charge');
+    Route::get('members/{member}/balance','Member\BalanceController@get');
     Route::get('members/{member}/balance/json','Member\BalanceController@json');
     Route::get('members/{member}/balance/quick','Member\BalanceController@lastFive');
 

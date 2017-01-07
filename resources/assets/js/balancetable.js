@@ -3,6 +3,8 @@ function today(){
     return new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate());
 }
 
+import {validator} from "./validator";
+
 Vue.component('datepicker',require('./components/Datepicker.vue'));
 Vue.component('paginator',require('./components/Paginator.vue'));
 
@@ -16,6 +18,13 @@ const app = new Vue({
         page: 1,
         maxPages: 1,
         rows: [],
+        current_balance: 0,
+        balance: {
+            amount: 0,
+            reason: "",
+            amount_error: "",
+            reason_error: ""
+        }
     },
     methods: {
         sort: function(column){
@@ -27,30 +36,41 @@ const app = new Vue({
             }
             this.get_data();
         },
-        get_adults(row){
-            return this.get_type(row,'adult');
-        },
-        get_children(row){
-            return this.get_type(row,'child');
-        },
-        get_type(row,type){
-            var list = [];
-            for (var i = 0; i < row.guests.length; i++){
-                if (row.guests[i].type == type){
-                    list.push(row.guests[i]);
+        charge: function () {
+            var app = this;
+
+            this.balance.amount_error = validator.validate(this.balance.amount,"required|numeric","Amount");
+            this.balance.reason_error = validator.validate(this.balance.reason,"required|string|max:45","Reason");
+            if (this.balance.amount_error || this.balance.reason_error) {
+                return;
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-            }
-            return list;
-        },
-        get_payment(row){
-            switch (row.payment_method) {
-                case 'account':
-                    return "Applied to Account"
-                case 'cash':
-                    return "Paid Cash"
-                case 'pass':
-                    return "Free Pass"
-            }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: window.location.href,
+                dataType: 'json',
+                data: {amount: app.balance.amount, reason: app.balance.reason},
+                success: function(data){
+                    app.current_balance = app.current_balance + app.balance.amount;
+                    app.balance = {
+                        amount: 0,
+                        reason: "",
+                        amount_error: "",
+                        reason_error: ""
+                    };
+                    app.get_data();
+                    $("#balanceModal").modal("hide");
+                },
+                error: function(data){
+                    console.log(data);
+                }
+            });
+
         },
         get_time(timestring){
             var options = {
@@ -59,12 +79,12 @@ const app = new Vue({
             var date = new Date(timestring);
             return date.toLocaleTimeString('en-us',options);
         },
-        get_data: function(){
+        get_data: function () {
             this.rows = [
                 {
-                    'adults' : [{'city': 'Loading...'}],
-                    'children' : [{'city': 'Loading...'}],
-                    'payment' : 'Loading...',
+                    'name' : 'Loading...',
+                    'change_amount': 'Loading...',
+                    'reason': 'Loading...',
                 }
             ]
             $.get({
@@ -86,19 +106,8 @@ const app = new Vue({
                 },
                 success: function(data){
                     app.maxPages = data.last_page;
-                    var dataRows = data.data;
-                    app.rows = [];
-                    var newRow = {};
-                    for (var i = 0; i < dataRows.length; i++){
-                        newRow = {};
-                        newRow.adults = app.get_adults(dataRows[i]);
-                        newRow.children = app.get_children(dataRows[i]);
-                        newRow.cost = dataRows[i].price;
-                        newRow.payment = app.get_payment(dataRows[i]);
-                        newRow.checkIn = dataRows[i].created_at;
-                        newRow.user = dataRows[i].name;
-                        app.rows.push(newRow);
-                    }
+                    app.current_balance = data.current_balance;
+                    app.rows = data.data;
                 }
             });
         }
@@ -117,6 +126,4 @@ const app = new Vue({
     created: function () {
         this.get_data();
     }
-
 });
-
