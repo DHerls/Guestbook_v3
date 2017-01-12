@@ -1,8 +1,8 @@
-Vue.component('multiple-display',require('./components/MultipleDisplayEditBox.vue'));
-Vue.component('note-box',require('./components/NoteBox.vue'));
-Vue.component('balance-box',require('./components/BalanceBox.vue'));
-var memberFields = require('./json/memberFields.json');
-var addressFields = require('./json/addressFields.json');
+Vue.component('multiple-display',require('./../components/MultipleDisplayEditBox.vue'));
+Vue.component('note-box',require('./../components/NoteBox.vue'));
+Vue.component('balance-box',require('./../components/BalanceBox.vue'));
+var memberFields = require('./../json/memberFields.json');
+var addressFields = require('./../json/addressFields.json');
 
 const app = new Vue({
     el: "#app",

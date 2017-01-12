@@ -1,10 +1,10 @@
-import {validator} from "./validator";
+import {validator} from "../validator";
 let SignaturePad = require("signature_pad");
 
-var guestFields = require('./json/guestFields.json');
+var guestFields = require('../json/guestFields.json');
 
-Vue.component('multiple-edit',require('./components/MultipleEditBox.vue'));
-Vue.component('vue-radio',require('./components/VueRadio.vue'));
+Vue.component('multiple-edit',require('../components/MultipleEditBox.vue'));
+Vue.component('vue-radio',require('../components/VueRadio.vue'));
 
 Vue.config.ignoredElements = ['canvas']
 const app = new Vue ({

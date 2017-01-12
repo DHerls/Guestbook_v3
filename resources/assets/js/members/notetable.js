@@ -1,4 +1,4 @@
-Vue.component('paginator',require('./components/Paginator.vue'));
+Vue.component('paginator',require('./../components/Paginator.vue'));
 
 const app = new Vue({
     el: '#app',

@@ -1,8 +1,8 @@
-import {validator} from "./validator";
-var memberFields = require('./json/memberFields.json');
-var addressFields = require('./json/addressFields.json');
+import {validator} from "../validator";
+var memberFields = require('./../json/memberFields.json');
+var addressFields = require('./../json/addressFields.json');
 
-Vue.component('multiple-edit',require('./components/MultipleEditBox.vue'));
+Vue.component('multiple-edit',require('./../components/MultipleEditBox.vue'));
 
 const app = new Vue ({
     el: "#app",

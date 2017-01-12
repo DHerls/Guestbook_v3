@@ -3,10 +3,10 @@ function today(){
     return new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate());
 }
 
-import {validator} from "./validator";
+import {validator} from "../validator";
 
-Vue.component('datepicker',require('./components/Datepicker.vue'));
-Vue.component('paginator',require('./components/Paginator.vue'));
+Vue.component('datepicker',require('./../components/Datepicker.vue'));
+Vue.component('paginator',require('./../components/Paginator.vue'));
 
 const app = new Vue({
     el: '#app',

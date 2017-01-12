@@ -6,13 +6,13 @@ module.exports = {
     entry: {
         app: ['./assets/js/bootstrap.js', 'jqnotifybar'],
         index: ['./assets/js/sortsearchtable.js', './assets/js/scrollToTop.js'],
-        new: ['./assets/js/newmember.js'],
-        edit: './assets/js/editmember.js',
-        checkin: './assets/js/checkinguest.js',
-        guests: './assets/js/guesttable.js',
-        display: './assets/js/displaymember.js',
-        notes: './assets/js/notetable.js',
-        balance: './assets/js/balancetable.js',
+        new: ['./assets/js/members/newmember.js'],
+        edit: './assets/js/members/editmember.js',
+        checkin: './assets/js/guests/checkinguest.js',
+        guests: './assets/js/guests/guesttable.js',
+        display: './assets/js/members/displaymember.js',
+        notes: './assets/js/members/notetable.js',
+        balance: './assets/js/members/balancetable.js',
         test: ['./assets/js/test.js']
     },
     output: {
