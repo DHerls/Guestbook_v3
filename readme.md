@@ -9,7 +9,7 @@ Made with a combination of PHP, Laravel, Javascript, and Vue.js
 ![](/storage/screenshots/index.PNG?raw=true)
 
 ###Index With Search:
-![](/storage/screenshots/index_Search.PNG?raw=true)
+![](/storage/screenshots/index_search.PNG?raw=true)
 
 ###Display Member Information:
 ![](/storage/screenshots/member_display.PNG?raw=true)
