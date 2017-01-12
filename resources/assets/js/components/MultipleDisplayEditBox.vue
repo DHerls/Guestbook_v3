@@ -33,7 +33,6 @@
         <ul class="list-group" v-else>
             <li class="list-group-item" v-for="object in info.rows">{{display(object)}}</li>
         </ul>
-        </div>
     </div>
 </template>
 <style>
