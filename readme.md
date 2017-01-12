@@ -1,7 +1,13 @@
-# Guestbook v3
+# Guestbook v3 (Incomplete)
 A web application designed to facilitate the management of club members and their guests.
 
 Made with a combination of PHP, Laravel, Javascript, and Vue.js
+
+##TODO List
+* Delete Guest Records (only allowed on the same day)
+* Generate reports (.xlsx) for all record types with dynamic date ranges
+* User CRUD
+* Integration with physical signature pad
 
 ##Screenshots
 
@@ -16,6 +22,9 @@ Made with a combination of PHP, Laravel, Javascript, and Vue.js
 
 ###Edit Member Information:
 ![](/storage/screenshots/member_edit.PNG?raw=true)
+
+###Add A New Member:
+![](/storage/screenshots/new_member.PNG?raw=true)
 
 ###Check In Guests:
 ![](/storage/screenshots/checkin.PNG?raw=true)
