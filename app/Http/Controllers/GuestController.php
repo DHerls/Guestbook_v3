@@ -11,6 +11,9 @@ use App\GuestRecord;
 class GuestController extends Controller
 {
     public function index(Member $member) {
+        /*
+         * Columns for Blade Template
+         */
         $columns = [
             ['display' => 'User',           'key' => 'name',            'sortable' => true, 'col_size' => 1],
             ['display' => 'Adults',       'key' => 'adults',      'sortable' => false, 'col_size' =>2],
@@ -19,6 +22,8 @@ class GuestController extends Controller
             ['display' => 'Payment Method', 'key' => 'payment_method',         'sortable' => true, 'col_size' => 2],
             ['display' => 'Check-in Time',  'key' => 'created_at',        'sortable' => true, 'col_size' => 2],
         ];
+
+        //Display Member Adult last names in Name1/Name2/Name3 format
         $last_names = array_unique($member->adults->map(function ($item) {
             return $item->last_name;
         })->toArray());
@@ -39,6 +44,7 @@ class GuestController extends Controller
             'sort_dir' => 'required|string|in:asc,desc',
         ]);
 
+        //Only Administrators are allowed to previous guest records
         if (\Auth::user()->isAdmin()){
             $records  = $member->guestRecords()
                 ->whereBetween('guest_records.created_at',[$this->startTime($request['start']),$this->endTime($request['end'])])
@@ -49,8 +55,10 @@ class GuestController extends Controller
                 ))
                 ->join('users','guest_records.user_id','=','users.id')
                 ->orderBy($request->sort_col,$request->sort_dir)
+                //Limit columns retrieved to prevent user information leaking
                 ->paginate(10,['users.name','users.id','guest_records.price','guest_records.created_at','guest_records.payment_method','guest_records.id']);
         } else {
+            //If the user is not an administrator, only retrieve records from today
             $records  = $member->guestRecords()
                 ->whereDate('guest_records.created_at', '=', date('Y-m-d'))
                 ->with(array(
@@ -60,6 +68,7 @@ class GuestController extends Controller
                 ))
                 ->join('users','guest_records.user_id','=','users.id')
                 ->orderBy($request->sort_col,$request->sort_dir)
+                //Limit columns retrieved to prevent user information leaking
                 ->paginate(10,['users.name','users.id','guest_records.price','guest_records.created_at','guest_records.payment_method','guest_records.id']);
         }
 
@@ -77,10 +86,12 @@ class GuestController extends Controller
         return view('guests.checkin')->with(compact('last_names','id'));
     }
 
+    //Format array with dates to MySQL Date format
     private function startTime($day) {
         return $day['year'] . '-' . $day['month'] . '-' . $day['date']. ' 00:00:00';
     }
 
+    //Format array with dates to MySQL Date format
     private function endTime($day) {
         return $day['year'] . '-' . $day['month'] . '-' . $day['date']. ' 23:59:59';
     }

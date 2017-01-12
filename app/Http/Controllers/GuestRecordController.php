@@ -45,6 +45,7 @@ class GuestRecordController extends Controller
         $guests = [];
 
         $price = 0;
+        //Weekend check required for weekday/weekend price difference
         $isWeekend = date('N') >= 6;
         if (isset($request['adults'])){
             if ($request->payment != 'pass'){
@@ -67,6 +68,7 @@ class GuestRecordController extends Controller
             }
         }
 
+        //Administrators can allow guests to come more than the Maximum number of times
         if (!$request->override){
             $too_many_visits = [];
             foreach ($guests as $guest){
@@ -86,6 +88,7 @@ class GuestRecordController extends Controller
             }
         }
 
+        //Increment Guest visits
         foreach ($guests as $guest){
             $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
             $visits->num_visits += 1;

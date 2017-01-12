@@ -47,6 +47,9 @@ class MemberController extends Controller
             'notes' => function($query) { $query->latest()->limit(1);}
         ]);
 
+
+        //Condense the massive amount of Member data into a json format excluding unnecessary information
+        //TODO Paginate results
         $adults = array();
         foreach ($members as $member){
             $adult = array();
@@ -97,6 +100,7 @@ class MemberController extends Controller
         return view("members.index")->with(compact('columns'));
     }
 
+    //Display a single member info
     public function display(Member $member){
         $memberRecords = $member->memberRecords()->latest()->limit(5)->with('user')->get();
         $guestRecords = $member->guestRecords()->latest()->limit(5)->with('user')->get();
@@ -106,6 +110,7 @@ class MemberController extends Controller
             $record['children'] = $record->guests()->where('type','child')->count();
         }
 
+        //Administrators can edit guests
         if (\Auth::user()->isAdmin()){
             return view('members.edit', compact('member', 'memberRecords', 'guestRecords'));
         } else {
@@ -113,6 +118,7 @@ class MemberController extends Controller
         }
     }
 
+    //For AJAX Loading
     public function individualData(Member $member) {
         $member->load(['adults','children','phones','emails']);
         return response()->json($member);
