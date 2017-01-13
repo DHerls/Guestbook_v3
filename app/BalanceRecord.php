@@ -16,6 +16,10 @@ class BalanceRecord extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function guestRecord(){
+        return $this->belongsTo(GuestRecord::class);
+    }
+
     public static function boot() {
 
         parent::boot();

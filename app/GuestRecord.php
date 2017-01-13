@@ -19,4 +19,8 @@ class GuestRecord extends Model
     public function guests() {
         return $this->belongsToMany(Guest::class,'guest_guest_record');
     }
+
+    public function balanceRecord() {
+        return $this->hasOne(BalanceRecord::class);
+    }
 }
