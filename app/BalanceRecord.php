@@ -24,9 +24,19 @@ class BalanceRecord extends Model
 
         parent::boot();
 
-        static::saved(function($record) {
+        static::created(function($record) {
             $member = $record->member;
             $member->current_balance = $member->current_balance + $record->change_amount;
+            $member->save();
+        });
+
+        static::deleting(function($record) {
+            print("Test");
+            $member = $record->member;
+            print($member->current_balance);
+            print($record->change_amount);
+            $member->current_balance = $member->current_balance - $record->change_amount;
+            print($member->current_balance);
             $member->save();
         });
 

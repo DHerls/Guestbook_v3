@@ -23,4 +23,16 @@ class GuestRecord extends Model
     public function balanceRecord() {
         return $this->hasOne(BalanceRecord::class);
     }
+
+    public static function boot() {
+
+        parent::boot();
+
+        static::deleting(function($record) {
+            if ($record->balanceRecord){
+                $record->balanceRecord->delete();
+            }
+        });
+
+    }
 }
