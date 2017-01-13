@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['middleware' => ['web','auth','admin']], function() {
+Route::group(['middleware' => ['web','auth', 'temp', 'admin']], function() {
 
     Route::get('/members/new','MemberController@create');
 
@@ -26,7 +26,7 @@ Route::group(['middleware' => ['web','auth','admin']], function() {
 
 });
 
-Route::group(['middleware' => ['web','auth']], function() {
+Route::group(['middleware' => ['web','auth', 'temp']], function() {
     Route::get('/', 'MemberController@index');
     Route::get('/members', 'MemberController@index');
     Route::get('/test', 'MemberController@test');
@@ -57,6 +57,10 @@ Route::group(['middleware' => ['web','auth']], function() {
 
     Route::get('/change-pass','Auth\PasswordController@showChangeForm');
     Route::post('/change-pass','Auth\PasswordController@changePassword');
+
+    Route::get('/set-pass','Auth\PasswordController@showTempForm');
+    Route::post('/set-pass','Auth\PasswordController@setOwnPass');
+
 });
 
 Route::group(['middleware' => 'web'], function() {

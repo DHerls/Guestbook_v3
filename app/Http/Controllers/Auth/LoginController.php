@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
+use App\User;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -47,4 +50,11 @@ class LoginController extends Controller
     {
         return 'username';
     }
+
+//    protected function authenticated(Request $request, User $user)
+//    {
+//        if ($user->temp_pass){
+//            return redirect('/set-pass');
+//        }
+//    }
 }
