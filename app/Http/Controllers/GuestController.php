@@ -21,6 +21,7 @@ class GuestController extends Controller
             ['display' => 'Cost',           'key' => 'price',            'sortable' => true, 'col_size' => 1],
             ['display' => 'Payment Method', 'key' => 'payment_method',         'sortable' => true, 'col_size' => 2],
             ['display' => 'Check-in Time',  'key' => 'created_at',        'sortable' => true, 'col_size' => 2],
+            ['display' => 'Delete',  'key' => 'delete',        'sortable' => false, 'col_size' => 1],
         ];
 
         //Display Member Adult last names in Name1/Name2/Name3 format

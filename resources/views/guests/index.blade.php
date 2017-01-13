@@ -55,6 +55,7 @@
                             <td>$@{{ row.cost }}</td>
                             <td>@{{ row.payment }}</td>
                             <td>@{{ get_time(row.checkIn) }}</td>
+                            <td><button class="btn btn-default" v-on:click="delete_row(row.id)"><i class="glyphicon glyphicon-trash"></i></button></td>
                         </tr>
                     </tbody>
                 </table>

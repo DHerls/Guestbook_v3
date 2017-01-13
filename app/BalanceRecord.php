@@ -31,12 +31,8 @@ class BalanceRecord extends Model
         });
 
         static::deleting(function($record) {
-            print("Test");
             $member = $record->member;
-            print($member->current_balance);
-            print($record->change_amount);
             $member->current_balance = $member->current_balance - $record->change_amount;
-            print($member->current_balance);
             $member->save();
         });
 

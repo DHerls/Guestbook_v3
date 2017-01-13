@@ -32,6 +32,12 @@ class GuestRecord extends Model
             if ($record->balanceRecord){
                 $record->balanceRecord->delete();
             }
+
+            foreach($record->guests as $guest){
+                $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
+                $visits->num_visits -= 1;
+                $visits->save();
+            }
         });
 
     }

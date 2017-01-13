@@ -38,6 +38,8 @@ Route::group(['middleware' => ['web','auth']], function() {
     Route::get('/members/{member}/guests/new','GuestController@check_in');
 
     Route::post('/members/{member}/guests/new','GuestRecordController@create');
+    Route::post('/members/{member}/guests/{record}/delete','GuestRecordController@delete');
+
     Route::post('/members/{member}/records','MemberRecordController@create');
 
     Route::post('members/{member}/balance','Member\BalanceController@charge');

@@ -59,6 +59,28 @@ const app = new Vue({
             var date = new Date(timestring);
             return date.toLocaleTimeString('en-us',options);
         },
+        delete_row: function (id) {
+            if (confirm("Are you sure? (This action cannot be undone!)")){
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: window.location.href + '/' + id + "/delete",
+                    dataType: 'json',
+                    data: {},
+                    success: function(data){
+                        app.get_data();
+                    },
+                    error: function(data){
+                        console.log(data);
+                    }
+                });
+            }
+        },
         get_data: function(){
             this.rows = [
                 {
@@ -97,6 +119,7 @@ const app = new Vue({
                         newRow.payment = app.get_payment(dataRows[i]);
                         newRow.checkIn = dataRows[i].created_at;
                         newRow.user = dataRows[i].name;
+                        newRow.id = dataRows[i].id;
                         app.rows.push(newRow);
                     }
                 }

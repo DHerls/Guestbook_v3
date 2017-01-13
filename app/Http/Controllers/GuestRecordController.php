@@ -127,4 +127,15 @@ class GuestRecordController extends Controller
 
         return $path;
     }
+
+    public function delete(Member $member, GuestRecord $record) {
+
+        if (!\Auth::user()->isAdmin()){
+            if (date('Y-m-d',strtotime($record->created_at) !== date('Y-m-d'))){
+                return response()->json("Guest Records cannot be deleted past 24 hours", 403);
+            }
+        }
+        $record->delete();
+        return response()->json('',200);
+    }
 }
