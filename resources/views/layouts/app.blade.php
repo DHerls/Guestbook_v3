@@ -70,7 +70,7 @@
                                     </form>
                                 </li>
                                 <li>
-                                    <a href="#">Change Password</a>
+                                    <a href="{{ url('/change-pass') }}">Change Password</a>
                                 </li>
                             </ul>
                         </li>

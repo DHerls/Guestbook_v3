@@ -54,6 +54,9 @@ Route::group(['middleware' => ['web','auth']], function() {
 
     Route::post('members/{member}/notes','Member\NoteController@create');
     Route::post('members/{member}/notes/{note}/delete','Member\NoteController@delete');
+
+    Route::get('/change-pass','Auth\PasswordController@showChangeForm');
+    Route::post('/change-pass','Auth\PasswordController@changePassword');
 });
 
 Route::group(['middleware' => 'web'], function() {
