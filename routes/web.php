@@ -24,6 +24,10 @@ Route::group(['middleware' => ['web','auth', 'temp', 'admin']], function() {
 
     Route::post('/members/{member}/delete','Member\Delete');
 
+    Route::get('/users/new','UserController@showNewForm');
+    Route::post('/users','UserController@create');
+
+
 });
 
 Route::group(['middleware' => ['web','auth', 'temp']], function() {
