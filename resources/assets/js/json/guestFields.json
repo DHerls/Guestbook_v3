@@ -7,7 +7,7 @@
     ],
     "rows": [],
     "title": "Adults",
-    "price": {"weekend": 10, "weekday": 5}
+    "price": {"weekend": 15, "weekday": 10}
   },
   "children": {
     "columns":[
@@ -17,6 +17,6 @@
     ],
     "title": "Children",
     "rows": [],
-    "price": {"weekend": 8, "weekday": 4}
+    "price": {"weekend": 5, "weekday": 5}
   }
 }

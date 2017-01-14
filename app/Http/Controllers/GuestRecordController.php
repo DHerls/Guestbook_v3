@@ -15,10 +15,10 @@ use Webpatser\Uuid\Uuid;
 
 class GuestRecordController extends Controller
 {
-    const ADULT_WEEKEND = 10;
-    const ADULT_WEEKDAY = 5;
-    const CHILD_WEEKEND = 8;
-    const CHILD_WEEKDAY = 4;
+    const ADULT_WEEKEND = 15;
+    const ADULT_WEEKDAY = 10;
+    const CHILD_WEEKEND = 5;
+    const CHILD_WEEKDAY = 5;
 
     const MAX_VISITS = 5;
 
