@@ -51,6 +51,18 @@ class PasswordController extends Controller
 
     }
 
+    public function setOtherPass(Request $request, User $user) {
+
+        $this->validate($request, [
+            'password' => 'required|min:8',
+        ]);
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return response()->json();
+    }
+
     public function showChangeForm() {
         return view('auth.changepass');
     }

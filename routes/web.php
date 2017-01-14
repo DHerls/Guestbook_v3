@@ -24,6 +24,13 @@ Route::group(['middleware' => ['web','auth', 'temp', 'admin']], function() {
 
     Route::post('/members/{member}/delete','Member\Delete');
 
+    Route::get('/users/json','UserController@getUserData');
+    Route::get('/users','UserController@getIndex');
+
+    Route::post('/users/{user}/flags','UserController@setFlags');
+    Route::post('/users/{user}/delete','UserController@delete');
+    Route::post('/users/{user}/password','Auth\PasswordController@setOtherPass');
+
     Route::get('/users/new','UserController@showNewForm');
     Route::post('/users','UserController@create');
 
