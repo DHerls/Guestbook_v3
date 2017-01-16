@@ -1,16 +1,20 @@
 Vue.component('searchbar', require('./components/SearchBar.vue'));
 Vue.component('editfield', require('./components/EditField.vue'));
+Vue.component('paginator', require('./components/Paginator.vue'))
 
 import {validator} from "./validator";
 
 const app = new Vue({
     el: '#app',
     data: {
-        sort_col: "",
-        sort_dir: "up",
-        data: [],
-        data_url: "",
+        search_string: "",
+        search_col: "last_names",
+        sort_col: "last_names",
+        sort_dir: "asc",
+        rows: [],
         currentMember: {},
+        page: 1,
+        max_pages: 1,
         balance: {
             amount: 0,
             reason: "",
@@ -26,7 +30,7 @@ const app = new Vue({
         guest_string: function(num){
             if (num == 0){
                 return "No Guests"
-            } else if (num == "1"){
+            } else if (num == 1){
                 return "1 Guest"
             } else {
                 return num + " Guests";
@@ -34,26 +38,37 @@ const app = new Vue({
         },
         set_sort_col: function(column){
             if (this.sort_col == column){
-                this.sort_dir = this.sort_dir == "up" ? "down" : "up";
+                this.sort_dir = this.sort_dir == "asc" ? "desc" : "asc";
             } else {
                 this.sort_col = column;
-                this.sort_dir = "up";
+                this.sort_dir = "asc";
             }
+            this.search();
         },
 
-        search: function(text = "", column = this.sort_col){
+        search: function(reset = true){
+            var app = this;
+            if (reset){
+                this.page = 1;
+            }
             $.ajax({
                 type: 'GET',
-                url: app.data_url,
+                url: '/members/json',
                 dataType: 'json',
-                data: {search_c: column, search_q: text},
+                data: {
+                    page: app.page,
+                    search_col: app.search_col,
+                    search_q: app.search_string,
+                    sort_col: app.sort_col,
+                    sort_dir: app.sort_dir
+                },
                 success: function(data){
-                    while(app.data.length){
-                        app.data.pop();
+                    app.max_pages = data.last_page;
+                    for (var i = 0; i < data.data.length; i++){
+                        data.data[i].balance = parseFloat(data.data[i].balance);
+                        data.data[i].guests = parseFloat(data.data[i].guests);
                     }
-                    while (data.length){
-                        app.data.push(data.pop());
-                    }
+                    app.rows = data.data;
                 },
                 error: function(data){
                     console.log(data);
@@ -169,28 +184,13 @@ const app = new Vue({
             });
         }
     },
-    computed: {
-        sorted_data: function() {
-            if (this.data.length == 0){
-                return []
-            }
-            if (typeof(this.data[0][this.sort_col]) == 'string'){
-                this.data.sort(function(a,b){
-                    return (app.sort_dir=="down" ? -1 : 1) * a[app.sort_col].localeCompare(b[app.sort_col]);
-                });
-            } else {
-                this.data.sort(function(a,b){
-                    return (app.sort_dir=="down" ? -1 : 1) * (a[app.sort_col] - b[app.sort_col]);
-                });
-            }
-
-            return this.data;
-        }
-    },
     created: function () {
-        this.data_url = document.head.querySelector("[name=data-url]").content;
-        this.sort_col = document.head.querySelector("[name=sort-col]").content;
-        Vue.nextTick(this.search);
+        this.search();
+    },
+    watch: {
+        page: function () {
+            this.search(false);
+        },
     }
 
 });

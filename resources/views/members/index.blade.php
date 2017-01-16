@@ -1,17 +1,11 @@
 @extends('layouts.app')
 
-@section('meta')
-    <meta name="data-url" content="{{Request::url()}}/members">
-    <meta name="sort-col" content="last_name">
-@endsection
-
 @section('content')
 <div id="member-search" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <div class="container">
     <div class="row">
-        <searchbar v-bind:search_columns="{'last_name': 'Last Name','first_name': 'First Name'}"
-            v-on:search="search(arguments[0],arguments[1])"
-        ></searchbar>
+        <searchbar v-bind:search_columns="{'last_names': 'Last Name','first_names': 'First Name'}"
+                   v-model="search_string" v-on:input="search(true)"></searchbar>
     </div>
 </div>
     @if(Auth::user()->isAdmin())
@@ -41,8 +35,8 @@
                                 <th class="col-sm-12 col-md-{{$column['col_size']}} sortable" v-on:click="set_sort_col('{{$column['key']}}')">
                                     {{$column['display']}}
                                     <span>
-                                        <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'up'"></i>
-                                        <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'down'"></i>
+                                        <i class="glyphicon glyphicon-triangle-top" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'asc'"></i>
+                                        <i class="glyphicon glyphicon-triangle-bottom" v-if="sort_col == '{{$column['key']}}' && sort_dir == 'desc'"></i>
                                     </span>
                                 </th>
                             @else
@@ -52,14 +46,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="data in sorted_data">
+                    <template v-for="data in rows">
                         <tr v-bind:id="'member-'+data.id">
                             <td><a v-bind:href="'/members/' + data.id" class="btn btn-info" role="button">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                 </a>
                             </td>
-                            <td >@{{data.last_name}}</td>
-                            <td>@{{data.first_name}}</td>
+                            <td >@{{data.last_names}}</td>
+                            <td>@{{data.first_names}}</td>
                             <td>
                                 $@{{ data.balance.toFixed(2) }}
                                 <button type="button" class="btn btn-default btn-xs" data-toggle="modal"
@@ -71,7 +65,7 @@
                             <td>
                                 <div class="btn-group">
                                     <a v-bind:href="'/members/' + data.id + '/guests'" class="btn btn-default" role="button">
-                                        @{{guest_string(data.num_guests)}}
+                                        @{{guest_string(data.guests)}}
                                     </a>
                                     <a v-bind:href="'/members/' + data.id + '/guests/new'" class="btn btn-default" role="button" title="Quick Add">
                                         <i class="glyphicon glyphicon-plus"></i>
@@ -91,6 +85,11 @@
 
                 </tbody>
             </table>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4 text-center">
+                <paginator v-model="page" v-bind:max="max_pages"></paginator>
+            </div>
         </div>
     </div>
     <div class="modal fade" role="dialog" id="balanceModal">

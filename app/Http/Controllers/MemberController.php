@@ -11,77 +11,36 @@ use Illuminate\Support\Facades\DB;
 class MemberController extends Controller
 {
     public function memberData(Request $request) {
-        define('SEARCH_COLUMNS', array('first_name','last_name'));
-
-        $search_string = null;
-
-        if ($request->has('search_c','search_q')){
-            foreach (SEARCH_COLUMNS as $col){
-                if ($request->search_c == $col){
-                    $search_column = $request->search_c;
-                    $search_query = DB::getPdo()->quote($request->search_q.'%');
-                    break;
-                }
-            }
-            if ($search_column){
-                $search_string = "EXISTS(SELECT 1 FROM adults WHERE adults.member_id = members.id AND {$search_column} LIKE {$search_query})";
-            }
-        }
-
-        if ($search_string){
-            $members = Member::whereRaw(DB::raw($search_string))->get();
-        } else {
-            $members = Member::all();
-        }
-
-        if ($request->has("date") && Auth::user()->isAdmin()){
-            $date = date('Y-m-d', strtotime($request->date));
-        } else {
-            $date = date('Y-m-d');
-        }
-
-        //dd($members);
-        //dd("DATE('created_at')= '{$date}'");
-        $members->load(['adults',
-            'memberRecords' => function($query) use ($date){ $query->whereRaw("DATE(created_at)= '{$date}'")->orderBy('created_at','desc');},
-            'notes' => function($query) { $query->latest()->limit(1);}
+        $this->validate($request, [
+            'search_col' => "required|string|in:first_names,last_names",
+            'search_q' => "string",
+            'sort_col' => "required|string|in:last_names,first_names,balance,guests,members,note",
+            'sort_dir' => "required|string|in:asc,desc"
         ]);
 
+        $records = DB::table('members as m')
+            ->selectRaw("m.id, a.first_names, a.last_names, m.current_balance as balance, IFNULL(g.guests,0) as guests, IFNULL(mr.num_members,0) as members, IFNULL(n.note,'') as note")
+            ->join(DB::raw("(SELECT member_id, GROUP_CONCAT(DISTINCT last_name SEPARATOR '/') as last_names,
+          GROUP_CONCAT(DISTINCT first_name SEPARATOR '/') as first_names
+          FROM adults GROUP BY adults.member_id) a"),'a.member_id','=','m.id')
+            ->leftJoin(DB::raw("(SELECT gr.member_id, COUNT(*) as guests
+   FROM guest_guest_record ggr
+     INNER JOIN guest_records gr on ggr.guest_record_id = gr.id
+   WHERE DATE(gr.created_at) = CURRENT_DATE() 
+   GROUP BY gr.member_id) g"),'g.member_id','=','m.id')
+            ->leftJoin(DB::raw("(SELECT m1.member_id, m1.num_members
+    FROM member_records m1 LEFT JOIN member_records m2
+        ON (m1.member_id = m2.member_id AND m1.id < m2.id)
+    WHERE m2.id IS NULL AND DATE(m1.created_at) = CURRENT_DATE()) mr"), 'mr.member_id', '=', 'm.id')
+            ->leftJoin(DB::raw("(SELECT n1.member_id, n1.note
+    FROM notes n1 LEFT JOIN notes n2
+        ON (n1.member_id = n2.member_id AND n1.id < n2.id)
+    WHERE n2.id IS NULL) n"), 'n.member_id', '=', 'm.id')
+            ->orderBy($request->sort_col,$request->sort_dir)
+            ->where($request->search_col,'LIKE','%' . $request->search_q . '%')
+            ->paginate(20);
 
-        //Condense the massive amount of Member data into a json format excluding unnecessary information
-        //TODO Paginate results
-        $adults = array();
-        foreach ($members as $member){
-            $adult = array();
-            $last_names = array_unique($member->adults->map(function ($item) {
-                return $item->last_name;
-            })->toArray());
-            $adult['last_name'] = implode('/',$last_names);
-
-            $first_names = $member->adults->map(function ($item) {
-                return $item->first_name;
-            })->toArray();
-            $adult['first_name'] = implode('/',$first_names);
-
-
-            $adult['id'] = $member->id;
-            $adult['members'] = $member->memberRecords->first() ? $member->memberRecords->first()->num_members : 0;
-            $num_guests = DB::table('guest_guest_record')
-                ->join('guests','guest_guest_record.guest_id','=','guests.id')
-                ->join('guest_records','guest_guest_record.guest_record_id','=','guest_records.id')
-                ->whereDate('guest_records.created_at', Date("Y-m-d"))
-                ->where('guest_records.member_id',$member->id)
-                ->count();
-            $adult['num_guests'] = $num_guests;
-
-            $adult['balance'] = floatval($member->current_balance);
-
-            $adult['note'] = $member->notes->first() ? $member->notes->first()->note : "";
-
-            $adults[] = $adult;
-        }
-
-        return response()->json($adults);
+        return response()->json($records);
     }
 
     public function index(Request $request){
@@ -90,11 +49,11 @@ class MemberController extends Controller
         }
         $columns = [
         ['display' => 'Info', 'sortable' => false, 'col_size' => 1],
-        ['display' => 'Last Name', 'key' => 'last_name', 'sortable' => true, 'col_size' => 2],
-        ['display' => 'First Name', 'key' => 'first_name', 'sortable' => true, 'col_size' => 2],
+        ['display' => 'Last Name', 'key' => 'last_names', 'sortable' => true, 'col_size' => 2],
+        ['display' => 'First Name', 'key' => 'first_names', 'sortable' => true, 'col_size' => 2],
         ['display' => 'Balance', 'key' => 'balance', 'sortable' => true, 'col_size' => 1],
         ['display' => 'Members', 'key' => 'members', 'sortable' => true, 'col_size' => 1],
-        ['display' => 'Guests', 'key' => 'num_guests', 'sortable' => true, 'col_size' => 2],
+        ['display' => 'Guests', 'key' => 'guests', 'sortable' => true, 'col_size' => 2],
         ['display' => 'Notes', 'key' => 'note', 'sortable' => true, 'col_size' => 3]
         ];
         return view("members.index")->with(compact('columns'));
@@ -182,7 +141,35 @@ class MemberController extends Controller
         return response()->json(['id' => $member->id]);
     }
 
-    public function test(){
-        return view('members.test');
+    public function test(Request $request){
+        $this->validate($request, [
+            'search_col' => "required|string|in:first_names,last_names",
+            'search_q' => "required|string",
+            'sort_col' => "required|string|in:last_names,first_names,balance,guests,members,note",
+            'sort_dir' => "required|string|in:asc,desc"
+        ]);
+
+        $records = DB::table('members as m')
+            ->selectRaw("a.first_names, a.last_names, m.current_balance as balance, IFNULL(g.guests,0) as guests, IFNULL(mr.num_members,0) as members, IFNULL(n.note,'') as note")
+            ->join(DB::raw("(SELECT member_id, GROUP_CONCAT(DISTINCT last_name SEPARATOR '/') as last_names,
+          GROUP_CONCAT(DISTINCT first_name SEPARATOR '/') as first_names
+          FROM adults GROUP BY adults.member_id) a"),'a.member_id','=','m.id')
+            ->leftJoin(DB::raw("(SELECT gr.member_id, COUNT(*) as guests
+   FROM guest_guest_record ggr
+     INNER JOIN guest_records gr on ggr.guest_record_id = gr.id
+   GROUP BY gr.member_id) g"),'g.member_id','=','m.id')
+            ->leftJoin(DB::raw("(SELECT m1.member_id, m1.num_members
+    FROM member_records m1 LEFT JOIN member_records m2
+        ON (m1.member_id = m2.member_id AND m1.id < m2.id)
+    WHERE m2.id IS NULL) mr"), 'mr.member_id', '=', 'm.id')
+            ->leftJoin(DB::raw("(SELECT n1.member_id, n1.note
+    FROM notes n1 LEFT JOIN notes n2
+        ON (n1.member_id = n2.member_id AND n1.id < n2.id)
+    WHERE n2.id IS NULL) n"), 'n.member_id', '=', 'm.id')
+            ->orderBy($request->sort_col,$request->sort_dir)
+            ->where($request->search_col,'LIKE','%' . $request->search_q . '%')
+            ->get();
+
+        return response()->json($records);
     }
 }
