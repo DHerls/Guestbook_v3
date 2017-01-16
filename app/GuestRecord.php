@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class GuestRecord extends Model
 {
@@ -38,6 +39,8 @@ class GuestRecord extends Model
                 $visits->num_visits -= 1;
                 $visits->save();
             }
+
+            Storage::delete([$record->member_signature,$record->guest_signature]);
         });
 
     }
