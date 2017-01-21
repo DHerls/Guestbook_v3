@@ -17,6 +17,7 @@ class CreateGuestRecordsTable extends Migration
             $table->increments('id');
             $table->integer('member_id')->unsigned();
             $table->integer('user_id')->unsigned();
+            $table->integer('override_user_id')->unsigned()->nullable();
             $table->smallInteger('price');
             $table->enum('payment_method',['account','cash','pass']);
             $table->string('member_signature', 80);
@@ -25,6 +26,7 @@ class CreateGuestRecordsTable extends Migration
 
             $table->foreign('member_id')->references('id')->on('members');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('override_user_id')->references('id')->on('users');
         });
     }
 

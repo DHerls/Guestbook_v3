@@ -10,7 +10,9 @@ use App\Http\Requests;
 use App\Member;
 use App\Guest;
 use App\GuestRecord;
+use App\User;
 
+use Laracasts\Presenter\Presenter;
 use Webpatser\Uuid\Uuid;
 
 class GuestRecordController extends Controller
@@ -83,9 +85,10 @@ class GuestRecordController extends Controller
             }
         } else {
             //FIXME Brute force vulnerability
-            if (!\Auth::user()->isAdmin() && !\Auth::once(['username' => $request->username, 'password' => $request->password])){
+            if (!\Auth::user()->isAdmin() && !\Hash::check($request->password,User::whereUsername($request->username)->first()->password)){
                 return response('',401);
             }
+
         }
 
         //Increment Guest visits
@@ -101,6 +104,14 @@ class GuestRecordController extends Controller
 
         $record->member_signature = $this->storeImage($request->member_sig);
         $record->guest_signature = $this->storeImage($request->guest_sig);
+
+        if ($request->override){
+            if (\Auth::user()->isAdmin()){
+                $record->override_user_id = \Auth::user()->id;
+            } else {
+                $record->override_user_id = User::whereUsername($request->username)->first()->id;
+            }
+        }
 
         $member->guestRecords()->save($record);
 

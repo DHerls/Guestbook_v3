@@ -9,6 +9,10 @@ class GuestRecord extends Model
 {
     use MonitorUserTrait;
 
+    public function overrideUser(){
+        return $this->belongsTo(User::class);
+    }
+
     public function user(){
         return $this->belongsTo(User::class);
     }
