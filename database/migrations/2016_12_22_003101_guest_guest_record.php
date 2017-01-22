@@ -17,6 +17,8 @@ class GuestGuestRecord extends Migration
             $table->integer('guest_record_id')->unsigned();
             $table->integer('guest_id')->unsigned();
 
+            $table->timestamps();
+
             $table->foreign('guest_record_id')->references('id')->on('guest_records');
             $table->foreign('guest_id')->references('id')->on('guests');
         });

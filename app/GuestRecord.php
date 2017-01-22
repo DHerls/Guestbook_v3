@@ -38,11 +38,7 @@ class GuestRecord extends Model
                 $record->balanceRecord->delete();
             }
 
-            foreach($record->guests as $guest){
-                $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
-                $visits->num_visits -= 1;
-                $visits->save();
-            }
+            $record->guests()->detach();
 
             Storage::delete([$record->member_signature,$record->guest_signature]);
         });

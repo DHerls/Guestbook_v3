@@ -74,8 +74,7 @@ class GuestRecordController extends Controller
         if (!$request->override){
             $too_many_visits = [];
             foreach ($guests as $guest){
-                $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
-                if ($visits->num_visits >= GuestRecordController::MAX_VISITS){
+                if ($guest->visits(date('Y')) >= GuestRecordController::MAX_VISITS){
                     array_push($too_many_visits,$guest);
                 }
             }
@@ -89,13 +88,6 @@ class GuestRecordController extends Controller
                 return response('',401);
             }
 
-        }
-
-        //Increment Guest visits
-        foreach ($guests as $guest){
-            $visits = $guest->guestVisits()->firstOrCreate(['year'=>date('Y')]);
-            $visits->num_visits += 1;
-            $visits->save();
         }
 
         $record = new GuestRecord();
