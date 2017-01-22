@@ -22,7 +22,7 @@ class GuestRecord extends Model
     }
 
     public function guests() {
-        return $this->belongsToMany(Guest::class,'guest_guest_record');
+        return $this->belongsToMany(Guest::class,'guest_guest_record')->withTimestamps()->withPivot('free_pass');
     }
 
     public function balanceRecord() {

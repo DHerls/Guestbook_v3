@@ -9,7 +9,7 @@ class Guest extends Model
     protected $fillable = ['first_name', 'last_name', 'city', 'type'];
 
     public function guestRecords() {
-        return $this->belongsToMany(GuestRecord::class,'guest_guest_record')->withTimestamps();
+        return $this->belongsToMany(GuestRecord::class,'guest_guest_record')->withTimestamps()->withPivot('free_pass');
     }
 
     public function visits($start_year, $end_year = 9999) {

@@ -16,6 +16,7 @@ class GuestGuestRecord extends Migration
         Schema::create('guest_guest_record', function (Blueprint $table) {
             $table->integer('guest_record_id')->unsigned();
             $table->integer('guest_id')->unsigned();
+            $table->boolean('free_pass')->default(false);
 
             $table->timestamps();
 

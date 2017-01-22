@@ -1,9 +1,10 @@
 {
   "adults": {
     "columns":[
-      {"key": "first_name", "title": "First Name", "validation": "required|string|max:45"},
-      {"key": "last_name", "title": "Last Name", "validation": "required|string|max:45"},
-      {"key": "city", "title": "City", "validation": "required|string|max:45"}
+      {"key": "first_name", "type": "text", "title": "First Name", "validation": "required|string|max:45"},
+      {"key": "last_name", "type": "text", "title": "Last Name", "validation": "required|string|max:45"},
+      {"key": "city", "type": "text", "title": "City", "validation": "required|string|max:45"},
+      {"key": "pass", "type": "checkbox", "title": "Free Pass", "validation": ""}
     ],
     "rows": [],
     "title": "Adults",
@@ -11,9 +12,10 @@
   },
   "children": {
     "columns":[
-      {"key": "first_name", "title": "First Name", "validation": "required|string|max:45"},
-      {"key": "last_name", "title": "Last Name", "validation": "required|string|max:45"},
-      {"key": "city", "title": "City", "validation": "required|string|max:45"}
+      {"key": "first_name","type": "text",  "title": "First Name", "validation": "required|string|max:45"},
+      {"key": "last_name", "type": "text", "title": "Last Name", "validation": "required|string|max:45"},
+      {"key": "city", "type": "text", "title": "City", "validation": "required|string|max:45"},
+      {"key": "pass", "type": "checkbox", "title": "Free Pass", "validation": ""}
     ],
     "title": "Children",
     "rows": [],

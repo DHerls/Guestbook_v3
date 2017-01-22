@@ -26,45 +26,55 @@ class GuestRecordController extends Controller
 
     public function create(Member $member, Request $request) {
 
-//        return response()->json($request, 451);
-
         $this->validate($request, [
             'adults' => 'array',
             'adults.*.first_name' => 'required|string|max:45',
             'adults.*.last_name' => 'required|string|max:45',
             'adults.*.city' => 'required|string|max:45',
+            'adults.*.pass' => 'required|in:true,false',
             'children' => 'array',
             'children.*.first_name' => 'required|string|max:45',
             'children.*.last_name' => 'required|string|max:45',
             'children.*.city' => 'required|string|max:45',
+            'children.*.pass' => 'required|in:true,false',
             'member_sig' => 'required|string',
             'guest_sig' => 'required|string',
-            'payment' => 'required|string|in:account,cash,pass',
+            'payment' => 'required|string|in:account,cash',
             'override' => 'required|boolean'
         ]);
 
-
         $guests = [];
+        $passes = [];
 
         $price = 0;
         //Weekend check required for weekday/weekend price difference
         $isWeekend = date('N') >= 6;
         if (isset($request['adults'])){
-            if ($request->payment != 'pass'){
-                $price += sizeof($request->adults) * ($isWeekend ? GuestRecordController::ADULT_WEEKEND : GuestRecordController::ADULT_WEEKDAY);
-            }
             foreach ($request->adults as $adult){
                 $adult['type'] = 'adult';
+                if($adult['pass'] == 'true'){
+                    $passes[] = true;
+                } else {
+                    $price += $isWeekend ? GuestRecordController::ADULT_WEEKEND : GuestRecordController::ADULT_WEEKDAY;
+                    $passes[] = false;
+                }
+                unset($adult['pass']);
+
                 $model = Guest::firstOrCreate($adult);
                 array_push($guests,$model);
             }
         }
         if (isset($request['children'])){
-            if ($request->payment != 'pass'){
-                $price += sizeof($request->children) * ($isWeekend ? GuestRecordController::CHILD_WEEKEND : GuestRecordController::CHILD_WEEKDAY);
-            }
             foreach ($request->children as $child){
                 $child['type'] = 'child';
+                if($child['pass'] == 'true'){
+                    $passes[] = true;
+                } else {
+                    $price += $isWeekend ? GuestRecordController::CHILD_WEEKEND : GuestRecordController::CHILD_WEEKDAY;
+                    $passes[] = false;
+                }
+                unset($child['pass']);
+
                 $model = Guest::firstOrCreate($child);
                 array_push($guests,$model);
             }
@@ -107,8 +117,9 @@ class GuestRecordController extends Controller
 
         $member->guestRecords()->save($record);
 
-        foreach ($guests as $guest){
-            $record->guests()->save($guest);
+        for ($i = 0; $i < sizeof($guests); $i++){
+            $guest = $guests[$i];
+            $record->guests()->save($guest, ['free_pass' => $passes[$i]]);
         }
 
         if ($record->payment_method == 'account') {

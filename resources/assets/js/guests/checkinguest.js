@@ -15,7 +15,6 @@ const app = new Vue ({
         paymentMethods: {
             account: "Apply to Account",
             cash: "Paid in Cash",
-            pass: "Free Pass",
         },
         mSigError: false,
         gSigError: false,
@@ -36,7 +35,7 @@ const app = new Vue ({
         },
         rowIsEmpty: function(row){
             for (var column in row){
-                if (column != 'errors' && row[column]){
+                if (column != 'errors' && column != 'pass' && row[column]){
                     return false;
                 }
             }
@@ -201,17 +200,16 @@ const app = new Vue ({
     },
     computed: {
         cost: function() {
-            if (this.payment == 'pass'){
-                return 0;
-            }
             var cost = 0;
             var today = new Date();
             var isWeekend = today.getDay() == 0 || today.getDay() == 6;
             for (var title in this.info){
-                if (isWeekend){
-                    cost += this.info[title].price['weekend'] * this.filledRows(this.info[title]);
-                } else {
-                    cost += this.info[title].price['weekday'] * this.filledRows(this.info[title]);
+                for(var i = 0; i < this.info[title].rows.length; i++){
+                    if (!this.rowIsEmpty(this.info[title].rows[i])){
+                        if (!this.info[title].rows[i].pass){
+                            cost += this.info[title].price[isWeekend ? 'weekend' : 'weekday'];
+                        }
+                    }
                 }
             }
 
