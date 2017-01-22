@@ -22,3 +22,26 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\GuestRecord::class, function (Faker\Generator $faker) {
+
+    return [
+        'member_id' => random_int(1,200),
+        'user_id' => random_int(1,2),
+        'payment_method' => random_int(1,2) == 1 ? "account" : 'cash',
+        'member_signature' => '/signatures/member.png',
+        'guest_signature' => '/signatures/guest.png',
+        'price' => random_int(1,80),
+        'created_at' => $faker->dateTimeThisMonth($max = 'now', $timezone = date_default_timezone_get())
+    ];
+});
+
+$factory->define(App\Guest::class, function (Faker\Generator $faker) {
+
+    return [
+        'first_name' => $faker->firstName,
+        'last_name' => $faker->lastName,
+        'city' => $faker->city,
+        'type' => random_int(1,2) == 1 ? "adult" : 'child',
+    ];
+});
