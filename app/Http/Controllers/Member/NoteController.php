@@ -49,10 +49,7 @@ class NoteController extends Controller
             ['display' => 'Note',       'key' => 'note',      'sortable' => true, 'col_size' =>4],
             ['display' => 'Created At',  'key' => 'created_at',        'sortable' => true, 'col_size' => 2],
         ];
-        $last_names = array_unique($member->adults->map(function ($item) {
-            return $item->last_name;
-        })->toArray());
-        $last_names = implode('/',$last_names);
+        $last_names = $member->last_names();
         $id = $member->id;
         return view('members.notes')->with(compact('columns'))->with(compact('last_names',"id"));
     }

@@ -48,4 +48,18 @@ class Member extends Model
     public function numPeople() {
         return $this->adults()->get()->count() + $this->children()->get()->count();
     }
+
+    public function last_names() {
+        $last_names = array_unique($this->adults->map(function ($item) {
+            return $item->last_name;
+        })->toArray());
+        return implode('/',$last_names);
+    }
+
+    public function first_names() {
+        $first_names = array_unique($this->adults->map(function ($item) {
+            return $item->first_name;
+        })->toArray());
+        return implode('/',$first_names);
+    }
 }

@@ -25,10 +25,7 @@ class GuestController extends Controller
         ];
 
         //Display Member Adult last names in Name1/Name2/Name3 format
-        $last_names = array_unique($member->adults->map(function ($item) {
-            return $item->last_name;
-        })->toArray());
-        $last_names = implode('/',$last_names);
+        $last_names = $member->last_names();
         $id = $member->id;
         return view('guests.index')->with(compact('columns'))->with(compact('last_names',"id"));
     }
@@ -79,10 +76,7 @@ class GuestController extends Controller
     }
 
     public function check_in(Member $member) {
-        $last_names = array_unique($member->adults->map(function ($item) {
-            return $item->last_name;
-        })->toArray());
-        $last_names = implode('/',$last_names);
+        $last_names = $member->last_names();
         $id = $member->id;
         return view('guests.checkin')->with(compact('last_names','id'));
     }
