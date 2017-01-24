@@ -34,6 +34,9 @@ Route::group(['middleware' => ['web','auth', 'temp', 'admin']], function() {
     Route::get('/users/new','UserController@showNewForm');
     Route::post('/users','UserController@create');
 
+    Route::get('/reports','ReportController@reportView');
+    Route::get('/reports/guests','ReportController@guestReport');
+
 
 });
 

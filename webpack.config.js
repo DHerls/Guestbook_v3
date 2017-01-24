@@ -14,6 +14,7 @@ module.exports = {
         notes: './assets/js/members/notetable.js',
         balance: './assets/js/members/balancetable.js',
         users: './assets/js/usertable.js',
+        reports: './assets/js/reports.js',
         test: ['./assets/js/test.js']
     },
     output: {
