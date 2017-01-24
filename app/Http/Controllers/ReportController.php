@@ -166,6 +166,7 @@ class ReportController extends Controller
                 $records = DB::table('guest_guest_record as ggr')
                     ->selectRaw("g.first_name as 'First Name',g.last_name as 'Last Name',g.city as 'City', COUNT(ggr.guest_id) as Visits")
                     ->join("guests as g",'g.id','=','ggr.guest_id')
+                    ->whereBetween('ggr.created_at', [$startDate,$endDate])
                     ->groupBy('g.id')
                     ->orderBy("g.last_name",'asc')
                     ->get()
