@@ -36,7 +36,7 @@ Route::group(['middleware' => ['web','auth', 'temp', 'admin']], function() {
 
     Route::get('/reports','ReportController@reportView');
     Route::get('/reports/guests','ReportController@guestReport');
-
+    Route::get('/receipts/{record}','ReportController@guestReceipt');
 
 });
 
@@ -83,6 +83,25 @@ Route::group(['middleware' => 'web'], function() {
     Route::post('login', 'Auth\LoginController@login');
     Route::post('logout', 'Auth\LoginController@logout');
 
+    Route::get('images/{filename}', function ($filename)
+    {
+        $path = storage_path() . '\\app\\signatures\\' . $filename;
+
+        if(!File::exists($path)) abort(404);
+
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+
+        return $response;
+    });
+
+//    Route::get('test', function () {
+//        $record = \App\GuestRecord::with('guests', 'member')->find(1);
+//        return view('reports.guestReceipt', compact('record'));
+//    });
 });
 
 

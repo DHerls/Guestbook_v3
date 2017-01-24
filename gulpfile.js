@@ -17,5 +17,5 @@ elixir(mix => {
     var bootstrapPath = 'node_modules/bootstrap-sass/assets';
 
 
-    mix.sass('app.scss')
+    mix.sass('app.scss').sass('pdf.scss')
 });

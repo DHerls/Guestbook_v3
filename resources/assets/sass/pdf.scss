@@ -1,0 +1,15 @@
+
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+// Variables
+@import "pdfvariables";
+@import "notifyBar";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.sig {
+  border: 1px black solid;
+  background-color: #adadad;
+}

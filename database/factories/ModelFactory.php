@@ -29,8 +29,8 @@ $factory->define(App\GuestRecord::class, function (Faker\Generator $faker) {
         'member_id' => random_int(1,200),
         'user_id' => random_int(1,2),
         'payment_method' => random_int(1,2) == 1 ? "account" : 'cash',
-        'member_signature' => '/signatures/member.png',
-        'guest_signature' => '/signatures/guest.png',
+        'member_signature' => 'member.png',
+        'guest_signature' => 'guest.png',
         'price' => random_int(1,80),
         'created_at' => $faker->dateTimeThisMonth($max = 'now', $timezone = date_default_timezone_get())
     ];

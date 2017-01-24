@@ -81,6 +81,11 @@ const app = new Vue({
                 });
             }
         },
+        receipt: function(id){
+            var loc = window.location;
+            var baseUrl = loc.protocol + "//" + loc.hostname + (loc.port? ":"+loc.port : "") + "/"
+            window.location = baseUrl + '/receipts/' + id;
+        },
         get_data: function(){
             this.rows = [
                 {

@@ -14,12 +14,17 @@ class ReportController extends Controller
         return view('reports.index');
     }
 
+    public function guestReceipt(GuestRecord $record) {
+        $pdf = \PDF::loadView('reports.guestReceipt', compact('record'));
+        return $pdf->download('guest_receipt_'.$record->member->last_names().'.pdf');
+    }
+
     public function guestReport(Request $request) {
 
         $startDate = $this->startTime($request->start_year,$request->start_month,$request->start_date);
         $endDate = $this->endTime($request->end_year,$request->end_month,$request->end_date);
 
-        Excel::create('test_report', function($excel) use($startDate,$endDate){
+        Excel::create('guest_report_'.date('Y_m_d_h:i:s'), function($excel) use($startDate,$endDate){
 
             $excel->sheet('Summary', function($sheet) use($startDate,$endDate){
                 $records = DB::table('guest_guest_record as ggr')

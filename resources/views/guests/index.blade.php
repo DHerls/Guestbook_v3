@@ -37,6 +37,9 @@
                                     <th class="col-sm-12 col-md-{{$column['col_size']}}">{{$column['display']}}</th>
                                 @endif
                             @endforeach
+                            @if(\Auth::user()->admin)
+                                <th class="col-sm-12 col-md-1">Receipt</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -56,6 +59,9 @@
                             <td>@{{ row.payment }}</td>
                             <td>@{{ get_time(row.checkIn) }}</td>
                             <td><button class="btn btn-default" v-on:click="delete_row(row.id)"><i class="glyphicon glyphicon-trash"></i></button></td>
+                            @if(\Auth::user()->admin)
+                                <td><button class="btn btn-default" v-on:click="receipt(row.id)"><i class="glyphicon glyphicon-print"></i></button></td>
+                            @endif
                         </tr>
                     </tbody>
                 </table>

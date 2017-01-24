@@ -139,7 +139,7 @@ class GuestRecordController extends Controller
         $path = 'signatures/' . $uuid . '.png';
         Storage::put($path, $data);
 
-        return $path;
+        return $uuid . '.png';
     }
 
     public function delete(Member $member, GuestRecord $record) {
