@@ -14,6 +14,7 @@ class CreateChildrenTable extends Migration
     public function up()
     {
         Schema::create('children', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('member_id')->unsigned();
             $table->string('first_name',45);

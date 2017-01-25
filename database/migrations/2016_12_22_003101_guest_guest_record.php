@@ -14,6 +14,7 @@ class GuestGuestRecord extends Migration
     public function up()
     {
         Schema::create('guest_guest_record', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->integer('guest_record_id')->unsigned();
             $table->integer('guest_id')->unsigned();
             $table->boolean('free_pass')->default(false);

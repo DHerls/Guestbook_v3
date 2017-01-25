@@ -14,6 +14,7 @@ class CreateGuestVisitsTable extends Migration
     public function up()
     {
         Schema::create('guest_visits', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('guest_id')->unsigned();
             $table->integer('year');
