@@ -14,7 +14,7 @@ class CreateEmailsTable extends Migration
     public function up()
     {
         Schema::create('emails', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->integer('member_id')->unsigned();
             $table->string('address',60);
             $table->string('description',45)->nullable();

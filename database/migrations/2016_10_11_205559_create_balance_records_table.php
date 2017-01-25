@@ -14,7 +14,7 @@ class CreateBalanceRecordsTable extends Migration
     public function up()
     {
         Schema::create('balance_records', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->integer('member_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('guest_record_id')->unsigned()->nullable();

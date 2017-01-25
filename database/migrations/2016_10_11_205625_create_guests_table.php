@@ -14,7 +14,7 @@ class CreateGuestsTable extends Migration
     public function up()
     {
         Schema::create('guests', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->string('first_name',45);
             $table->string('last_name',45);
             $table->string('city',45);

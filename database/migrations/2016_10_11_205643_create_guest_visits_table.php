@@ -14,7 +14,7 @@ class CreateGuestVisitsTable extends Migration
     public function up()
     {
         Schema::create('guest_visits', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->integer('guest_id')->unsigned();
             $table->integer('year');
             $table->tinyInteger('num_visits')->default(0);
