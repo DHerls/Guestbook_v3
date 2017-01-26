@@ -10,7 +10,9 @@ class RecordObserver {
 
 
     public function creating($model) {
-        $model->user_id = \Auth::user()->id;
+        if (!$model->user()->count()){
+            $model->user_id = \Auth::user()->id;
+        }
     }
 
 

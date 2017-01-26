@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGuestVisitsTable extends Migration
+class Adults extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateGuestVisitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('guest_visits', function (Blueprint $table) {
+        Schema::create('adults', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
-            $table->integer('guest_id')->unsigned();
-            $table->integer('year');
-            $table->tinyInteger('num_visits')->default(0);
+            $table->integer('member_id')->unsigned();
+            $table->string('first_name',45);
+            $table->string('last_name',45);
             $table->timestamps();
 
-            $table->foreign('guest_id')->references('id')->on('guests');
-
+            $table->foreign('member_id')->references('id')->on('members');
         });
     }
 
@@ -33,6 +32,6 @@ class CreateGuestVisitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('guest_visits');
+        Schema::dropIfExists('adults');
     }
 }

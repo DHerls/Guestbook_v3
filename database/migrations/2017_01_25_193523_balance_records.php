@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateChildrenTable extends Migration
+class BalanceRecords extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,19 @@ class CreateChildrenTable extends Migration
      */
     public function up()
     {
-        Schema::create('children', function (Blueprint $table) {
+        Schema::create('balance_records', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('member_id')->unsigned();
-            $table->string('first_name',45);
-            $table->string('last_name',45);
-            $table->mediumInteger('birth_year')->nullable();
+            $table->integer('user_id')->unsigned();
+            $table->integer('guest_record_id')->unsigned()->nullable();
+            $table->decimal('change_amount');
+            $table->string('reason',45);
             $table->timestamps();
 
             $table->foreign('member_id')->references('id')->on('members');
-
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('guest_record_id')->references('id')->on('guest_records');
         });
     }
 
@@ -34,6 +36,6 @@ class CreateChildrenTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('children');
+        Schema::dropIfExists('balance_records');
     }
 }

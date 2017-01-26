@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAdultsTable extends Migration
+class Notes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreateAdultsTable extends Migration
      */
     public function up()
     {
-        Schema::create('adults', function (Blueprint $table) {
+        Schema::create('notes', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('member_id')->unsigned();
-            $table->string('first_name',45);
-            $table->string('last_name',45);
+            $table->integer('user_id')->unsigned();
+            $table->string('note');
             $table->timestamps();
 
             $table->foreign('member_id')->references('id')->on('members');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -32,6 +33,6 @@ class CreateAdultsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('adults');
+        Schema::dropIfExists('notes');
     }
 }

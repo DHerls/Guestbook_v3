@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMemberRecordsTable extends Migration
+class Children extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateMemberRecordsTable extends Migration
      */
     public function up()
     {
-        Schema::create('member_records', function (Blueprint $table) {
+        Schema::create('children', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('member_id')->unsigned();
-            $table->integer('user_id')->unsigned();
-            $table->tinyInteger('num_members');
+            $table->string('first_name',45);
+            $table->string('last_name',45);
+            $table->mediumInteger('birth_year')->nullable();
             $table->timestamps();
 
             $table->foreign('member_id')->references('id')->on('members');
-            $table->foreign('user_id')->references('id')->on('users');
+
         });
     }
 
@@ -33,6 +34,6 @@ class CreateMemberRecordsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('member_records');
+        Schema::dropIfExists('children');
     }
 }
