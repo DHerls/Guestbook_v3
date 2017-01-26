@@ -119,10 +119,7 @@
                     dataType: 'json',
                     data: {note: app.note.text},
                     success: function(data){
-                        app.notes.unshift(data);
-                        if (app.notes.length > 5){
-                            app.notes.pop();
-                        }
+                        app.get_data();
                         app.note = {
                             text: "",
                             error: ""

@@ -139,10 +139,13 @@
                             amount_error: "",
                             reason_error: ""
                         };
-                        app.records.unshift(data);
-                        if (app.records.length > 5){
-                            app.records.pop();
-                        }
+                        var app = this;
+                        $.get({
+                            url: window.location.href + "/balance/quick",
+                            success: function(data){
+                                app.records = data;
+                            }
+                        });
                         $("#balanceModal").modal("hide");
                     },
                     error: function(data){
