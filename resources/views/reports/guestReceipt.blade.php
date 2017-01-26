@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <!-- Styles -->
-        <link href="C:\Users\Developer\Documents\Ridge Top\guestbook_v3\public\css\pdf.css" rel="stylesheet">
+        <link href="{{url('/css/pdf.css')}}" rel="stylesheet">
     </head>
     <body>
         <div id="app">
