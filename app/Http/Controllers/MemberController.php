@@ -38,6 +38,7 @@ class MemberController extends Controller
     WHERE n2.id IS NULL) n"), 'n.member_id', '=', 'm.id')
             ->orderBy($request->sort_col,$request->sort_dir)
             ->where($request->search_col,'LIKE','%' . $request->search_q . '%')
+            ->whereNull('deleted_at')
             ->paginate(20);
 
         return response()->json($records);
