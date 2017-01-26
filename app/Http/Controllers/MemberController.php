@@ -68,6 +68,11 @@ class MemberController extends Controller
         foreach ($guestRecords as $record){
             $record['adults'] = $record->guests()->where('type','adult')->count();
             $record['children'] = $record->guests()->where('type','child')->count();
+            $record['created_at'] = $record->created_at->addHours(1);
+        }
+
+        foreach($memberRecords as $record){
+            $record['created_at'] = $record->created_at->addHours(1);
         }
 
         //Administrators can edit guests
