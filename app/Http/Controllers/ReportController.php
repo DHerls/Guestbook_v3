@@ -147,7 +147,6 @@ class ReportController extends Controller
 
                 foreach ($records as &$record) {
                     $record = (array)$record;
-                    $record['Visits'] = intval($record['Visits']);
                 }
 
                 $sheet->fromArray($records);
@@ -177,6 +176,7 @@ class ReportController extends Controller
 
                 foreach ($records as &$record) {
                     $record = (array)$record;
+                    $record['Visits'] = intval($record['Visits']);
                 }
 
                 $sheet->fromArray($records);
