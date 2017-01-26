@@ -94,7 +94,7 @@ class ReportController extends Controller
   SUM(CASE WHEN g.type = 'child' AND ggr.free_pass = 1 THEN 1 ELSE 0 END) 'Child Passes',
   gr.price as Price, 
   (CASE WHEN gr.payment_method = 'account' THEN 'Applied to Account' ELSE 'Paid Cash' END) as 'Payment Method', 
-  u.name as 'Employee', MAX(DATE(gr.created_at)) as Date")
+  u.name as 'Employee', DATE(MAX(gr.created_at)) as Date")
                     ->leftJoin('guest_guest_record as ggr','ggr.guest_record_id','=','gr.id')
                     ->join('users as u','u.id','=','gr.user_id')
                     ->join('guests as g','g.id','=','ggr.guest_id')
