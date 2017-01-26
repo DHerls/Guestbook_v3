@@ -198,6 +198,77 @@ class ReportController extends Controller
         })->download('xlsx');
     }
 
+    public function memberReport(Request $request) {
+        $startDate = $this->startTime($request->start_year,$request->start_month,$request->start_date);
+        $endDate = $this->endTime($request->end_year,$request->end_month,$request->end_date);
+
+        Excel::create('guest_report_'.date('Y_m_d_h:i:s'), function($excel) use($startDate,$endDate) {
+            $excel->sheet('Summary', function($sheet) {
+
+            });
+
+            $excel->sheet('Count', function($sheet) use($startDate, $endDate){
+                $records = DB::table('members as m')
+                    ->selectRaw("a.last_names as 'Member', COUNT(*) as 'Num Visits'")
+                    ->leftJoin('member_records as mr','mr.member_id','=','m.id')
+                    ->join(DB::raw("(SELECT member_id, GROUP_CONCAT(DISTINCT last_name SEPARATOR '/') as last_names
+   FROM adults GROUP BY adults.member_id) a"),'a.member_id','=','m.id')
+                    ->whereBetween('mr.created_at', [$startDate,$endDate])
+                    ->orderBy("a.last_names",'asc')
+                    ->groupBy("m.id")
+                    ->get()->toArray();
+
+                foreach ($records as &$record) {
+                    $record = (array)$record;
+                }
+
+                $sheet->fromArray($records);
+
+                $sheet->freezeFirstRow();
+
+                $sheet->cells('A1:B1', function($cells) {
+                    $cells->setFontWeight('bold');
+                    $cells->setAlignment('center');
+                    $cells->setBorder(array(
+                        'bottom'   => array(
+                            'style' => 'solid'
+                        ),
+                    ));
+                });
+            });
+
+            $excel->sheet('Individual', function($sheet) use($startDate, $endDate){
+                $records = DB::table('members as m')
+                    ->selectRaw("a.last_names as 'Member', mr.num_members as 'Num Members', u.name as 'Employee', DATE(mr.created_at) as 'Date'")
+                    ->leftJoin('member_records as mr','mr.member_id','=','m.id')
+                    ->join('users as u','u.id','=','mr.user_id')
+                    ->join(DB::raw("(SELECT member_id, GROUP_CONCAT(DISTINCT last_name SEPARATOR '/') as last_names
+   FROM adults GROUP BY adults.member_id) a"),'a.member_id','=','m.id')
+                    ->whereBetween('mr.created_at', [$startDate,$endDate])
+                    ->orderBy("mr.created_at",'asc')
+                    ->get()->toArray();
+
+                foreach ($records as &$record) {
+                    $record = (array)$record;
+                }
+
+                $sheet->fromArray($records);
+
+                $sheet->freezeFirstRow();
+
+                $sheet->cells('A1:D1', function($cells) {
+                    $cells->setFontWeight('bold');
+                    $cells->setAlignment('center');
+                    $cells->setBorder(array(
+                        'bottom'   => array(
+                            'style' => 'solid'
+                        ),
+                    ));
+                });
+            });
+        })->download('xlsx');
+    }
+
     //Format array with dates to MySQL Date format
     private function startTime($year, $month, $date) {
         return $year . '-' . $month . '-' . $date . ' 00:00:01';

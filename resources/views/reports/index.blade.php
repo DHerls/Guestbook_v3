@@ -29,6 +29,11 @@
                         -
                         <datepicker v-model="member_end" v-bind:start="member_start"></datepicker>
                     </div>
+                    <br>
+                    <div class="text-center">
+                        <p>After pressing, wait for download</p>
+                        <button class="btn btn-success" v-on:click="get_member">Generate Member Report</button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -27,6 +27,20 @@ const app = new Vue({
                 return encodeURIComponent(k) + "=" + encodeURIComponent(data[k]);
             }).join('&')
             window.location.href = window.location.href + "/guests?" + params;
+        },
+        get_member: function(){
+            var data = {
+                start_year: this.member_start.getFullYear(),
+                start_month: this.member_start.getMonth() + 1,
+                start_date: this.member_start.getDate(),
+                end_year: this.member_end.getFullYear(),
+                end_month: this.member_end.getMonth() + 1,
+                end_date: this.member_end.getDate()
+            }
+            var params = Object.keys(data).map(function(k) {
+                return encodeURIComponent(k) + "=" + encodeURIComponent(data[k]);
+            }).join('&')
+            window.location.href = window.location.href + "/members?" + params;
         }
     }
 });
