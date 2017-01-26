@@ -57,13 +57,13 @@
                         <div class="col-xs-6">
                             <p>Member Signature</p>
                             <div class="sig">
-                                <img src="{{storage_path()}}\app\signatures\{{$record->member_signature}}">
+                                <img src="{{storage_path()}}/app/signatures/{{$record->member_signature}}">
                             </div>
                         </div>
                         <div class="col-xs-6">
                             <p>Guest Signature</p>
                             <div class="sig">
-                                <img src="{{storage_path()}}\app\signatures\{{$record->guest_signature}}">
+                                <img src="{{storage_path()}}/app/signatures/{{$record->guest_signature}}">
                             </div>
                         </div>
                     </div>
