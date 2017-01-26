@@ -37,7 +37,7 @@ const app = new Vue({
             var list = [];
             for (var i = 0; i < row.guests.length; i++){
                 if (row.guests[i].type == type){
-                    row.guests[i].free_pass = row.guests[i].pivot.free_pass
+                    row.guests[i].free_pass = row.guests[i].pivot.free_pass == 1
                     list.push(row.guests[i]);
                 }
             }
