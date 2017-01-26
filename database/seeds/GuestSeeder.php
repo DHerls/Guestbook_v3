@@ -12,8 +12,7 @@ class GuestSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
-        factory(GuestRecord::class, 1000)->create()->each(function($gr) use($faker){
+        factory(GuestRecord::class, 1000)->create()->each(function($gr){
             foreach (range(1,random_int(1,4)) as $index){
                 $gr->guests()->save(factory(\App\Guest::class)->make(), ['free_pass' => random_int(1,4) == 1,
                     'created_at' => $gr->created_at]);
