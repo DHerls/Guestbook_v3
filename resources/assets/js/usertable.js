@@ -22,10 +22,11 @@ const app = new Vue({
                     sort_dir: this.sort_dir
                 },
                 success: function(data){
+                    console.log(data);
                     for (var i = 0; i < data.data.length; i++){
-                        data.data[i].admin = data.data[i].admin === 1
-                        data.data[i].temp_pass = data.data[i].temp_pass === 1
-                        data.data[i].disabled = data.data[i].disabled === 1
+                        data.data[i].admin = data.data[i].admin == 1
+                        data.data[i].temp_pass = data.data[i].temp_pass == 1
+                        data.data[i].disabled = data.data[i].disabled == 1
                     }
                     app.rows = data.data;
                     app.maxPages = data.last_page;
@@ -42,31 +43,31 @@ const app = new Vue({
             this.get_data();
         },
         update_flags: function(id, index){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+            Vue.nextTick(function(){
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                var loc = window.location;
+                var baseUrl = loc.protocol + "//" + loc.hostname + (loc.port? ":"+loc.port : "") + "/"
+                $.ajax({
+                    type: 'POST',
+                    url: baseUrl + "users/" + id + "/flags",
+                    dataType: 'json',
+                    data: {
+                        admin: app.rows[index].admin,
+                        temp_pass: app.rows[index].temp_pass,
+                        disabled: app.rows[index].disabled,
+                    },
+                    success: function(data){
+                        app.get_data();
+                    },
+                    error: function(data){
+                        console.log(data);
+                    }
+                });
             });
-            var loc = window.location;
-            var baseUrl = loc.protocol + "//" + loc.hostname + (loc.port? ":"+loc.port : "") + "/"
-
-            $.ajax({
-                type: 'POST',
-                url: baseUrl + "users/" + id + "/flags",
-                dataType: 'json',
-                data: {
-                    admin: app.rows[index].admin,
-                    temp_pass: app.rows[index].temp_pass,
-                    disabled: app.rows[index].disabled,
-                },
-                success: function(data){
-                    app.get_data();
-                },
-                error: function(data){
-                    console.log(data);
-                }
-            });
-
         },
         delete_user: function(id){
             if (!confirm("Are you sure? (This cannot be undone!)")){

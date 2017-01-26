@@ -47,6 +47,7 @@ class ReportController extends Controller
                     $record['Adult Passes'] = intval($record['Adult Passes']);
                     $record['Children'] = intval($record['Children']);
                     $record['Child Passes'] = intval($record['Child Passes']);
+                    $record['Total Guests'] = intval($record['Total Guests']);
                     $record['Total Passes'] = intval($record['Total Passes']);
                 }
 
@@ -111,6 +112,7 @@ class ReportController extends Controller
                     $record['Adult Passes'] = intval($record['Adult Passes']);
                     $record['Children'] = intval($record['Children']);
                     $record['Child Passes'] = intval($record['Child Passes']);
+                    $record['Price'] = intval($record['Child Passes']);
                 }
 
                 $sheet->fromArray($records, null , 'A1', true);
@@ -145,6 +147,7 @@ class ReportController extends Controller
 
                 foreach ($records as &$record) {
                     $record = (array)$record;
+                    $record['Visits'] = intval($record['Visits']);
                 }
 
                 $sheet->fromArray($records);
