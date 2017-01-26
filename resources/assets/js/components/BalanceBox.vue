@@ -79,7 +79,6 @@
 </style>
 <script>
     import {validator} from "../validator";
-    var dateFormat = require('dateformat');
     export default {
         data(){
             return {
@@ -98,10 +97,20 @@
                 return window.location.href;
             },
             get_time: function (datetime) {
-                return dateFormat(datetime, 'hh:mm TT');
+                var options = {
+                    hour: "2-digit", minute: "2-digit"
+                };
+                var date = new Date(datetime);
+                date.setMinutes(date.getMinutes() + (360 - date.getTimezoneOffset()))
+                return date.toLocaleTimeString('en-us',options);
             },
             get_date: function (datetime) {
-                return dateFormat(datetime, 'mm-dd-yy');
+                var options = {
+                    month:'2-digit', day:'2-digit', year: 'numeric',
+                };
+                var date = new Date(datetime);
+                date.setMinutes(date.getMinutes() + (360 - date.getTimezoneOffset()))
+                return date.toLocaleTimeString('en-us',options);
             },
             charge: function () {
                 var app = this;

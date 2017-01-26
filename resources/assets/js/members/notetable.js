@@ -28,6 +28,7 @@ const app = new Vue({
                 month:'2-digit', day:'2-digit', year: '2-digit', hour: "2-digit", minute: "2-digit"
             };
             var date = new Date(timestring);
+            date.setMinutes(date.getMinutes() + (360 - date.getTimezoneOffset()))
             return date.toLocaleTimeString('en-us',options);
         },
         remove: function(note_id){
