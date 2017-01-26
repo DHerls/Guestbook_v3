@@ -47,12 +47,12 @@
                             <td>@{{ row.user }}</td>
                             <td>
                                 <ul>
-                                    <li v-for="adult in row.adults">@{{adult.first_name}} @{{ adult.last_name }} (@{{ adult.city }}) <strong v-if="adult.pivot.free_pass">[Free Pass]</strong></li>
+                                    <li v-for="adult in row.adults">@{{adult.first_name}} @{{ adult.last_name }} (@{{ adult.city }}) <strong v-if="adult.free_pass">[Free Pass]</strong></li>
                                 </ul>
                             </td>
                             <td>
                                 <ul>
-                                    <li v-for="child in row.children">@{{child.first_name}} @{{ child.last_name }} (@{{ child.city }}) <strong v-if="child.pivot.free_pass">[Free Pass]</strong></li>
+                                    <li v-for="child in row.children">@{{child.first_name}} @{{ child.last_name }} (@{{ child.city }}) <strong v-if="child.free_pass">[Free Pass]</strong></li>
                                 </ul>
                             </td>
                             <td>$@{{ row.cost }}</td>

@@ -37,6 +37,7 @@ const app = new Vue({
             var list = [];
             for (var i = 0; i < row.guests.length; i++){
                 if (row.guests[i].type == type){
+                    row.guests[i].free_pass = row.guests[i].pivot.free_pass
                     list.push(row.guests[i]);
                 }
             }
@@ -48,8 +49,6 @@ const app = new Vue({
                     return "Applied to Account"
                 case 'cash':
                     return "Paid Cash"
-                case 'pass':
-                    return "Free Pass"
             }
         },
         get_time(timestring){
