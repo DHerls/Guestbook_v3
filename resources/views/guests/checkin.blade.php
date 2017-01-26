@@ -116,5 +116,5 @@
 @endsection
 
 @section('scripts')
-    <script type="text/javascript" src="/js/checkin.js"></script>
+    <script type="text/javascript" src="{{json_decode(\Storage::get('stats.json'),true)['checkin']['js']}}"></script>
 @endsection

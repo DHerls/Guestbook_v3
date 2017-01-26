@@ -1,5 +1,8 @@
 var path = require("path");
 var webpack = require("webpack");
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+var AssetsPlugin = require('assets-webpack-plugin')
+var assetsPluginInstance = new AssetsPlugin({path: path.join(__dirname, 'storage','app'),filename: 'stats.json'})
 
 module.exports = {
     context: path.resolve('resources'),
@@ -20,7 +23,7 @@ module.exports = {
     output: {
         path: path.resolve('public/js'),
         publicPath: '/js/',
-        filename: "[name].js"
+        filename: "[name].[hash].js"
     },
     module: {
         loaders: [
@@ -69,8 +72,15 @@ module.exports = {
         }
     },
     plugins: [
+        new CleanWebpackPlugin(['public\\js'], {
+            root: 'C:\\Users\\Developer\\Documents\\Ridge Top\\guestbook_v3',
+            verbose: true,
+            dry: false,
+            exclude: ['shared.js']
+        }),
         new webpack.ResolverPlugin(
             new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin(".bower.json", ["main"])
-        )
+        ),
+        assetsPluginInstance,
     ]
 }

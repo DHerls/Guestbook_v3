@@ -36,5 +36,5 @@
 @endsection
 
 @section('scripts')
-    <script type="text/javascript" src="/js/reports.js"></script>
+    <script type="text/javascript" src="{{json_decode(\Storage::get('stats.json'),true)['reports']['js']}}"></script>
 @endsection

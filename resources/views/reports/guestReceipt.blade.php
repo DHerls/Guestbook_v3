@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <!-- Styles -->
-        <link href="{{url('/css/pdf.css')}}" rel="stylesheet">
+        <link href="{{storage_path()}}/css/pdf.css" rel="stylesheet">
     </head>
     <body>
         <div id="app">

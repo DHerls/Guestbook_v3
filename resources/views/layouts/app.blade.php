@@ -83,7 +83,7 @@
             @yield('content')
         </div>
         <!-- Scripts -->
-            <script src="/js/app.js"></script>
+            <script src="{{json_decode(\Storage::get('stats.json'),true)['app']['js']}}"></script>
             @yield('scripts')
     </div>
 </body>

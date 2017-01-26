@@ -157,5 +157,5 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="{{json_decode(\Storage::get('stats.json'),true)['index']['js']}}"></script>
 @endsection
