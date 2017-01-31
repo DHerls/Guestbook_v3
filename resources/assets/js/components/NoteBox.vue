@@ -21,8 +21,8 @@
             </thead>
             <tbody>
             <tr v-for="note, index in notes">
-                <td>{{get_date(note.created_at)}}</td>
-                <td>{{get_time(note.created_at)}}</td>
+                <td>{{note.date}}</td>
+                <td>{{note.time}}</td>
                 <td>{{note.name}}</td>
                 <td>{{note.note}}</td>
                 <td class="fit"><button v-on:click="remove(index,note.id)" class="btn btn-default btn-sm text-center" title="Remove Note">
@@ -73,22 +73,6 @@
         methods: {
             here: function () {
                 return window.location.href;
-            },
-            get_time: function (datetime) {
-                var options = {
-                    hour: "2-digit", minute: "2-digit"
-                };
-                var date = new Date(datetime);
-                date.setMinutes(date.getMinutes() + (360 - date.getTimezoneOffset()))
-                return date.toLocaleTimeString('en-us',options);
-            },
-            get_date: function (datetime) {
-                var options = {
-                    month:'2-digit', day:'2-digit', year: 'numeric',
-                };
-                var date = new Date(datetime);
-                date.setMinutes(date.getMinutes() + (360 - date.getTimezoneOffset()))
-                return date.toLocaleTimeString('en-us',options);
             },
             addNote: function(){
                 var validated = true;

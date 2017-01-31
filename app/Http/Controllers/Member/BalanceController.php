@@ -38,6 +38,11 @@ class BalanceController extends Controller
             ->join('users','users.id','=','balance_records.user_id')
             ->get(['users.name','users.id','balance_records.change_amount','balance_records.reason','balance_records.id','balance_records.created_at']);
 
+        foreach($balanceRecords as $record){
+            $record['time'] = $record->created_at->addHours(1)->format('g:i a');
+            $record['date'] = $record->created_at->addHours(1)->format('m-d-y');
+        }
+
         return response()->json($balanceRecords);
     }
 

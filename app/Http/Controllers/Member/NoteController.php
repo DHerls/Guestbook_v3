@@ -34,6 +34,11 @@ class NoteController extends Controller
             ->join('users','users.id','=','notes.user_id')
             ->get(['users.name','users.id','notes.note','notes.id','notes.created_at']);
 
+        foreach($notes as $note){
+            $note['time'] = $note->created_at->addHours(1)->format('g:i a');
+            $note['date'] = $note->created_at->addHours(1)->format('m-d-y');
+        }
+
         return response()->json($notes);
     }
 

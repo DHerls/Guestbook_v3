@@ -25,8 +25,8 @@
                 </thead>
                 <tbody>
                 <tr v-for="record in records">
-                    <td>{{get_date(record.created_at)}}</td>
-                    <td>{{get_time(record.created_at)}}</td>
+                    <td>{{record.date}}</td>
+                    <td>{{record.time}}</td>
                     <td>{{record.name}}</td>
                     <td>${{record.change_amount}}</td>
                     <td>{{record.reason}}</td>
@@ -95,22 +95,6 @@
         methods: {
             here: function () {
                 return window.location.href;
-            },
-            get_time: function (datetime) {
-                var options = {
-                    hour: "2-digit", minute: "2-digit"
-                };
-                var date = new Date(datetime);
-                date.setMinutes(date.getMinutes() + (360 - date.getTimezoneOffset()))
-                return date.toLocaleTimeString('en-us',options);
-            },
-            get_date: function (datetime) {
-                var options = {
-                    month:'2-digit', day:'2-digit', year: 'numeric',
-                };
-                var date = new Date(datetime);
-                date.setMinutes(date.getMinutes() + (360 - date.getTimezoneOffset()))
-                return date.toLocaleTimeString('en-us',options);
             },
             charge: function () {
                 var app = this;
