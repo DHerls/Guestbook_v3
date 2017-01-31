@@ -70,28 +70,33 @@ const app = new Vue({
             });
         },
         delete_user: function(id){
-            if (!confirm("Are you sure? (This cannot be undone!)")){
-                return;
-            }
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            var loc = window.location;
-            var baseUrl = loc.protocol + "//" + loc.hostname + (loc.port? ":"+loc.port : "") + "/"
+            $.confirm({
+                body: "Are you sure you want to delete this user?  (This cannot be undone!)",
+                class: "danger",
+                button: "Delete",
+                confirm: function(){
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    var loc = window.location;
+                    var baseUrl = loc.protocol + "//" + loc.hostname + (loc.port? ":"+loc.port : "") + "/"
 
-            $.ajax({
-                type: 'POST',
-                url: baseUrl + "users/" + id + "/delete",
-                dataType: 'json',
-                success: function(data){
-                    app.get_data();
-                },
-                error: function(data){
-                    console.log(data);
+                    $.ajax({
+                        type: 'POST',
+                        url: baseUrl + "users/" + id + "/delete",
+                        dataType: 'json',
+                        success: function(data){
+                            app.get_data();
+                        },
+                        error: function(data){
+                            console.log(data);
+                        }
+                    });
                 }
-            });
+            })
+
         },
         set_password: function(){
             if (!this.new_pass){

@@ -148,34 +148,8 @@ class MemberController extends Controller
     }
 
     public function test(Request $request){
-        $this->validate($request, [
-            'search_col' => "required|string|in:first_names,last_names",
-            'search_q' => "required|string",
-            'sort_col' => "required|string|in:last_names,first_names,balance,guests,members,note",
-            'sort_dir' => "required|string|in:asc,desc"
-        ]);
 
-        $records = DB::table('members as m')
-            ->selectRaw("a.first_names, a.last_names, m.current_balance as balance, IFNULL(g.guests,0) as guests, IFNULL(mr.num_members,0) as members, IFNULL(n.note,'') as note")
-            ->join(DB::raw("(SELECT member_id, GROUP_CONCAT(DISTINCT last_name SEPARATOR '/') as last_names,
-          GROUP_CONCAT(DISTINCT first_name SEPARATOR '/') as first_names
-          FROM adults GROUP BY adults.member_id) a"),'a.member_id','=','m.id')
-            ->leftJoin(DB::raw("(SELECT gr.member_id, COUNT(*) as guests
-   FROM guest_guest_record ggr
-     INNER JOIN guest_records gr on ggr.guest_record_id = gr.id
-   GROUP BY gr.member_id) g"),'g.member_id','=','m.id')
-            ->leftJoin(DB::raw("(SELECT m1.member_id, m1.num_members
-    FROM member_records m1 LEFT JOIN member_records m2
-        ON (m1.member_id = m2.member_id AND m1.id < m2.id)
-    WHERE m2.id IS NULL) mr"), 'mr.member_id', '=', 'm.id')
-            ->leftJoin(DB::raw("(SELECT n1.member_id, n1.note
-    FROM notes n1 LEFT JOIN notes n2
-        ON (n1.member_id = n2.member_id AND n1.id < n2.id)
-    WHERE n2.id IS NULL) n"), 'n.member_id', '=', 'm.id')
-            ->orderBy($request->sort_col,$request->sort_dir)
-            ->where($request->search_col,'LIKE','%' . $request->search_q . '%')
-            ->get();
 
-        return response()->json($records);
+        return view('members.test');
     }
 }

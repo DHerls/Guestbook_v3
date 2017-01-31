@@ -1,11 +1,18 @@
-Vue.component('paginator',require('./components/Paginator.vue'));
-
 const app = new Vue({
     el: "#app",
     data: {
-        lastPage: 20,
-        currentPage: 19,
+
     },
-    components: {
+    methods: {
+        show_confirm: function(){
+            $.confirm({
+                body: "Are you sure you want to delete this user?  This cannot be undone.",
+                class: "danger",
+                button: "Delete",
+                confirm: function(){
+                    console.log("Action Confirmed");
+                }
+            });
+        }
     }
 });

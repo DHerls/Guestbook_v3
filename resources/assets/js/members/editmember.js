@@ -11,7 +11,16 @@ const app = new Vue({
         address: addressFields
     },
     methods: {
-
+        delete_member: function () {
+            $.confirm({
+                body: "Are you sure you want to delete this member? (This action cannot be undone!)",
+                button: "Delete",
+                class: "danger",
+                confirm: function () {
+                    $("#delete").submit();
+                }
+            })
+        }
     },
     created: function() {
         $.get({

@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="container">
-    <paginator v-model="currentPage" v-bind:max="lastPage"></paginator>
+    <button class="btn btn-primary" v-on:click="show_confirm">Confirm</button>
 </div>
 @endsection
 
 @section('scripts')
-    <script type="text/javascript" src="/js/test.js"></script>
+    <script type="text/javascript" src="{{json_decode(\Storage::get('stats.json'),true)['test']['js']}}"></script>
 @endsection

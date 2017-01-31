@@ -2,10 +2,10 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
-            <form action="{{Request::url()}}/delete" method="post">
+        <div  class="row">
+            <form id="delete" action="{{Request::url()}}/delete" method="post">
                 {{ csrf_field() }}
-                <button id="delete-button" class="btn btn-danger pull-right" type="submit" onclick="return confirm('Are you sure?')">
+                <button id="delete-button" class="btn btn-danger pull-right" onclick="return false;" v-on:click="delete_member">
                     Delete User
                 </button>
             </form>

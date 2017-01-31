@@ -60,26 +60,31 @@ const app = new Vue({
             return date.toLocaleTimeString('en-us',options);
         },
         delete_row: function (id) {
-            if (confirm("Are you sure? (This action cannot be undone!)")){
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+            $.confirm({
+                body: "Are you sure you want to delete this record? (This cannot be undone!)",
+                button: "Delete",
+                class: "danger",
+                confirm: function(){
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
 
-                $.ajax({
-                    type: 'POST',
-                    url: window.location.href + '/' + id + "/delete",
-                    dataType: 'json',
-                    data: {},
-                    success: function(data){
-                        app.get_data();
-                    },
-                    error: function(data){
-                        console.log(data);
-                    }
-                });
-            }
+                    $.ajax({
+                        type: 'POST',
+                        url: window.location.href + '/' + id + "/delete",
+                        dataType: 'json',
+                        data: {},
+                        success: function(data){
+                            app.get_data();
+                        },
+                        error: function(data){
+                            console.log(data);
+                        }
+                    });
+                }
+            })
         },
         receipt: function(id){
             var loc = window.location;
