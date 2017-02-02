@@ -26,7 +26,7 @@ class ReportController extends Controller
 
         Excel::create('guest_report_'.date('Y_m_d_h:i:s'), function($excel) use($startDate,$endDate){
 
-            $excel->sheet('Summary', function($sheet) use($startDate,$endDate){
+            $excel->sheet('Summary By Week', function($sheet) use($startDate,$endDate){
                 $records = DB::table('guest_guest_record as ggr')
                     ->selectRaw("STR_TO_DATE(CONCAT(YEARWEEK(MIN(ggr.created_at)), ' Sunday'), '%X%V %W') as 'Start Date',
   STR_TO_DATE(CONCAT(YEARWEEK(MIN(ggr.created_at)), ' Saturday'), '%X%V %W') as 'End Date',
@@ -81,6 +81,75 @@ class ReportController extends Controller
                     $cells->setFontWeight('bold');
                     $cells->setBorder(array(
                         'top'   => array(
+                            'style' => 'solid'
+                        ),
+                    ));
+                });
+            });
+
+            $excel->sheet('Summary By Day', function($sheet) use($startDate, $endDate){
+                $records = DB::select("SELECT day_of_week as 'Day of Week',
+                  COUNT(*) as 'Number',
+                  SUM(a) as 'Total Adults',
+                  AVG(a) as 'Average Adults',
+                  SUM(c) as 'Total Children',
+                  AVG(c) as 'Average Children',
+                  SUM(tg) as 'Total Guests',
+                  AVG(tg) as 'Average Guests',
+                  SUM(ap) as 'Total Adult Passes',
+                  AVG(ap) as 'Average Adult Passes',
+                  SUM(cp) as 'Total Child Passes',
+                  AVG(cp) as 'Average Child Passes',
+                  SUM(tp) as 'Total Passes',
+                  AVG(tp) as 'Average Passes'
+                FROM
+                  (SELECT DAYNAME(ggr.created_at) day_of_week,
+                           DAYOFWEEK(ggr.created_at) day_num,
+                           TO_DAYS(ggr.created_at) date,
+                           SUM(CASE WHEN g.type = 'adult' THEN 1 ELSE 0 END) a,
+                           SUM(CASE WHEN g.type = 'child' THEN 1 ELSE 0 END) c,
+                           COUNT(*) tg,
+                           SUM(CASE WHEN g.type = 'adult' AND ggr.free_pass = 1 THEN 1 ELSE 0 END) ap,
+                           SUM(CASE WHEN g.type = 'child' AND ggr.free_pass = 1 THEN 1 ELSE 0 END) cp,
+                           SUM(CASE WHEN ggr.free_pass = 1 THEN 1 ELSE 0 END) tp
+                    FROM guest_guest_record as ggr
+                      INNER JOIN guests as g on g.id = ggr.guest_id
+                      WHERE ggr.created_at >= '{$startDate}'
+                    AND ggr.created_at <= '{$endDate}'
+                    GROUP BY date
+                  ) as temp
+                GROUP BY day_of_week
+                ORDER BY day_num
+                ");
+
+                $records = (array)$records;
+
+                foreach ($records as &$record) {
+                    $record = (array)$record;
+                    $record['Number'] = intval($record['Number']);
+                    $record['Total Adults'] = intval($record['Total Adults']);
+                    $record['Average Adults'] = floatval($record['Average Adults']);
+                    $record['Total Children'] = intval($record['Total Children']);
+                    $record['Average Children'] = floatval($record['Average Children']);
+                    $record['Total Guests'] = intval($record['Total Guests']);
+                    $record['Average Guests'] = floatval($record['Average Guests']);
+                    $record['Total Adult Passes'] = intval($record['Total Adult Passes']);
+                    $record['Average Adult Passes'] = floatval($record['Average Adult Passes']);
+                    $record['Total Child Passes'] = intval($record['Total Child Passes']);
+                    $record['Average Child Passes'] = floatval($record['Average Child Passes']);
+                    $record['Total Passes'] = intval($record['Total Passes']);
+                    $record['Average Passes'] = floatval($record['Average Passes']);
+                }
+
+                $sheet->fromArray($records, null , 'A1', true);
+
+                $sheet->freezeFirstRow();
+
+                $sheet->cells('A1:N1', function($cells) {
+                    $cells->setFontWeight('bold');
+                    $cells->setAlignment('center');
+                    $cells->setBorder(array(
+                        'bottom'   => array(
                             'style' => 'solid'
                         ),
                     ));
