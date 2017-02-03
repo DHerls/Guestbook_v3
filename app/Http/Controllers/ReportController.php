@@ -271,9 +271,50 @@ class ReportController extends Controller
         $startDate = $this->startTime($request->start_year,$request->start_month,$request->start_date);
         $endDate = $this->endTime($request->end_year,$request->end_month,$request->end_date);
 
-        Excel::create('guest_report_'.date('Y_m_d_h:i:s'), function($excel) use($startDate,$endDate) {
-            $excel->sheet('Summary', function($sheet) {
+        Excel::create('member_report_'.date('Y_m_d_h:i:s'), function($excel) use($startDate,$endDate) {
+            $excel->sheet('Summary', function($sheet) use($startDate,$endDate){
+                $records = DB::table('member_records as mr')
+                    ->selectRaw("STR_TO_DATE(CONCAT(YEARWEEK(MIN(mr.created_at)), ' Sunday'), '%X%V %W') as 'Start Date',
+       STR_TO_DATE(CONCAT(YEARWEEK(MIN(mr.created_at)), ' Saturday'), '%X%V %W') as 'End Date',
+       SUM(mr.num_members) Members")
+                    ->whereBetween('mr.created_at', [$startDate,$endDate])
+                    ->groupBy(DB::raw("YEARWEEK(mr.created_at)"))
+                    ->get()->toArray();
 
+                foreach ($records as &$record) {
+                    $record = (array)$record;
+                    $record['Members'] = intval($record['Members']);
+                }
+
+                $sheet->fromArray($records, null , 'A1', true);
+
+                $highestRow = $sheet->getHighestRow();
+
+                $sheet->appendRow(["","Grand Totals",
+                    "=SUM(C2:C{$highestRow})"]);
+
+                $highestRow++;
+
+                $sheet->freezeFirstRow();
+
+                $sheet->cells('A1:C1', function($cells) {
+                    $cells->setFontWeight('bold');
+                    $cells->setAlignment('center');
+                    $cells->setBorder(array(
+                        'bottom'   => array(
+                            'style' => 'solid'
+                        ),
+                    ));
+                });
+
+                $sheet->cells("A{$highestRow}:C{$highestRow}", function($cells) {
+                    $cells->setFontWeight('bold');
+                    $cells->setBorder(array(
+                        'top'   => array(
+                            'style' => 'solid'
+                        ),
+                    ));
+                });
             });
 
             $excel->sheet('Count', function($sheet) use($startDate, $endDate){
@@ -335,6 +376,9 @@ class ReportController extends Controller
                     ));
                 });
             });
+
+            $excel->setActiveSheetIndex(0);
+
         })->download('xlsx');
     }
 

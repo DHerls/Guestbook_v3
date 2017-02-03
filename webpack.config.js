@@ -7,7 +7,7 @@ var assetsPluginInstance = new AssetsPlugin({path: path.join(__dirname, 'storage
 module.exports = {
     context: path.resolve('resources'),
     entry: {
-        app: ['./assets/js/bootstrap.js', 'jqnotifybar', './assets/js/confirm.js'],
+        app: ['./assets/js/bootstrap.js', 'jqnotifybar', './assets/js/confirm.js', './assets/js/errorhandler.js'],
         index: ['./assets/js/sortsearchtable.js', './assets/js/scrollToTop.js'],
         new: ['./assets/js/members/newmember.js'],
         edit: './assets/js/members/editmember.js',

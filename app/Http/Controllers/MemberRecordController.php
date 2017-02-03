@@ -20,10 +20,17 @@ class MemberRecordController extends Controller
             'max' => 'Only :max members registered to this account!'
         ]);
 
-        $mRecord = new MemberRecord();
-        $mRecord->member_id = $member->id;
-        $mRecord->num_members = $request->members;
-        $mRecord->save();
+        if (!$member->memberRecords()->latest()->first()->created_at->isToday()){
+            $mRecord = new MemberRecord();
+            $mRecord->num_members = $request->members;
+            $member->memberRecords()->save($mRecord);
+        } else {
+            $mRecord = $member->memberRecords()->latest()->first();
+            $mRecord->num_members = $request->members;
+            $mRecord->save();
+        }
+
+
 
 
         return response()->json(['status' => 1]);
