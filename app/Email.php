@@ -11,4 +11,12 @@ class Email extends Model
     public function member(){
         return $this->belongsTo(Member::class);
     }
+
+    public function formatted() {
+        if ($this->description){
+            return $this->address . '(' .$this->description .= ')';
+        } else {
+            return $this->address;
+        }
+    }
 }

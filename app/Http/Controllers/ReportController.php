@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -378,6 +379,48 @@ class ReportController extends Controller
             });
 
             $excel->setActiveSheetIndex(0);
+
+        })->download('xlsx');
+    }
+
+    public function memberDirectory(Request $request) {
+        Excel::create('Member Directory', function($excel) {
+            $excel->sheet('Directory', function($sheet) {
+                $members = Member::with('adults', 'children', 'emails', 'phones')->get();
+                $directory = [];
+                foreach ($members as $m){
+                    $directory[] = [$m->directoryNames(),
+                                    $m->directoryAddress(),
+                                    $m->directoryPhones(),
+                                    $m->directoryEmails(),
+                                    $m->directoryChildren()];
+                }
+
+                usort($directory, function($a, $b) {
+                    return strcmp($a[0], $b[0]);
+                });
+
+                array_unshift($directory, ['Name', 'Address', 'Phone', 'Email', 'Children']);
+
+                $sheet->setAutoSize(true);
+
+                $sheet->fromArray($directory, null, 'A1', false, false);
+
+                $sheet->freezeFirstRow();
+
+                $sheet->cells('A1:E1', function($cells) {
+                    $cells->setFontWeight('bold');
+                    $cells->setAlignment('center');
+                    $cells->setBorder(array(
+                        'bottom'   => array(
+                            'style' => 'solid'
+                        ),
+                    ));
+                });
+                $sheet->getStyle('A2:E'. $sheet->getHighestRow())
+                    ->getAlignment()->setWrapText(true);
+
+            });
 
         })->download('xlsx');
     }

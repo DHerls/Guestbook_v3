@@ -62,4 +62,75 @@ class Member extends Model
         })->toArray());
         return implode('/',$first_names);
     }
+
+    public function directoryNames() {
+        $ln = [];
+        foreach ($this->adults as $a) {
+            if (array_key_exists($a->last_name, $ln)){
+                $ln[$a->last_name][] = $a;
+            } else {
+                $ln[$a->last_name] = [$a];
+            }
+        }
+
+        $result = '';
+        foreach ($ln as $last_name=>$array){
+            $subresult = $last_name . ', ';
+            foreach ($array as $id=>$adult){
+                if ($id > 0){
+                    $subresult .= ' & ';
+                }
+                $subresult .= $adult->first_name;
+            }
+            $result .= $subresult . "\n";
+        }
+
+        return $result;
+    }
+
+    public function directoryAddress() {
+        $result = $this->address_line_1;
+        $result .= "\n";
+        if ($this->address_line_2){
+            $result = $this->address_line_2;
+            $result .= "\n";
+        }
+        $result .= $this->city;
+        $result .= ', ';
+        $result .= $this->state;
+        $result .= ' ';
+        $result .= $this->zip;
+        return $result;
+    }
+
+    public function directoryPhones() {
+        $result = '';
+        foreach ($this->phones as $p){
+            $result .= $p->fancyNumber();
+            $result .= "\n";
+        }
+        return $result;
+    }
+
+    public function directoryEmails() {
+        $result = '';
+        foreach ($this->emails as $e){
+            $result .= $e->formatted();
+            $result .= "\n";
+        }
+        return $result;
+    }
+
+    public function directoryChildren() {
+        $result = '';
+        foreach ($this->children as $c){
+            $result .= $c->directoryFormatted();
+            $result .= ", ";
+        }
+
+        if ($result){
+            $result = substr($result, 0, sizeof($result) - 3);
+        }
+        return $result;
+    }
 }

@@ -38,6 +38,7 @@ Route::group(['middleware' => ['web','auth', 'temp', 'admin']], function() {
     Route::get('/reports/guests','ReportController@guestReport');
     Route::get('/reports/members','ReportController@memberReport');
     Route::get('/receipts/{record}','ReportController@guestReceipt');
+    Route::get('/reports/directory','ReportController@memberDirectory');
 
 });
 

@@ -37,6 +37,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Member Directory</div>
+                <div class="panel-body">
+                    <div class="text-center">
+                        <p>Click to download the most recent member directory:</p>
+                        <a class="btn btn-success" href="/reports/directory">Download</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
